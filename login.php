@@ -1,33 +1,40 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 session_start();
-require_once "cron.php";
+include("database.php"); // Incluimos la conexión PDO
 
+// === REDIRIGIR SI YA ESTÁ LOGUEADO ===
 if (isset($_SESSION['user_email'])) {
     header("Location: discover.php");
     exit;
 }
 
+// === PROCESAR LOGIN ===
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = $_POST['email'] ?? '';
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    if ($email && $password) {
+        // Encriptamos la contraseña ingresada con SHA-256
+        $password_hashed = hash('sha256', $password);
 
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_email'] = $user['email'];
-        $_SESSION['user_id'] = $user['id'];
-        header("Location: discover.php");
-        exit;
+        // SELECT usando email y contraseña hasheada
+        $stmt = $pdo->prepare("SELECT id, email FROM users WHERE email = ? AND password = ? LIMIT 1");
+        $stmt->execute([$email, $password_hashed]);
+        $user = $stmt->fetch();
+
+        if ($user) {
+            // Login correcto
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_id'] = $user['id'];
+            header("Location: discover.php");
+            exit;
+        } else {
+            $error = "Email o contraseña incorrectos";
+        }
     } else {
-        $error = "Email o contraseña incorrectos";
+        $error = "Introduce email y contraseña";
     }
 }
 ?>
@@ -45,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <h2 id="login-title">Iniciar sesión</h2>
 
     <?php if ($error): ?>
-        <p id="login-error"><?php echo $error; ?></p>
+        <p id="login-error"><?php echo htmlspecialchars($error); ?></p>
     <?php endif; ?>
 
     <form id="login-form" method="post">
