@@ -1,9 +1,9 @@
 <?php
 
 $host = 'localhost';
-$db   = 'fp_project';
-$user = 'root';
-$pass = '';
+$db   = 'simbiodb';
+$user = 'simbdmin';
+$pass = 'Millon202';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
