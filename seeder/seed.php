@@ -264,7 +264,7 @@ try {
             $nom,
             'Center',
             "Usuario del centro $nom",
-            "../uploads/logos/" . $centro_logo[$i] . ".png"
+            "uploads/logos/" . $centro_logo[$i] . ".png"
         ]);
     }
 
@@ -287,7 +287,7 @@ try {
             $nom,
             'Company',
             "Usuario de la empresa $nom",
-            "../uploads/logos/" . $empresa_logo[$i] . ".png",
+            "uploads/logos/" . $empresa_logo[$i] . ".png",
         ]);
     }
 
@@ -327,7 +327,7 @@ try {
         )->execute([
             $projects_titles[$i],
             $descriptions[$i],
-            "../uploads/videos/" . $projects_videos[$i] . ".mp4",
+            "uploads/videos/" . $projects_videos[$i] . ".mp4",
             date('Y-m-d'),
             'Active',
             $id_empresas[$i]
