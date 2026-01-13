@@ -12,8 +12,6 @@ include('../config/database.php');
 
 echo "🚀 Iniciando seeder...\n";
 
-$pdo->beginTransaction();
-
 try {
 
     /* -------------------------------------------------
@@ -67,8 +65,9 @@ try {
     echo "👤 Creando usuarios...\n";
 
     $centres = [
-        'Institut Tecnològic de Barcelona', 'Institut La Ribera', 
-        'Institut Montsià', 'Institut Vallès', 'Institut Joan XXIII', 'Institut Delta'
+        'Institut Tecnològic de Barcelona', 'Institut La Ribera',
+        'Institut Montsià', 'Institut Vallès',
+        'Institut Joan XXIII', 'Institut Delta'
     ];
 
     $empreses = ['Google', 'Microsoft', 'Amazon', 'Apple'];
@@ -80,7 +79,15 @@ try {
         $pdo->prepare(
             "INSERT INTO Users (Email, Password, Username, entity_name, entity_type, Level_Studies, Presentation)
              VALUES (?, ?, ?, ?, ?, ?, ?)"
-        )->execute([$email, hash('sha256','password123'), $username, $nom, 'Center', 'FP', "Usuario del centro $nom"]);
+        )->execute([
+            $email,
+            hash('sha256','password123'),
+            $username,
+            $nom,
+            'Center',
+            'FP',
+            "Usuario del centro $nom"
+        ]);
     }
 
     // Empresas
@@ -90,7 +97,15 @@ try {
         $pdo->prepare(
             "INSERT INTO Users (Email, Password, Username, entity_name, entity_type, Level_Studies, Presentation)
              VALUES (?, ?, ?, ?, ?, ?, ?)"
-        )->execute([$email, hash('sha256','password123'), $username, $nom, 'Company', 'N/A', "Usuario de la empresa $nom"]);
+        )->execute([
+            $email,
+            hash('sha256','password123'),
+            $username,
+            $nom,
+            'Company',
+            'N/A',
+            "Usuario de la empresa $nom"
+        ]);
     }
 
     /* -------------------------------------------------
@@ -103,11 +118,12 @@ try {
 
     foreach ($centersUsers as $i => $center) {
         $pdo->prepare(
-            "INSERT INTO Projects (Title, Description, Date_Creation, State, ID_Owner)
-             VALUES (?, ?, ?, ?, ?)"
+            "INSERT INTO Projects (Title, Description, Video, Date_Creation, State, ID_Owner)
+             VALUES (?, ?, ?, ?, ?, ?)"
         )->execute([
             "Projecte FP " . ($i + 1),
             "Projecte real del centre " . $center['entity_name'],
+            "videos/proyecto" . ($i + 1) . ".mp4",
             date('Y-m-d'),
             'Active',
             $center['ID_User']
@@ -123,10 +139,12 @@ try {
     $projects = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     foreach ($projects as $i => $projectId) {
-        $family = array_keys($tagCicles)[$i % count($tagCicles)]; // ciclo rotativo
+        $family = array_keys($tagCicles)[$i % count($tagCicles)];
         foreach ($tagCicles[$family] as $catId) {
-            $pdo->prepare("INSERT INTO Projects_Categories (ID_Project, ID_Category) VALUES (?, ?)")
-                ->execute([$projectId, $catId]);
+            $pdo->prepare(
+                "INSERT INTO Projects_Categories (ID_Project, ID_Category)
+                 VALUES (?, ?)"
+            )->execute([$projectId, $catId]);
         }
     }
 
@@ -141,13 +159,17 @@ try {
     foreach ($users as $user) {
         if ($user['entity_type'] === 'Center') {
             for ($i = 0; $i < 2 && $i < count($projects); $i++) {
-                $pdo->prepare("INSERT INTO Favorites (ID_User, ID_Project) VALUES (?, ?)")
-                    ->execute([$user['ID_User'], $projects[$i]]);
+                $pdo->prepare(
+                    "INSERT INTO Favorites (ID_User, ID_Project)
+                     VALUES (?, ?)"
+                )->execute([$user['ID_User'], $projects[$i]]);
             }
         } else {
             for ($i = count($projects) - 2; $i < count($projects); $i++) {
-                $pdo->prepare("INSERT INTO Favorites (ID_User, ID_Project) VALUES (?, ?)")
-                    ->execute([$user['ID_User'], $projects[$i]]);
+                $pdo->prepare(
+                    "INSERT INTO Favorites (ID_User, ID_Project)
+                     VALUES (?, ?)"
+                )->execute([$user['ID_User'], $projects[$i]]);
             }
         }
     }
@@ -160,13 +182,17 @@ try {
     foreach ($users as $user) {
         if ($user['entity_type'] === 'Center') {
             for ($i = count($projects) - 2; $i < count($projects); $i++) {
-                $pdo->prepare("INSERT INTO Likes (ID_User, ID_Project) VALUES (?, ?)")
-                    ->execute([$user['ID_User'], $projects[$i]]);
+                $pdo->prepare(
+                    "INSERT INTO Likes (ID_User, ID_Project)
+                     VALUES (?, ?)"
+                )->execute([$user['ID_User'], $projects[$i]]);
             }
         } else {
             for ($i = 0; $i < 2 && $i < count($projects); $i++) {
-                $pdo->prepare("INSERT INTO Likes (ID_User, ID_Project) VALUES (?, ?)")
-                    ->execute([$user['ID_User'], $projects[$i]]);
+                $pdo->prepare(
+                    "INSERT INTO Likes (ID_User, ID_Project)
+                     VALUES (?, ?)"
+                )->execute([$user['ID_User'], $projects[$i]]);
             }
         }
     }
@@ -176,7 +202,7 @@ try {
     -------------------------------------------------- */
     echo "✉️ Insertando mensajes...\n";
 
-    $centers = array_filter($users, fn($u) => $u['entity_type'] === 'Center');
+    $centers   = array_filter($users, fn($u) => $u['entity_type'] === 'Center');
     $companies = array_filter($users, fn($u) => $u['entity_type'] === 'Company');
     $date = date('Y-m-d');
 
@@ -187,7 +213,12 @@ try {
             $pdo->prepare(
                 "INSERT INTO Messages (Sender, Destination, Text_Message, Date_Message, Read_Status)
                  VALUES (?, ?, ?, ?, 0)"
-            )->execute([$center['ID_User'], $company['ID_User'], "Hola, soy el usuario del centro {$center['ID_User']}", $date]);
+            )->execute([
+                $center['ID_User'],
+                $company['ID_User'],
+                "Hola, soy el usuario del centro {$center['ID_User']}",
+                $date
+            ]);
             $j++;
         }
     }
@@ -199,17 +230,18 @@ try {
             $pdo->prepare(
                 "INSERT INTO Messages (Sender, Destination, Text_Message, Date_Message, Read_Status)
                  VALUES (?, ?, ?, ?, 0)"
-            )->execute([$company['ID_User'], $center['ID_User'], "Hola, soy el usuario de la empresa {$company['ID_User']}", $date]);
+            )->execute([
+                $company['ID_User'],
+                $center['ID_User'],
+                "Hola, soy el usuario de la empresa {$company['ID_User']}",
+                $date
+            ]);
             $j++;
         }
     }
 
-    $pdo->commit();
     echo "✅ Seeder ejecutado correctamente\n";
 
 } catch (Exception $e) {
-    if ($pdo->inTransaction()) {
-        $pdo->rollBack();
-    }
     echo "❌ Error: " . $e->getMessage() . "\n";
 }
