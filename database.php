@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// === CONFIGURACIÓN DE BASE DE DATOS ===
+// === CONFIGURACIÓN BD ===
 $host = 'localhost';
 $db   = 'simbiodb';
 $user = 'simbdmin';
@@ -15,11 +15,7 @@ $options = [
     PDO::ATTR_EMULATE_PREPARES   => false,
 ];
 
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    die("Error de conexión: " . $e->getMessage());
-}
+$pdo = new PDO($dsn, $user, $pass, $options);
 
 // === REDIRIGIR SI YA ESTÁ LOGUEADO ===
 if (isset($_SESSION['user_email'])) {
@@ -27,7 +23,6 @@ if (isset($_SESSION['user_email'])) {
     exit;
 }
 
-// PROCESAR LOGIN 
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -35,18 +30,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST['password'] ?? '';
 
     if ($email && $password) {
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ? and password = ? LIMIT 1");
-        $stmt->execute([$email]);
+
+        // MISMO HASH QUE EL SEEDER
+        $password_hashed = hash('sha256', $password);
+
+        $stmt = $pdo->prepare(
+            "SELECT ID_User, Email 
+             FROM Users 
+             WHERE Email = ? AND Password = ?
+             LIMIT 1"
+        );
+
+        $stmt->execute([$email, $password_hashed]);
         $user = $stmt->fetch();
 
-        if ($user && password_verify($password, $user['password'])) {
-            // Login correcto
-            $_SESSION['user_email'] = $user['email'];
+        if ($user) {
+            $_SESSION['user_email'] = $user['Email'];
+            $_SESSION['user_id']    = $user['ID_User'];
+
             header("Location: discover.php");
             exit;
         } else {
             $error = "Email o contraseña incorrectos";
         }
+
     } else {
         $error = "Introduce email y contraseña";
     }

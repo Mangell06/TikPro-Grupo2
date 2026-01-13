@@ -1,10 +1,10 @@
 <?php
 session_start();
-include("database.php"); // Incluimos la conexión PDO
+include("database.php"); // Debe apuntar a la MISMA BD que el seeder
 
 // === REDIRIGIR SI YA ESTÁ LOGUEADO ===
 if (isset($_SESSION['user_email'])) {
-    header("Location: discover.php");
+    header("Location: ola.php");
     exit;
 }
 
@@ -16,18 +16,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password = $_POST['password'] ?? '';
 
     if ($email && $password) {
-        // Encriptamos la contraseña ingresada con SHA-256
+
+        // MISMO hash que el seeder
         $password_hashed = hash('sha256', $password);
 
-        // SELECT usando email y contraseña hasheada
-        $stmt = $pdo->prepare("SELECT id, email FROM users WHERE email = ? AND password = ? LIMIT 1");
+        $stmt = $pdo->prepare(
+            "SELECT ID_User, Email 
+             FROM Users 
+             WHERE Email = ? AND Password = ? 
+             LIMIT 1"
+        );
+
         $stmt->execute([$email, $password_hashed]);
-        $user = $stmt->fetch();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            // Login correcto
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_email'] = $user['Email'];
+            $_SESSION['user_id']    = $user['ID_User'];
+
             header("Location: discover.php");
             exit;
         } else {
@@ -47,6 +53,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body id="login-body">
+<header class="main-header">
+    <h1 class="header-title">WORKTEAM</h1>
+</header>
 
 <div id="login-container">
     <h2 id="login-title">Iniciar sesión</h2>
