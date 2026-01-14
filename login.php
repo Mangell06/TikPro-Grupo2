@@ -72,6 +72,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <button id="login-button" type="submit">Entrar</button>
     </form>
 </div>
+<script type="module">
+import { sendLog } from './create-logs.js'; // tu función para guardar logs
+
+// Capturar el formulario
+const form = document.getElementById('login-form');
+const emailInput = document.getElementById('input-email');
+
+form.addEventListener('submit', async (e) => {
+    // Log: intento de login
+    sendLog(`Intento de login con email: ${emailInput.value}`);
+});
+</script>
 
 </body>
 </html>

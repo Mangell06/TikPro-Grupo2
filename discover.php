@@ -44,179 +44,148 @@
 </nav>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script type="module">
-    import { showNotification } from './notificaciones.js';
-    let projectsData = [];
+import { showNotification } from './notificaciones.js';
+import { sendLog } from './create-logs.js'; // importar función de logging
 
-    // funcion para crear elementos.
-    function createElement(tag, parent = "", className = "", attr = {}) {
-        // crear el elemento.
-        const $element = $(tag);
+let projectsData = [];
 
-        // añadir clase si tiene.
-        if (className) {
-            $element.addClass(className);
+// funcion para crear elementos.
+function createElement(tag, parent = "", className = "", attr = {}) {
+    const $element = $(tag);
+    if (className) $element.addClass(className);
+    if (attr && typeof attr === "object") {
+        for (const key in attr) $element.attr(key, attr[key]);
+    }
+    if (parent) $(parent).append($element);
+    return $element;
+}
+
+// funcion para crear cartas
+function createCard(projectData) {
+    const divCard = createElement("<div></div>", "", "project-card");
+    
+    createElement("<video></video>", divCard, "", { 
+        src: projectData.video,
+        controls: true,
+        muted: true,
+        autoplay: true,
+        loop: true,
+        playsinline: true 
+    });
+
+    const infoButton = createElement("<button></button>", divCard, "info-toggle").text("Mostrar info");
+
+    const divInfo = createElement("<div></div>", divCard, "project-info hidden");
+
+    infoButton.on("click", () => {
+        divInfo.toggleClass("hidden");
+        infoButton.text(divInfo.hasClass("hidden") ? "Mostrar info" : "Ocultar info");
+        sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} toggle info: ${divInfo.hasClass("hidden") ? 'oculto' : 'visible'}`);
+    });
+
+    createElement("<p></p>", divInfo).text(projectData.description);
+
+    const divTags = createElement("<div></div>", divInfo, "tags");
+    (projectData.tags || []).forEach(tag => {
+        createElement("<span></span>", divTags).text(tag);
+    });
+
+    const divButtons = createElement("<div></div>", divCard, "actions");
+    const btnNope = createElement("<button></button>", divButtons, "nope").text("Like");
+    const btnLike = createElement("<button></button>", divButtons, "like").text("Nope");
+
+    btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} presionó Like en proyecto ${projectData.id_project}`));
+    btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} presionó Nope en proyecto ${projectData.id_project}`));
+
+    return divCard;
+}
+
+function deleteData() {
+    if (projectsData.length !== 0) {
+        projectsData.shift();
+        return true;
+    }
+    return false;
+}
+
+function deleteCard() {
+    const cardDoom = $("#discover-container .project-card");
+    if (!cardDoom.length) {
+        showNotification("error","No hi ha cap projecte");
+        sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} intento eliminar carta pero no habia ninguna`);
+        return false;
+    }
+    cardDoom.remove();
+    sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} eliminó la carta visible`);
+    return true;
+}
+
+async function readDB() {
+    const lastId = projectsData.length ? projectsData[0].id_project : 0;
+
+    await fetch(`includes/load-cards.php?exclude_id=${lastId}`)
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                showNotification("error",err.error);
+                sendLog(`Error fetch proyectos: ${err.error}`);
+            });
         }
-
-        // añadir atributos si tiene.
-        if (attr && typeof attr === "object") {
-            for (const key in attr) {
-                $element.attr(key, attr[key]);
-            }
+        return response.json();
+    })
+    .then(projects => {
+        const newProject = projects;
+        const exists = projectsData.some(p => p.id_project === newProject.id_project);
+        if (!exists) {
+            projectsData.push(newProject);
+            sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} cargó proyecto ${newProject.id_project}`);
         }
+    });
+}
 
-        // añadir al padre si tiene.
-        if (parent) {
-            $(parent).append($element);
-        }
-
-        // devolver el elemento creado.
-        return $element;
+async function loadCard() {
+    while (projectsData.length-1 < 3) {
+        await readDB();
     }
 
-    // funcion para crear cartas
-    function createCard(projectData) {
-        // Crear el div de la carta
-        const divCard = createElement("<div></div>", "", "project-card");
-        
-        // Añadir el video del proyecto
-        createElement("<video></video>", divCard, "", { 
-            src: projectData.video,
-            controls: true,
-            muted: true,
-            autoplay: true,
-            loop: true,
-            playsinline: true 
-        });
-
-        // Crear botón de toggle info (siempre visible)
-        const infoButton = createElement("<button></button>", divCard, "info-toggle").text("Mostrar info");
-        
-        // Evento para mostrar/ocultar divInfo
-        infoButton.on("click", () => {
-            divInfo.toggleClass("hidden");
-            // Cambiar texto según estado
-            infoButton.text(divInfo.hasClass("hidden") ? "Mostrar info" : "Ocultar info");
-        });
-
-        // Crear el div de información (inicialmente oculto)
-        const divInfo = createElement("<div></div>", divCard, "project-info hidden");
-
-        // Añadir párrafo de descripción
-        createElement("<p></p>", divInfo).text(projectData.description);
-
-        // Crear div para tags
-        const divTags = createElement("<div></div>", divInfo, "tags");
-
-        // Añadir cada tag
-        (projectData.tags || []).forEach(tag => {
-            createElement("<span></span>", divTags).text(tag);
-        });
-
-        // Crear div de botones principales
-        const divButtons = createElement("<div></div>", divCard, "actions");
-
-        // Botones de like/nope
-        createElement("<button></button>", divButtons, "nope").text("Like");
-        createElement("<button></button>", divButtons, "like").text("Nope");
-
-        return divCard;
-    }
-
-    /* Funcion para eliminar Informacion */
-    function deleteData() {
-        if (projectsData.length !== 0) {
-            projectsData.shift();
-            return true;
-        }
+    if (projectsData.length === 0) {
+        showNotification("error","No hi ha projectes");
+        sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} no tiene proyectos disponibles`);
         return false;
     }
 
-    /* Funcion para eliminar Cartas */
-    function deleteCard() {
-        // Selecciona la carta visible (solo hay una)
-        const cardDoom = $("#discover-container .project-card");
-
-        if (!cardDoom.length) {
-            showNotification("error","No hi ha cap projecte");
-            return false;
-        } // no hay carta
-
-        // Eliminar la carta actual
-        cardDoom.remove();
-        return true;        
+    if ($("#discover-container .project-card").length > 0) {
+        deleteCard();
+        deleteData();
     }
 
-    async function readDB() {
-        // tomar la id del primer proyecto mostrado (si existe)
-        const lastId = projectsData.length ? projectsData[0].id_project : 0;
+    const cardDoom = createCard(projectsData[0]);
+    addCardEvents(cardDoom); 
+    $("#discover-container").append(cardDoom);
 
-        await fetch(`includes/load-cards.php?exclude_id=${lastId}`)
-        .then(response => {
-            // ERROR: mostrar y cortar
-            if (!response.ok) {
-                    return response.json().then(err => {
-                    showNotification("error",err.error);
-                });
-            }
+    return true;
+}
 
-            // OK → continuar
-            return response.json();
-        })
-        .then(projects => {
-            const newProject = projects; // tu fetch devuelve un objeto único
-            // comprobar si ya está en projectsData
-            const exists = projectsData.some(p => p.id_project === newProject.id_project);
-            if (!exists) {
-                projectsData.push(newProject);
-            }
-        });
+function addCardEvents(card) {
+    card.find(".like").on("click", () => handleAction(card, "like"));
+    card.find(".nope").on("click", () => handleAction(card, "nope"));
+}
+
+function handleAction(card, action) {
+    card.addClass(action === "like" ? "swipe-right" : "swipe-left");
+    sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} swiped ${action} en proyecto ${projectsData[0].id_project}`);
+
+    setTimeout(() => {
+        if (!loadCard()) showNotification("error","No s'ha pogut carregar el seguent projecte");
+    }, 400);
+
+    if (action === "like") {
+        showNotification("info","💖 Match! Anar al xat");
     }
+}
 
-    // funcion para cargar siguiente carta.
-    async function loadCard() {
-        console.log(projectsData);
-        while (projectsData.length-1 < 3) {
-            await readDB(); // esperar a que projectsData se llene
-        }
-
-        if (projectsData.length === 0) {
-            showNotification("error","No hi ha projectes");
-            return false;
-        }
-
-        // eliminar carta anterior si existe
-        if ($("#discover-container .project-card").length > 0) {
-            deleteCard();
-            deleteData();
-        }
-
-        // crear carta solo después de que projectsData tenga datos
-        const cardDoom = createCard(projectsData[0]);
-        addCardEvents(cardDoom); 
-        $("#discover-container").append(cardDoom);
-
-        return true;
-    }
-
-    function addCardEvents(card) {
-        card.find(".like").on("click", () => handleAction(card, "like"));
-        card.find(".nope").on("click", () => handleAction(card, "nope"));
-    }
-
-    // Accion al darle Like a una carta.
-    function handleAction(card, action) {
-        card.addClass(action === "like" ? "swipe-right" : "swipe-left");
-
-        setTimeout(() => {
-            if (!loadCard()) showNotification("error","No s'ha pogut carregar el seguent projecte");
-        }, 400);
-
-        if (action === "like") {
-            showNotification("info","💖 Match! Anar al xat");
-        }
-    }
-
-    loadCard();
+sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} abrió la página Discover`);
+loadCard();
 </script>
 </body>
 </html>

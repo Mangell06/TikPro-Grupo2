@@ -1,0 +1,26 @@
+[19:44:11] [127.0.0.1] Usuario company1 abrió la página Discover
+[19:44:11] [127.0.0.1] Usuario company1 cargó proyecto 1
+[19:44:11] [127.0.0.1] Usuario company1 cargó proyecto 6
+[19:44:11] [127.0.0.1] Usuario company1 cargó proyecto 3
+[19:44:11] [127.0.0.1] Usuario company1 cargó proyecto 4
+[19:44:19] [127.0.0.1] Intento de login con email: google@empresa.com
+[19:44:20] [127.0.0.1] Usuario company1 abrió la página Discover
+[19:44:20] [127.0.0.1] Usuario company1 cargó proyecto 3
+[19:44:20] [127.0.0.1] Usuario company1 cargó proyecto 6
+[19:44:20] [127.0.0.1] Usuario company1 cargó proyecto 4
+[19:44:20] [127.0.0.1] Usuario company1 cargó proyecto 2
+[19:44:44] [127.0.0.1] Intento de login con email: google@empresa.com
+[19:44:44] [127.0.0.1] Usuario company1 abrió la página Discover
+[19:44:44] [127.0.0.1] Usuario company1 cargó proyecto 2
+[19:44:44] [127.0.0.1] Usuario company1 cargó proyecto 6
+[19:44:44] [127.0.0.1] Usuario company1 cargó proyecto 4
+[19:44:44] [127.0.0.1] Usuario company1 cargó proyecto 3
+[19:44:48] [127.0.0.1] Usuario company1 toggle info: visible
+[19:44:57] [127.0.0.1] Usuario company1 toggle info: oculto
+[19:45:02] [127.0.0.1] Usuario company1 presionó Nope en proyecto 2
+[19:45:02] [127.0.0.1] Usuario company1 swiped like en proyecto 2
+[19:45:02] [127.0.0.1] Usuario company1 eliminó la carta visible
+[19:45:04] [127.0.0.1] Usuario company1 presionó Like en proyecto 6
+[19:45:04] [127.0.0.1] Usuario company1 swiped nope en proyecto 6
+[19:45:04] [127.0.0.1] Usuario company1 cargó proyecto 5
+[19:45:04] [127.0.0.1] Usuario company1 eliminó la carta visible
