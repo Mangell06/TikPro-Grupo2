@@ -19,19 +19,25 @@
     try {
         // consulta
         $stmt = $pdo->prepare("
-            SELECT p.id_project, p.title, p.description, p.video
+            SELECT p.id_project, p.title, p.description, p.video,
+            GROUP_CONCAT(c.name_category) AS tags
             FROM projects p
+            LEFT JOIN category_project cp ON p.id_project = cp.id_project
+            LEFT JOIN categories c ON cp.id_category = c.id_category
             WHERE p.id_project != :excludeId
+            GROUP BY p.id_project
             ORDER BY RAND()
             LIMIT 1;
         ");
         $stmt->execute(['excludeId' => $excludeId]);
 
         while ($row = $stmt->fetch()) {
+            $tagsArray = !empty($row['tags']) ? explode(',', $row['tags']) : [];
             $projects = [
                 "id_project" => $row["id_project"],
                 "description" => $row["description"],
-                "video" => $row["video"]
+                "video" => $row["video"],
+                "tags" => $tagsArray
             ];
         }
 

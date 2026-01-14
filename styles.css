@@ -199,36 +199,36 @@
         0 8px 20px rgba(255, 77, 109, 0.4);
 }
 
-header h1 {
-    font-family: 'Arial', sans-serif; /* fuente */
-    font-size: 2.5rem;                 /* tamaño grande */
-    color: #ffffff;                    /* color del texto */
-    text-align: center;                /* centrar el texto */
-    margin: 0;                    /* margen superior e inferior */
-    background: linear-gradient(135deg, #ff7e5f, #feb47b); /* degradado */
-    letter-spacing: 1px;               /* separación entre letras */
+.header-discovered {
+    width: 100%;
+    padding: 20px 0;
+    background: var(--bg-gradient);
+    text-align: center;
+    z-index: 1000;
+    position: relative; /* ocupa espacio normal */
 }
 
-/*DISCOVER.PHP */
-
+/* DISCOVER.PHP */
 #discover-body {
     margin: 0;
     font-family: var(--font-primary);
     background: linear-gradient(135deg, #ff4d6d, #ff8c42);
-    height: 100vh;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;   /* al menos toda la pantalla */
 }
 
 #discover-container {
     display: flex;
-    justify-content: center;  /* centra horizontal */
-    align-items: center;      /* centra vertical */
-    height: 100vh;
-    padding-top: 0;           /* eliminar padding que rompe la verticalidad */
-    padding-bottom: 80px;     /* mantener espacio para nav si quieres */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: calc(var(--header-height, 40px)); /* empuja contenido debajo del header */
+    padding-bottom: 120px;                          /* espacio para nav inferior */
+    width: 100%;
     position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;                               /* scroll vertical si hace falta */
 }
 
 /* Ajustar las project-card para que respeten header y nav */
@@ -255,6 +255,35 @@ header h1 {
     max-height: 60vh;       /* nunca más alto que la pantalla */
     border-radius: 16px;
     object-fit: cover;      /* recorta si es necesario */
+}
+
+/* Boton de desplegar informacion*/
+.info-toggle {
+    display: inline-block;
+    margin: 10px 0;       /* separación arriba y abajo */
+    padding: 10px 18px;   /* tamaño cómodo */
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 
+        background 0.3s, 
+        transform 0.2s, 
+        box-shadow 0.2s;
+}
+
+.info-toggle:hover {
+    background: var(--color-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+.info-toggle:active {
+    transform: scale(0.97);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
 /* Ajustes móviles grandes */
@@ -357,10 +386,26 @@ header h1 {
 }
 
 .tags span {
-    margin-right: 6px;
-    color: #ff4d6d;
+    display: inline-block;
+    margin: 4px 6px 4px 0;       /* margen entre tags */
+    padding: 4px 10px;            /* espacio interno */
+    background-color: rgba(255, 77, 109, 0.15); /* fondo suave */
+    color: #ff4d6d;               /* texto principal */
     font-weight: bold;
+    font-size: 0.85rem;
+    border-radius: 12px;          /* bordes redondeados */
+    white-space: nowrap;           /* evitar salto de línea dentro del tag */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* sombra ligera */
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
 }
+
+.tags span:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background-color: rgba(255, 77, 109, 0.25); /* fondo más intenso al hover */
+}
+
 #bottom-nav {
     position: fixed;
     bottom: 0;
@@ -400,6 +445,17 @@ header h1 {
     border-radius: 20px;
     font-weight: bold;
     cursor: pointer;
+}
+
+/*Texto descripcion de cartas*/
+.project-info p {
+    font-family: var(--font-secondary);
+    font-size: 0.95rem;
+    color: var(--color-dark);
+    line-height: 1.5;                   /* más espaciado entre líneas */
+    margin-bottom: 10px;                /* separación con los tags */
+    text-align: left;                   /* alineación del texto */
+    word-break: break-word;             /* evita desbordes de palabras largas */
 }
 
 /* =========================

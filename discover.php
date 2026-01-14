@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body id="discover-body">
-    <header>
+    <header class="header-discovered">
         <?php
         include("includes/database.php");
 
@@ -88,34 +88,39 @@
             playsinline: true 
         });
 
-        // Crear el div de información
-        const divInfo = createElement("<div></div>", "", "project-info");
+        // Crear botón de toggle info (siempre visible)
+        const infoButton = createElement("<button></button>", divCard, "info-toggle").text("Mostrar info");
+        
+        // Evento para mostrar/ocultar divInfo
+        infoButton.on("click", () => {
+            divInfo.toggleClass("hidden");
+            // Cambiar texto según estado
+            infoButton.text(divInfo.hasClass("hidden") ? "Mostrar info" : "Ocultar info");
+        });
+
+        // Crear el div de información (inicialmente oculto)
+        const divInfo = createElement("<div></div>", divCard, "project-info hidden");
 
         // Añadir párrafo de descripción
         createElement("<p></p>", divInfo).text(projectData.description);
 
         // Crear div para tags
-        //const divTags = createElement("div", divInfo, "tags");
+        const divTags = createElement("<div></div>", divInfo, "tags");
 
         // Añadir cada tag
-        /*(projectData.tags || []).forEach(tag => {
-            createElement("span", divTags).text(`#${tag}`);
-        });*/
+        (projectData.tags || []).forEach(tag => {
+            createElement("<span></span>", divTags).text(tag);
+        });
 
-        // Añadir divInfo al divCard
-        divCard.append(divInfo);
-        
-        // Crear div de botones
+        // Crear div de botones principales
         const divButtons = createElement("<div></div>", divCard, "actions");
 
-        // Crear botones con sus clases
-        createElement("<button></button>", divButtons, "nope").text("No m'agrada");
-        createElement("<button></button>", divButtons, "like").text("M'agrada");
+        // Botones de like/nope
+        createElement("<button></button>", divButtons, "nope").text("Like");
+        createElement("<button></button>", divButtons, "like").text("Nope");
 
-        // Devolver la card completa
         return divCard;
     }
-
 
     /* Funcion para eliminar Informacion */
     function deleteData() {
