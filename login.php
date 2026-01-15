@@ -57,11 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <div id="login-container">
     <h2 id="login-title">Iniciar sesión</h2>
-
-    <?php if ($error): ?>
-        <p id="login-error"><?php echo htmlspecialchars($error); ?></p>
-    <?php endif; ?>
-
     <form id="login-form" method="post">
         <label id="label-email" for="email">Email</label>
         <input id="input-email" type="email" name="email" required>
@@ -73,6 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </form>
 </div>
 <script type="module">
+import { showNotification } from './notificaciones.js';
 import { sendLog } from './create-logs.js'; // tu función para guardar logs
 
 // Capturar el formulario
@@ -83,6 +79,10 @@ form.addEventListener('submit', async (e) => {
     // Log: intento de login
     sendLog(`Intento de login con email: ${emailInput.value}`);
 });
+
+<?php if ($error): ?>
+    showNotification('error', <?= json_encode($error) ?>);
+<?php endif; ?>
 </script>
 
 </body>
