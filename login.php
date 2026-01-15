@@ -35,10 +35,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header("Location: discover.php");
             exit;
         } else {
-            $error = "Email o contraseña incorrectos";
+            $error = "Email o contrasenya incorrectes";
         }
     } else {
-        $error = "Introduce email y contraseña";
+        $error = "Introdueix email y contrasenya";
     }
 }
 ?>
@@ -77,7 +77,7 @@ const emailInput = document.getElementById('input-email');
 
 form.addEventListener('submit', async (e) => {
     // Log: intento de login
-    sendLog(`Intento de login con email: ${emailInput.value}`);
+    sendLog(`Intent de login amb email: ${emailInput.value}`);
 });
 
 <?php if ($error): ?>
