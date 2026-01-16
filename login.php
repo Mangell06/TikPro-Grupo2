@@ -46,25 +46,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Inicia Sesio</title>
+    <title>Inicia sessió</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icono-simbio.png" type="image/png">
 </head>
 <body id="login-body">
 <header class="main-header">
-    <h1 class="header-title">WORKTEAM</h1>
+    <h1 class="header-title">SIMBIO</h1>
 </header>
 
 <div id="login-container">
-    <h2 id="login-title">Iniciar sesión</h2>
+    <h2 id="login-title">Iniciar sessió</h2>
     <form id="login-form" method="post">
         <label id="label-email" for="email">Email</label>
         <input id="input-email" type="email" name="email" required>
 
-        <label id="label-password" for="password">Contraseña</label>
+        <label id="label-password" for="password">Contrasenya</label>
         <input id="input-password" type="password" name="password" required>
 
-        <button id="login-button" type="submit">Entrar</button>
+        <button id="login-button" type="submit">Iniciar sessió</button>
     </form>
 </div>
 <script type="module">

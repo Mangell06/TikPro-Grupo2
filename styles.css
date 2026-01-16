@@ -41,8 +41,8 @@
 .main-header {
     width: 100%;
     padding: 20px 0;
-    background: var(--bg-gradient);
-    text-align: center;
+    background: white;
+    text-align: left;
     position: fixed;
     top: 0;
     left: 0;
@@ -54,8 +54,11 @@
     font-family: var(--font-primary);
     font-size: 2rem;
     font-weight: bold;
-    color: white;
+    color: var(--color-primary);
     letter-spacing: 2px;
+    letter-spacing: 2px;
+    margin-left: 50px;
+
 }
 
 
