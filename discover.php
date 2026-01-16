@@ -39,7 +39,7 @@
 </main>
 
 <nav id="bottom-nav">
-    <button id="nav-profile">👤</button>
+    <a href="profile.php" id="nav-profile" class="nav-profile-link">👤</a>
     <button id="nav-chat">💬</button>
     <a href="logout.php" id="nav-logout" class="logout-button">🚪</a>
 </nav>
