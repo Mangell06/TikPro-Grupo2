@@ -9,13 +9,19 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descobrir</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icono-simbio.png" type="image/png">
 </head>
 <body id="discover-body">
     <header class="header-discovered">
-        <?php
+        <div class="profile-chat-header">
+            <a href="profile.php">Perfil</a>
+            <a href="chats.php">Chats</a>
+        </div>
+        <div class="close-session">
+            <?php
         include("includes/database.php");
 
         $iduser = $_SESSION["user_id"];
@@ -26,23 +32,23 @@
 
         // Obtener el resultado
         $user = $stmt->fetch();
-
+        
         // Mostrar el nombre
         if ($user) {
-            echo "<h1> Benvingut, " . htmlspecialchars($user['username']) . "</h1>";
+            echo "<h3 class='user'> Benvingut, " . htmlspecialchars($user['username']) . "</h3>";
         } else {
             echo "<h1>Usuari no encontrat</h1>";
         }
         ?>
-    </header>
+        
+        <a href="logout.php" id="nav-logout" class="logout-button">Tancar sessió</a>
+    
+        </div>
+        </header>
 <main id="discover-container">
 </main>
 
-<nav id="bottom-nav">
-    <button id="nav-profile">👤</button>
-    <button id="nav-chat">💬</button>
-    <a href="logout.php" id="nav-logout" class="logout-button">🚪</a>
-</nav>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script type="module">
 import { showNotification } from './notificaciones.js';
@@ -65,35 +71,38 @@ function createElement(tag, parent = "", className = "", attr = {}) {
 function createCard(projectData) {
     const divCard = createElement("<div></div>", "", "project-card");
     
-    createElement("<video></video>", divCard, "", { 
+    createElement("<video controls muted autoplay loop playsinline></video>", divCard, "", { 
         src: projectData.video,
-        controls: true,
-        muted: true,
-        autoplay: true,
-        loop: true,
-        playsinline: true 
     });
+    const mother =createElement("<div></div>", divCard, "allInfoDiv");
+    
+    const divButtons = createElement("<div></div>", mother, "actions");
+    const btnLike = createElement("<button></button>", divButtons, "like").text("❤");
+    const btnNope = createElement("<button></button>", divButtons, "nope").text("✖");
+    
 
-    const infoButton = createElement("<button></button>", divCard, "info-toggle").text("Mostra info");
+    const infoButton = createElement("<button></button>", mother, "info-toggle").text("Mostra info");
 
-    const divInfo = createElement("<div></div>", divCard, "project-info hidden");
+    const divInfo = createElement("<div></div>", mother, "project-info hidden");
 
-    infoButton.on("click", () => {
+    const infoButtonClick = () => {
         divInfo.toggleClass("hidden");
-        infoButton.text(divInfo.hasClass("hidden") ? "Mostra info" : "Amagar info");
+        mother.toggleClass("allInfoDiv");
         sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} toggle info: ${divInfo.hasClass("hidden") ? 'oculto' : 'visible'}`);
-    });
+    }
 
+    const infoButtonClose = createElement("<button></button>", divInfo, "info-toggle").text("Amagar info");
+    infoButton.on("click", infoButtonClick);
+    infoButtonClose.on("click", infoButtonClick);
+    
+    
+    console.log(projectData)
     createElement("<p></p>", divInfo).text(projectData.description);
 
     const divTags = createElement("<div></div>", divInfo, "tags");
     (projectData.tags || []).forEach(tag => {
         createElement("<span></span>", divTags).text(tag);
     });
-
-    const divButtons = createElement("<div></div>", divCard, "actions");
-    const btnNope = createElement("<button></button>", divButtons, "nope").text("Nope");
-    const btnLike = createElement("<button></button>", divButtons, "like").text("Like");
 
     btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} presionó Like en proyecto ${projectData.id_project}`));
     btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} presionó Nope en proyecto ${projectData.id_project}`));

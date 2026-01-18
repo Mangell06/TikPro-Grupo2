@@ -20,8 +20,10 @@
         // consulta
         $stmt = $pdo->prepare("
             SELECT p.id_project, p.title, p.description, p.video,
-            GROUP_CONCAT(c.name_category) AS tags
+            GROUP_CONCAT(c.name_category) AS tags,
+            u.username, u.entity_name, u.entity_type
             FROM projects p
+            LEFT JOIN users u ON p.id_owner = u.id_user
             LEFT JOIN category_project cp ON p.id_project = cp.id_project
             LEFT JOIN categories c ON cp.id_category = c.id_category
             WHERE p.id_project != :excludeId
@@ -36,8 +38,12 @@
             $projects = [
                 "id_project" => $row["id_project"],
                 "description" => $row["description"],
+                "title" => $row["title"],
                 "video" => $row["video"],
-                "tags" => $tagsArray
+                "tags" => $tagsArray,
+                "username" => $row["username"],
+                "entity_name" => $row["entity_name"],
+                "entity_type" => $row["entity_type"],
             ];
         }
 
