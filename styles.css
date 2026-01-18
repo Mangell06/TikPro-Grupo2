@@ -484,7 +484,110 @@
     }
 }
 
+/* Estilos base para la carta final (móvil y PC) */
+.final-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 400px; /* para PC */
+    min-height: 250px;
+    text-align: center;
+    flex-direction: column;
+}
 
+.final-info-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.final-info-card p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+}
+
+.final-info-card button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background: #ff4d6d;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.final-info-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Botón cargando */
+.final-info-card button.loading {
+    background-color: #888;   /* color gris */
+    cursor: not-allowed;
+    transform: scale(1);
+}
+
+/* Opcional: animación de puntos */
+.final-info-card button.loading::after {
+    content: '...';
+    animation: dots 1s steps(3, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+/* Media Query: PC/Tablet */
+@media screen and (min-width: 768px) {
+    .final-card {
+        width: 60%;
+        max-width: 600px;
+        min-height: 300px;
+        padding: 30px;
+    }
+
+    .final-info-card p {
+        font-size: 1.2rem;
+    }
+
+    .final-info-card button {
+        font-size: 1.1rem;
+        padding: 12px 25px;
+    }
+}
+
+/* Media Query: Escritorio grande */
+@media screen and (min-width: 1200px) {
+    .final-card {
+        width: 40%;
+        max-width: 700px;
+        min-height: 350px;
+        padding: 40px;
+    }
+
+    .final-info-card p {
+        font-size: 1.3rem;
+    }
+
+    .final-info-card button {
+        font-size: 1.2rem;
+        padding: 15px 30px;
+    }
+}
 
 /* =========================
    MENSAJES DE NOTIFICACIÓN

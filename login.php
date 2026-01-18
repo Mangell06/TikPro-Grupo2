@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $password_hashed = hash('sha256', $password);
 
         $stmt = $pdo->prepare(
-            "SELECT id_user, email 
+            "SELECT id, email 
              FROM users 
              WHERE email = ? AND password = ? 
              LIMIT 1"
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            $_SESSION['user_id']    = $user['id_user'];
+            $_SESSION['user_id']    = $user['id'];
 
             header("Location: discover.php");
             exit;

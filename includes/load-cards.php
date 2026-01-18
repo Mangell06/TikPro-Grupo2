@@ -1,60 +1,81 @@
 <?php
-    session_start();
-    include("database.php");
+session_start();
+include("database.php");
 
-    // indicar que la respuesta es json
-    header('Content-Type: application/json');
+header('Content-Type: application/json');
 
-    // comprobar sesión
-    if (!isset($_SESSION['user_id'])) {
-        http_response_code(401);
-        echo json_encode([
-            "error" => "Sessió no iniciada"
-        ]);
-        exit;
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(["error" => "Sessió no iniciada"]);
+    exit;
+}
+
+try {
+    $excludeIds = [];
+    if (isset($_GET['exclude_projects']) && $_GET['exclude_projects'] !== '') {
+        $excludeIds = array_map('intval', explode(',', $_GET['exclude_projects']));
     }
 
-    $excludeId = isset($_GET['exclude_id']) ? intval($_GET['exclude_id']) : 0;
-
-    try {
-        // consulta
-        $stmt = $pdo->prepare("
-            SELECT p.id_project, p.title, p.description, p.video,
-            GROUP_CONCAT(c.name_category) AS tags
-            FROM projects p
-            LEFT JOIN category_project cp ON p.id_project = cp.id_project
-            LEFT JOIN categories c ON cp.id_category = c.id_category
-            WHERE p.id_project != :excludeId
-            GROUP BY p.id_project
-            ORDER BY RAND()
-            LIMIT 1;
-        ");
-        $stmt->execute(['excludeId' => $excludeId]);
-
-        while ($row = $stmt->fetch()) {
-            $tagsArray = !empty($row['tags']) ? explode(',', $row['tags']) : [];
-            $projects = [
-                "id_project" => $row["id_project"],
-                "description" => $row["description"],
-                "video" => $row["video"],
-                "tags" => $tagsArray
-            ];
-        }
-
-        // sin resultados
-        if (empty($projects)) {
-            http_response_code(204);
-            exit;
-        }
-
-        // todo correcto
-        http_response_code(200);
-        echo json_encode($projects);
-
-    } catch (Exception $e) {
-        http_response_code(500);
-        echo json_encode([
-            "error" => "No s'ha pogut conectar amb el servidor"
-        ]);
+    $whereSql = '';
+    if (!empty($excludeIds)) {
+        $whereSql = 'WHERE p.id NOT IN (' . implode(',', $excludeIds) . ')';
     }
+
+    $userId = $_SESSION['user_id'];
+
+    // Obtener categorías del usuario
+    $stmtCat = $pdo->prepare("SELECT id_category FROM categories_user WHERE id_user = :iduser");
+    $stmtCat->execute(['iduser' => $userId]);
+    $userCategories = $stmtCat->fetchAll(PDO::FETCH_COLUMN);
+
+    $orderSql = '';
+    if (!empty($userCategories)) {
+        // Convierte el array en lista para SQL
+        $userCatList = implode(',', $userCategories);
+
+        // LEFT JOIN temporal con categorías del usuario para marcar coincidencias
+        $orderSql = "LEFT JOIN categories_project ucp 
+                    ON p.id = ucp.id_project AND ucp.id_category IN ($userCatList)";
+    }
+
+    // Consulta
+    $sql = "
+    SELECT p.id, p.title, p.description, p.video, GROUP_CONCAT(c.name) AS tags, COUNT(ucp.id_category) AS coincidences
+    FROM projects p
+    LEFT JOIN categories_project cp ON p.id = cp.id_project
+    LEFT JOIN categories c ON cp.id_category = c.id
+    $orderSql
+    $whereSql
+    GROUP BY p.id
+    ORDER BY coincidences DESC
+    LIMIT 1
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    $projects = [];
+
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $tagsArray = $row['tags'] ? explode(',', $row['tags']) : [];
+        $projects[] = [
+            "id_project" => (int)$row["id"],
+            "title" => $row["title"],
+            "description" => $row["description"],
+            "video" => $row["video"],
+            "tags" => $tagsArray
+        ];
+    }
+
+    http_response_code(200);
+    echo json_encode($projects);
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        "error" => "No s'ha pogut conectar amb el servidor",
+        "details" => $e->getMessage()
+    ]);
+}
+
 ?>
