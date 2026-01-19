@@ -26,14 +26,11 @@
 
         $iduser = $_SESSION["user_id"];
 
-        // Preparar y ejecutar la consulta
         $stmt = $pdo->prepare("SELECT name FROM users WHERE id = :iduser");
         $stmt->execute(['iduser' => $iduser]);
 
-        // Obtener el resultado
         $user = $stmt->fetch();
         
-        // Mostrar el nombre
         if ($user) {
             echo "<h3 class='user'>" . htmlspecialchars($user['name']) . "</h3>";
         } else {
@@ -53,9 +50,8 @@
 <script type="module">
 import { showNotification } from './notificaciones.js';
 import { createElement } from './createElement.js';
-import { sendLog } from './create-logs.js'; // importar función de logging
+import { sendLog } from './create-logs.js';
 
-// preventDefault F5
 $(document).on("keydown", function(e) {
     if ((e.which || e.keyCode) == 116 || ((e.ctrlKey || e.metaKey) && (e.which || e.keyCode) == 82)) {
         e.preventDefault();
@@ -63,7 +59,8 @@ $(document).on("keydown", function(e) {
     }
 });
 
-// preventDefault F5
+$("#nav-logout").on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} a cerrado sesion`));
+
 $(document).on("keydown", function(e) {
     if ((e.which || e.keyCode) == 116 || ((e.ctrlKey || e.metaKey) && (e.which || e.keyCode) == 82)) {
         e.preventDefault();
@@ -75,21 +72,16 @@ const currentUser = <?php echo json_encode($user['name']); ?>;
 let projectsData = [];
 let projectsShows = []
 
-// funcion para crear elementos.
-
-
-// funcion para crear cartas
-function createCard(projectData, isLike) {
+function createCard(projectData) {
     const divCard = createElement("<div></div>", "", "project-card");
 
     if (!projectData) {
-        // Carta final sin proyecto
         divCard.addClass("final-card");
 
         const divInfo = createElement("<div></div>", divCard, "final-info-card");
-        createElement("<p></p>", divInfo).text("No hi han mes projectes.");
+        createElement("<p></p>", divInfo).text("No hi ha més videos per mostrar");
         createElement("<p></p>", divInfo).text("¿Vols tornar a veurels?");
-        const btnTornar = createElement("<button></button>", divInfo).text("Torna a Veurels");
+        const btnTornar = createElement("<button></button>", divInfo).text("Torna");
 
         btnTornar.on("click", async () => {
             btnTornar.prop("disabled", true).addClass("loading").text("Carregant");
@@ -104,8 +96,11 @@ function createCard(projectData, isLike) {
 
         return divCard;
     }
-
-    // Carta normal con proyecto
+    
+    if (projectData.liked) {
+        const star = createElement("<div></div>", divCard, "liked-star");
+        star.text("★");
+    }
     createElement("<video controls muted autoplay loop playsinline></video>", divCard, "", { 
         src: projectData.video
     });
@@ -114,15 +109,15 @@ function createCard(projectData, isLike) {
 
     const divButtons = createElement("<div></div>", mother, "actions");
 
-    if (!isLike) {
+    if (!projectData.liked) {
         const btnLike = createElement("<button></button>", divButtons, "like").text("M'agrada");
-        const btnNope = createElement("<button></button>", divButtons, "nope").text("No m'agrada");
+        const btnNope = createElement("<button></button>", divButtons, "nope").text("No m'interessa");
 
-        btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Like en proyecto ${projectData.id_project}`));
-        btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Nope en proyecto ${projectData.id_project}`));
+        btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "No M'interessa" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
+        btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "M'agrada" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
     } else {
-        const btnNext = createElement("<button></button>", divButtons, "nope").text("Seguent");
-        btnNext.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó next en el proyecto con id ${projectData.id_project}`));
+        const btnNext = createElement("<button></button>", divButtons, "nope").text("Següent");
+        btnNext.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "següent" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
     }
 
     const title = createElement("<p></p>", mother,"project-title").text(projectData.title);
@@ -133,6 +128,7 @@ function createCard(projectData, isLike) {
     createElement("<a href='profile.php'></a>", ancoreDiv, "ancore").text("Perfil");
     createElement("<a href='chats.php'></a>", ancoreDiv, "ancore").text("Chat");
     const infoButton = createElement("<button></button>", ancoreDiv, "ancore").text("Detalls");
+    infoButton.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "Detalls" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
 
     const divInfo = createElement("<div></div>", mother, "project-info hiddenSuave");
     const infoButtonClick = () => {
@@ -143,6 +139,7 @@ function createCard(projectData, isLike) {
     }
 
     const infoButtonClose = createElement("<button></button>", divInfo, "info-toggle").text("Amagar detalls");
+    infoButtonClose.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "Amagar detalls" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
     infoButton.on("click", infoButtonClick);
     infoButtonClose.on("click", infoButtonClick);
 
@@ -171,7 +168,7 @@ function deleteData() {
 function deleteCard() {
     const cardDoom = $("#discover-container .project-card");
     if (!cardDoom.length) {
-        showNotification("error","No hi ha cap projecte");
+        showNotification("error","No hi ha cap projecte",<?php echo json_encode($user['name']); ?>);
         sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} intento eliminar carta pero no habia ninguna`);
         return false;
     }
@@ -192,7 +189,7 @@ async function readDB() {
     }).then(response => {
         if (!response.ok) {
             return response.json().then(err => {
-                showNotification("error", err.error);
+                showNotification("error", err.error,<?php echo json_encode($user['name']); ?>);
                 sendLog(`Error: ${err.error}`);
             });
         }
@@ -208,7 +205,7 @@ async function readDB() {
     });
 }
 
-for (let i = projectsData.length; i < 3; i++) {
+for (let i = projectsData.length; i < 2; i++) {
     await readDB();
 }
 
@@ -217,25 +214,16 @@ async function loadCard() {
         deleteCard();
     }
     if (projectsData.length === 0) {
-        await readDB();  // cargar al menos un proyecto
-        if (projectsData.length === 0) {
-            const finalCard = createCard(null); // carta final
-            $("#discover-container").append(finalCard);
-            sendLog(`Usuario ${currentUser} no tiene proyectos disponibles`);
-            return;
-        }
+        const finalCard = createCard(null);
+        $("#discover-container").append(finalCard);
+        sendLog(`Usuario ${currentUser} no tiene proyectos disponibles`);
+        return;
     }
 
-    // Obtener el estado like del primer proyecto
-    const liked = await isLike(projectsData[0].id_project);
-
-    // Crear la carta con los datos correctos
-    const cardDoom = createCard(projectsData[0], liked);
+    const cardDoom = createCard(projectsData[0]);
     addCardEvents(cardDoom);
     $("#discover-container").append(cardDoom);
 
-    deleteData();
-    // Leer más proyectos para mantener el buffer (asíncrono)
     readDB();
 }
 
@@ -245,58 +233,37 @@ function addCardEvents(card) {
 }
 
 async function handleAction(card, action) {
-    card.addClass(action === "like" ? "swipe-right" : "swipe-left");
-    if (projectsData.length > 0) {
-        sendLog(`Usuario ${currentUser} swiped ${action} en proyecto ${projectsData[0].id_project}`);
-    }
-
+    card.addClass(action === "like" ? "swipe-left" : "swipe-right");
     setTimeout(() => {
         loadCard();
     }, 400);
 
-    if (action === "like" && projectsData[0]) {
-        showNotification("info","💖 Match! Anar al xat");
+   if (action === "like" && projectsData[0]) {
         try {
             const res = await fetch("includes/like-cards.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({ project: projectsData[0].id_project })
+                body: new URLSearchParams({ 
+                    project: projectsData[0].id_project,
+                    liked: projectsData[0].liked ? 1 : 0
+                })
             });
             if (!res.ok) {
                 const err = await res.json();
-                showNotification("error", err.error);
+                showNotification("error", err.error,<?php echo json_encode($user['name']); ?>);
                 sendLog(`Error: ${err.error}`);
             } else {
-                sendLog(`Usuario ${currentUser} dio like al proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`);
+                showNotification("info","💖 Match! Anar al xat",<?php echo json_encode($user['name']); ?>);
             }
         } catch (e) {
-            showNotification("error","Error enviando like");
+            showNotification("error","Error enviando like",<?php echo json_encode($user['name']); ?>);
         }
     }
+
+    deleteData();
 }
 
-async function isLike(projectId) {
-    try {
-        const response = await fetch("includes/check-like.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ project: projectId })
-        });
-
-        if (!response.ok) {
-            const err = await response.json();
-            throw new Error(err.error);
-        }
-
-        const data = await response.json();
-        return data.exists === true; // devuelve true si el like ya existe
-
-    } catch (err) {
-        return false; // fallback
-    }
-}
-
-showNotification("info","Benvingut, " + <?php echo json_encode($user['name']); ?>);
+showNotification("info","Benvingut, " + <?php echo json_encode($user['name']); ?>,<?php echo json_encode($user['name']); ?>);
 loadCard();
 </script>
 </body>

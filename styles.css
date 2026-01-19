@@ -715,3 +715,143 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+
+/* =========================
+   CARTA FINAL (SIN PROYECTOS)
+   ========================= */
+
+.project-card.final-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #fff0f3 100%
+    );
+    border-radius: 24px;
+    box-shadow:
+        0 30px 60px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(230, 57, 70, 0.2);
+    animation: finalCardAppear 0.6s ease-out;
+}
+
+@keyframes finalCardAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Contenido interno */
+.final-info-card {
+    text-align: center;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Texto principal */
+.final-info-card p:first-child {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+/* Texto secundario */
+.final-info-card p:nth-child(2) {
+    font-size: 1rem;
+    color: var(--color-neutral);
+}
+
+/* Botón volver a ver */
+.final-info-card button {
+    margin-top: 20px;
+    background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-secondary)
+    );
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 16px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        background 0.3s;
+}
+
+.final-info-card button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 35px rgba(230, 57, 70, 0.45);
+}
+
+.final-info-card button:active {
+    transform: scale(0.97);
+}
+
+/* Estado cargando */
+.final-info-card button.loading {
+    background: var(--color-neutral);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* =========================
+   ESTRELLA DE LIKE
+   ========================= */
+
+.liked-star {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+    color: #fff;
+
+    background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-secondary)
+    );
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.25),
+        0 0 0 2px rgba(255,255,255,0.85);
+
+    z-index: 20;
+    pointer-events: none;
+
+    animation: starPop 0.35s ease-out;
+}
+
+@keyframes starPop {
+    0% {
+        transform: translateX(-50%) scale(0.6);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(-50%) scale(1);
+        opacity: 1;
+    }
+}

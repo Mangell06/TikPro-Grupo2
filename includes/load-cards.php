@@ -26,26 +26,25 @@ try {
     error_log("Exclude IDs: " . implode(',', $excludeIds));
 
     $userId = $_SESSION['user_id'];
-
-    // Obtener categorías del usuario
     $stmtCat = $pdo->prepare("SELECT id_category FROM categories_user WHERE id_user = :iduser");
     $stmtCat->execute(['iduser' => $userId]);
     $userCategories = $stmtCat->fetchAll(PDO::FETCH_COLUMN);
 
     $orderSql = '';
     if (!empty($userCategories)) {
-        // Convierte el array en lista para SQL
         $userCatList = implode(',', $userCategories);
-
-        // LEFT JOIN temporal con categorías del usuario para marcar coincidencias
         $orderSql = "LEFT JOIN categories_project ucp 
                     ON p.id = ucp.id_project AND ucp.id_category IN ($userCatList)";
+    } else {
+        $orderSql = '';
     }
-
-    // Consulta
     $sql = "
-    SELECT p.id, p.title, p.description, p.video, GROUP_CONCAT(c.name) AS tags, COUNT(ucp.id_category) AS coincidences,
-    u.name, u.entity_name, u.entity_type FROM projects p
+    SELECT p.id, p.title, p.description, p.video, 
+    GROUP_CONCAT(c.name) AS tags, 
+    COUNT(ucp.id_category) AS coincidences,
+    u.name, u.entity_name, u.entity_type, 
+    (SELECT COUNT(*) FROM likes WHERE id_user = :userid AND id_project = p.id) AS liked
+    FROM projects p
     LEFT JOIN users u ON p.id_owner = u.id
     LEFT JOIN categories_project cp ON p.id = cp.id_project
     LEFT JOIN categories c ON cp.id_category = c.id
@@ -53,11 +52,10 @@ try {
     $whereSql
     GROUP BY p.id
     ORDER BY coincidences DESC
-    LIMIT 1
-    ";
+    LIMIT 1";
 
     $stmt = $pdo->prepare($sql);
-    $stmt->execute();
+    $stmt->execute(['userid' => $userId]);
 
     $projects = [];
 
@@ -71,7 +69,8 @@ try {
             "tags" => $tagsArray,
             "username" => $row["name"],
             "entity_name" => $row["entity_name"],
-            "entity_type" => $row["entity_type"], 
+            "entity_type" => $row["entity_type"],
+            "liked" => ($row['liked'] > 0),
         ];
     }
 

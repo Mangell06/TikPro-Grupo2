@@ -1,53 +1,13 @@
-[17:16:13] [127.0.0.1] Usuario Institut Joan XXIII toggle info: visible
-[17:16:14] [127.0.0.1] Usuario Institut Joan XXIII toggle info: oculto
-[17:16:15] [127.0.0.1] Usuario Institut Joan XXIII presionó Nope en el proyecto con id 4
-[17:16:15] [127.0.0.1] Usuario Institut Joan XXIII swiped nope en proyecto 5
-[17:16:15] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:15] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 6
-[17:16:18] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 2
-[17:16:18] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 4
-[17:16:18] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 5
-[17:16:18] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 1
-[17:16:22] [127.0.0.1] Usuario Institut Joan XXIII toggle info: visible
-[17:16:24] [127.0.0.1] Usuario Institut Joan XXIII presionó Nope en el proyecto con id 2
-[17:16:24] [127.0.0.1] Usuario Institut Joan XXIII swiped nope en proyecto 4
-[17:16:24] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:24] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 3
-[17:16:26] [127.0.0.1] Usuario Institut Joan XXIII presionó Like en el proyecto con id 4
-[17:16:26] [127.0.0.1] Usuario Institut Joan XXIII swiped like en proyecto 5
-[17:16:26] [127.0.0.1] Error: m'agrada ya registrat
-[17:16:27] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:27] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 6
-[17:16:30] [127.0.0.1] Usuario Institut Joan XXIII presionó next en el proyecto con id 5
-[17:16:30] [127.0.0.1] Usuario Institut Joan XXIII swiped nope en proyecto 1
-[17:16:31] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:32] [127.0.0.1] Usuario Institut Joan XXIII presionó Nope en el proyecto con id 1
-[17:16:32] [127.0.0.1] Usuario Institut Joan XXIII swiped nope en proyecto 3
-[17:16:32] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:34] [127.0.0.1] Usuario Institut Joan XXIII presionó Nope en el proyecto con id 3
-[17:16:34] [127.0.0.1] Usuario Institut Joan XXIII swiped nope en proyecto 6
-[17:16:35] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:36] [127.0.0.1] Usuario Institut Joan XXIII presionó next en el proyecto con id 6
-[17:16:36] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:36] [127.0.0.1] Usuario Institut Joan XXIII no tiene proyectos disponibles
-[17:16:37] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 2
-[17:16:37] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 4
-[17:16:37] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 5
-[17:16:37] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:37] [127.0.0.1] Usuario Institut Joan XXIII vuelve a ver los projectos
-[17:16:37] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 1
-[17:16:39] [127.0.0.1] Usuario Institut Joan XXIII presionó Nope en el proyecto con id 2
-[17:16:39] [127.0.0.1] Usuario Institut Joan XXIII swiped nope en proyecto 4
-[17:16:39] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:39] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 3
-[17:16:42] [127.0.0.1] Usuario Institut Joan XXIII presionó Like en el proyecto con id 4
-[17:16:42] [127.0.0.1] Usuario Institut Joan XXIII swiped like en proyecto 5
-[17:16:42] [127.0.0.1] Error: m'agrada ya registrat
-[17:16:42] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:42] [127.0.0.1] Usuario "Institut Joan XXIII" cargó proyecto 6
-[17:16:44] [127.0.0.1] Usuario Institut Joan XXIII presionó next en el proyecto con id 5
-[17:16:44] [127.0.0.1] Usuario Institut Joan XXIII swiped nope en proyecto 1
-[17:16:45] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
-[17:16:47] [127.0.0.1] Usuario Institut Joan XXIII presionó Nope en el proyecto con id 1
-[17:16:47] [127.0.0.1] Usuario Institut Joan XXIII swiped nope en proyecto 3
-[17:16:48] [127.0.0.1] Usuario Institut Joan XXIII eliminó la carta visible
+
+[21:01:47] [37.222.10.101] Usuario "PayPal" cargó proyecto 1
+[21:01:47] [37.222.10.101] Usuario "PayPal" cargó proyecto 3
+[21:01:48] [37.222.10.101] Usuario "PayPal" cargó proyecto 4
+[21:01:50] [37.222.10.101] Usuario PayPal a cerrat la notificació
+[21:01:55] [37.222.10.101] Usuario PayPal a cerrado sesion
+[21:02:02] [37.222.10.101] Usuario "paypal@empresa.com" inició sesión
+[21:02:03] [37.222.10.101] Usuario "PayPal" cargó proyecto 1
+[21:02:03] [37.222.10.101] Usuario "PayPal" cargó proyecto 3
+[21:02:03] [37.222.10.101] Usuario "PayPal" cargó proyecto 4
+[21:02:07] [37.222.10.101] Usuario PayPal presionó "següent" en el proyecto Enviaments ràpids amb Amazon con id 1
+[21:02:08] [37.222.10.101] Usuario PayPal eliminó la carta visible
+[21:02:08] [37.222.10.101] Usuario "PayPal" cargó proyecto 5

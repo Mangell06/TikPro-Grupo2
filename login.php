@@ -30,10 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user) {
-            $_SESSION['user_id']    = $user['id'];
-
-            header("Location: discover.php");
-            exit;
+            $_SESSION['user_id'] = $user['id'];
+            $loginSuccess = true;
         } else {
             $error = "Email o contrasenya incorrectes";
         }
@@ -76,14 +74,19 @@ import { sendLog } from './create-logs.js'; // tu función para guardar logs
 const form = document.getElementById('login-form');
 const emailInput = document.getElementById('input-email');
 
-form.addEventListener('submit', async (e) => {
-    // Log: intento de login
-    sendLog(`Intent de login amb email: ${emailInput.value}`);
-});
+// Si el login fue exitoso, hacer log y redirigir
+<?php if ($loginSuccess): ?>
+(async () => {
+    await sendLog(`Usuario "<?= addslashes($email) ?>" inició sesión`);
+    window.location.href = 'discover.php';
+})();
+<?php endif; ?>
 
 <?php if ($error): ?>
-    showNotification('error', <?= json_encode($error) ?>);
+showNotification('error', <?= json_encode($error) ?>, <?php echo json_encode($user['name']); ?>);
+sendLog(`Intent de login amb email: <?= addslashes($email) ?>`);
 <?php endif; ?>
+
 </script>
 
 </body>
