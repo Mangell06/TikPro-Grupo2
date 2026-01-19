@@ -3,18 +3,35 @@
    PALETA DE COLORES (5)
    ========================= */
 :root {
-    --color-primary: #ff4d6d;     /* Coral / Pink */
-    --color-secondary: #ff8c42;   /* Orange Peach */
-    --color-dark: #1f1c2c;        /* Dark Purple */
-    --color-neutral: #555555;     /* Neutral text */
-    --color-error: #e63946;       /* Error red */
+    /* Colores Principales (Ajustados para sofisticación) */
+    --color-primary: #E63946; 
+    --color-secondary: #F28482;
+    --color-dark: #1D3557;
+    --color-neutral: #4A4E69;
+    --color-error: #D62828;
 
     --bg-gradient: linear-gradient(
-        135deg,
-        #ff4d6d,
-        #ff8c42,
-        #ffb347
+        135deg, 
+        #E63946 0%, 
+        #F28482 50%, 
+        #F4A261 100%
     );
+
+    --btn-gradient: linear-gradient(
+        90deg, 
+        #E63946, 
+        #F07167
+    );
+
+    --color-info: #457B9D;   
+    --color-success: #84A59D; 
+    --color-warning: #F4A261;
+    --color-error: #E63946;
+    
+
+    --color-info-light: rgba(69, 123, 157, 0.15);
+    --color-success-light: rgba(132, 165, 157, 0.15);
+    --color-warning-light: rgba(233, 196, 106, 0.15);
 }
 
 /* =========================
@@ -41,8 +58,8 @@
 .main-header {
     width: 100%;
     padding: 20px 0;
-    background: var(--bg-gradient);
-    text-align: center;
+    background: white;
+    text-align: left;
     position: fixed;
     top: 0;
     left: 0;
@@ -54,8 +71,11 @@
     font-family: var(--font-primary);
     font-size: 2rem;
     font-weight: bold;
-    color: white;
+    color: var(--color-primary);
     letter-spacing: 2px;
+    letter-spacing: 2px;
+    margin-left: 50px;
+
 }
 
 
@@ -201,18 +221,46 @@
 
 .header-discovered {
     width: 100%;
-    padding: 20px 0;
-    background: var(--bg-gradient);
+    padding: 20px 22px;
+    background: white;
     text-align: center;
     z-index: 1000;
-    position: relative; /* ocupa espacio normal */
+    position: relative;
+    justify-content: space-between;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.close-session{
+    gap: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.user{
+  font-weight: 599;
+  color: #6c6c6c;
+  display: inline;
+}
+
+.profile-chat-header{
+  gap: 80px;
+  display: flex;
+  font-size: 18px;
+}
+
+.profile-chat-header a{
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
 }
 
 /* DISCOVER.PHP */
 #discover-body {
     margin: 0;
     font-family: var(--font-primary);
-    background: linear-gradient(135deg, #ff4d6d, #ff8c42);
+    background: var(--bg-gradient);
     display: flex;
     flex-direction: column;
     min-height: 100vh;   /* al menos toda la pantalla */
@@ -221,29 +269,26 @@
 #discover-container {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    padding-top: calc(var(--header-height, 40px)); /* empuja contenido debajo del header */
-    padding-bottom: 120px;                          /* espacio para nav inferior */
     width: 100%;
     position: relative;
     overflow-x: hidden;
-    overflow-y: auto;                               /* scroll vertical si hace falta */
+    overflow-y: auto;
+    flex-grow: 1;
 }
 
 /* Ajustar las project-card para que respeten header y nav */
 .project-card {
-    width: 90%;              /* ocupa la mayor parte del ancho */
-    max-width: 50%;        /* límite en pantallas grandes */
-    height: auto;            /* altura automática */
+    width: 380px;
+    max-width: 50%;
+    height: 713px;
     background: white;
     border-radius: 20px;
-    padding: 20px;
     text-align: center;
-    position: relative;      /* cambiar de absolute */
+    position: relative;
     box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-    animation: fadeIn 0.4s ease;
-    overflow: hidden;        /* evitar que el video sobresalga */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -262,11 +307,18 @@
 }
 
 .project-card video {
-    width: 100%;            /* ocupa todo el ancho de la tarjeta */
-    height: auto;           /* mantiene proporción */
+    width: 100%;
+    height: 540px;          /* mantiene proporción */
     max-height: 60vh;       /* nunca más alto que la pantalla */
     border-radius: 16px;
     object-fit: cover;      /* recorta si es necesario */
+}
+
+.allInfoDiv{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
 /* Boton de desplegar informacion*/
@@ -274,13 +326,14 @@
     display: inline-block;
     margin: 10px 0;       /* separación arriba y abajo */
     padding: 10px 18px;   /* tamaño cómodo */
-    background: var(--color-primary);
+    background: linear-gradient( 135deg, var(--color-primary), var(--color-secondary) );
     color: white;
     border: none;
     border-radius: 12px;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
+    margin-top: 8px;
     transition: 
         background 0.3s, 
         transform 0.2s, 
@@ -298,59 +351,98 @@
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
+.project-title{
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  margin-top: -3px;
+}
+
+.ancore{
+    display: inline-block;
+    margin: 10px 0;
+    /* margin-top: 10px; */
+    padding: 10px 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    color: var(--color-error);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.ancore:hover{
+    text-decoration: underline;
+}
+
+.divAncore{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
 /* Ajustes móviles grandes */
-@media (max-width: 480px) {
-    #discover-container {
-        flex-direction: column;      
-        justify-content: flex-start;  
-        align-items: center;
-        padding-top: 100px;           /* espacio para header */
-        padding-bottom: 80px;         /* espacio para nav */
-        height: calc(100vh - 180px);  /* altura total disponible */
-    }
-
-    .project-card {
-        width: 98%;                  /* casi todo el ancho */
-        max-width: 95%;              /* un poco más ancho */
-        padding: 20px;
-        border-radius: 16px;
-        position: relative;
-        max-height: calc(100%);      /* altura máxima disponible */
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-    }
-
-    .project-card video {
+@media screen and (max-width: 700px) {
+   
+    .project-card{
         width: 100%;
-        height: auto;
-        max-height: 75vh;            /* más alto que antes */
-        border-radius: 12px;
-        object-fit: cover;
+        height: 100%;
+        flex-grow: 1;
+        max-width: unset;
     }
 
-    .actions button {
-        padding: 14px;
-        font-size: 1.05rem;
+    .project-card video{
+        max-height: unset;
+        height: 25px;
+        flex-grow: 1;
     }
+
+    .profile-chat-header{
+        gap: 10px;
+    }
+
+    .close_session{
+        gap: 10px;
+    }
+    #nav-logout{
+        padding: 5px;
+    }
+
+    .user{
+        display: none;
+    }
+    
+    .project-info.hiddenSuave{
+        display: none;
+
+    }
+ 
+
+  
 }
 
 .actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    gap: 10px;           /* separación entre botones */
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  flex-direction: row;
+  width: 100%;
+  right: -84px;
+  top: 64%;
+  z-index: 10;
 }
 
 .actions button {
-    flex: 1;              /* ambos botones ocupan el mismo espacio */
-    padding: 14px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 12px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
+  border: none;
+  border-radius: 37px;
+  cursor: pointer;
+  height: 36px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 9px;
 }
 
 .actions button:hover {
@@ -359,12 +451,13 @@
 }
 
 .like {
-    background: #ff4d6d;
+    background: #E63946;
     color: white;
 }
 
 .nope {
-    background: #ccc;
+    background: #484848;
+    color: white;
 }
 
 .swipe-right {
@@ -389,12 +482,58 @@
     }
 }
 
+@keyframes entrada-suave {
+  0% { top: 150px }
+  100% { top: 0px }
+}
+
 .project-info {
-    margin-top: 10px;
+    margin-top: -275px;
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    margin-bottom: -20px;
+    height: 300px;
+    overflow-y: auto;
+    z-index: 10;
+    transition: top 0.3s ease;
+}
+
+.project-info:not(.hiddenSuave) {
+    /* animation: entrada-suave 0.5s forwards; */
+    top: 0;
+}
+
+.project-info.hiddenSuave {
+    top: 220%;
+}
+
+.project-card .actions, .project-card video {
+    transition: filter 0.2s ease;
+}
+
+.dimLight .actions, .dimLight video {
+    filter: brightness(0.3);
+    pointer-events: none;
+}
+
+.project-hidden-button{
+  margin-top: -180px;
+  position: absolute;
+  padding: 10px;
+  z-index: 9999;
+  margin-left: -171px;
 }
 
 .hidden {
     display: none;
+}
+
+.trunc{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: 10px;
 }
 
 .tags span {
@@ -402,7 +541,7 @@
     margin: 4px 6px 4px 0;       /* margen entre tags */
     padding: 4px 10px;            /* espacio interno */
     background-color: rgba(255, 77, 109, 0.15); /* fondo suave */
-    color: #ff4d6d;               /* texto principal */
+    color: #E63946;               /* texto principal */
     font-weight: bold;
     font-size: 0.85rem;
     border-radius: 12px;          /* bordes redondeados */
@@ -410,12 +549,18 @@
     box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* sombra ligera */
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: default;
+    
 }
 
 .tags span:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     background-color: rgba(255, 77, 109, 0.25); /* fondo más intenso al hover */
+    
+}
+
+.tags{
+    padding-bottom: 20px;
 }
 
 #bottom-nav {
@@ -429,16 +574,18 @@
 }
 
 #bottom-nav button,
-#bottom-nav .logout-button {
-    background: var(--color-primary);
-    color: white;
+.logout-button {
+    background: linear-gradient( 135deg, var(--color-primary), var(--color-secondary) );
+    color: #fff;
     border: none;
-    padding: 12px 18px;
+    padding: 8px;
     border-radius: 12px;
-    font-size: 18px;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
     cursor: pointer;
-    text-decoration: none; /* Para el enlace */
-    transition: background 0.3s, transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    font-weight: 599;
 }
 
 #bottom-nav button:hover,
@@ -451,7 +598,7 @@
 .like-notification {
     position: fixed;
     top: 20px;
-    background: #ff4d6d;
+    background: #E63946;
     color: white;
     padding: 15px 25px;
     border-radius: 20px;
@@ -460,14 +607,23 @@
 }
 
 /*Texto descripcion de cartas*/
-.project-info p {
+.project-info p{
     font-family: var(--font-secondary);
     font-size: 0.95rem;
     color: var(--color-dark);
-    line-height: 1.5;                   /* más espaciado entre líneas */
-    margin-bottom: 10px;                /* separación con los tags */
-    text-align: left;                   /* alineación del texto */
-    word-break: break-word;             /* evita desbordes de palabras largas */
+    line-height: 1.5;
+    margin-bottom: 10px;
+    text-align: left !important;
+    word-break: break-word;
+}
+
+.project-info pre{
+    margin-bottom: 15px;
+    text-align: left !important;
+}
+
+.bold{
+    font-weight: 501;
 }
 
 /* =========================
@@ -513,34 +669,37 @@
 
 /* Tipos de notificación */
 .notification.info {
-    background: #007bff; /* Azul */
+    background: var(--color-info);
 }
 
 .notification.warning {
-    background: #ffc107; /* Amarillo */
+    background: var(--color-warning);
     color: #333;
 }
 
 .notification.error {
-    background: #e63946; /* Rojo */
+    background: var(--color-error);
 }
 
+.notification.success{
+    background-color: var(--color-success);
+}
 /* Botón de cerrar */
 .notification .close-btn {
-    margin-left: 15px;
     background: rgba(255,255,255,0.3);
     border: none;
     color: white;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background 0.2s;
+    text-align: center;
 }
 
 .notification.warning .close-btn {
@@ -556,4 +715,8 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+
+
+
+
 
