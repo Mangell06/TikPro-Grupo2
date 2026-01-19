@@ -64,7 +64,7 @@ function createElement(tag, parent = "", className = "", attr = {}) {
 }
 
 // funcion para crear cartas
-function createCard(projectData) {
+function createCard(projectData, isLike) {
     let divCard = createElement("<div></div>", "", "project-card");
 
     if (projectData) {
@@ -96,11 +96,18 @@ function createCard(projectData) {
         });
 
         const divButtons = createElement("<div></div>", divCard, "actions");
-        const btnNope = createElement("<button></button>", divButtons, "nope").text("Nope");
-        const btnLike = createElement("<button></button>", divButtons, "like").text("Like");
 
-        btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Nope en proyecto ${projectData.id_project}`));
-        btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Like en proyecto ${projectData.id_project}`));
+        if(!isLike) {
+            const btnNope = createElement("<button></button>", divButtons, "nope").text("no m'agrada");
+            const btnLike = createElement("<button></button>", divButtons, "like").text("m'agrada");
+
+            btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Nope en el proyecto con id ${projectData.id_project}`));
+            btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Like en el proyecto con id ${projectData.id_project}`));
+        } else {
+            const btnNext = createElement("<button></button>", divButtons, "nope").text("Seguent");
+            btnNext.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó next en el proyecto con id ${projectData.id_project}`));
+
+        }
 
     } else {
         // Carta final sin proyecto
@@ -115,24 +122,12 @@ function createCard(projectData) {
             btnTornar.prop("disabled", true).addClass("loading").text("Carregant");
 
             projectsShows = [];
-            sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} vuelve a ver los projectos`);
-            
-            // Cargar los datos de los nuevos proyectos
+            projectsData = [];
             for (let i = projectsData.length; i < 3; i++) {
                 await readDB();
             }
-
-            // Limpiar contenedor
-            if ($("#discover-container .project-card").length > 0) {
-                deleteCard();
-                deleteData();
-            }
-
-            if (projectsData[0]) {
-                const newCard = await createCard(projectsData[0]);
-                addCardEvents(newCard);
-                $("#discover-container").append(newCard);
-            }
+            loadCard();
+            sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} vuelve a ver los projectos`);
         });
     }
 
@@ -160,13 +155,19 @@ function deleteCard() {
 }
 
 async function readDB() {
-    const excludeIds = projectsShows.join(',');
-    await fetch(`includes/load-cards.php?exclude_projects=${projectsShows}`)
-    .then(response => {
+    await fetch(`includes/load-cards.php?exclude_projects=${projectsShows}`, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams({
+        exclude_projects: projectsShows.join(",")
+    })
+    }).then(response => {
         if (!response.ok) {
             return response.json().then(err => {
                 showNotification("error", err.error);
-                sendLog(`Error fetch proyectos: ${err.error}`);
+                sendLog(`Error: ${err.error}`);
             });
         }
         return response.json();
@@ -186,26 +187,30 @@ for (let i = projectsData.length; i < 3; i++) {
 }
 
 async function loadCard() {
-
-    if (projectsData.length === 0) {
-        const finalCard = createCard(projectsData[0]);
-        $("#discover-container").append(finalCard);
-        sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} no tiene proyectos disponibles`);
-        return;
-    }
-
     if ($("#discover-container .project-card").length > 0) {
         deleteCard();
-        deleteData();
+    }
+    if (projectsData.length === 0) {
+        await readDB();  // cargar al menos un proyecto
+        if (projectsData.length === 0) {
+            const finalCard = createCard(null); // carta final
+            $("#discover-container").append(finalCard);
+            sendLog(`Usuario ${currentUser} no tiene proyectos disponibles`);
+            return;
+        }
     }
 
-    const cardDoom = createCard(projectsData[0]);
-    addCardEvents(cardDoom); 
+    // Obtener el estado like del primer proyecto
+    const liked = await isLike(projectsData[0].id_project);
+
+    // Crear la carta con los datos correctos
+    const cardDoom = createCard(projectsData[0], liked);
+    addCardEvents(cardDoom);
     $("#discover-container").append(cardDoom);
+
+    deleteData();
+    // Leer más proyectos para mantener el buffer (asíncrono)
     readDB();
-
-
-    return;
 }
 
 function addCardEvents(card) {
@@ -213,20 +218,58 @@ function addCardEvents(card) {
     card.find(".nope").on("click", () => handleAction(card, "nope"));
 }
 
-function handleAction(card, action) {
+async function handleAction(card, action) {
     card.addClass(action === "like" ? "swipe-right" : "swipe-left");
-    sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} swiped ${action} en proyecto ${projectsData[0].id_project}`);
+    if (projectsData.length > 0) {
+        sendLog(`Usuario ${currentUser} swiped ${action} en proyecto ${projectsData[0].id_project}`);
+    }
 
     setTimeout(() => {
         loadCard();
     }, 400);
 
-    if (action === "like") {
+    if (action === "like" && projectsData[0]) {
         showNotification("info","💖 Match! Anar al xat");
+        try {
+            const res = await fetch("includes/like-cards.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ project: projectsData[0].id_project })
+            });
+            if (!res.ok) {
+                const err = await res.json();
+                showNotification("error", err.error);
+                sendLog(`Error: ${err.error}`);
+            } else {
+                sendLog(`Usuario ${currentUser} dio like al proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`);
+            }
+        } catch (e) {
+            showNotification("error","Error enviando like");
+        }
     }
 }
 
-sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} abrió la página Discover`);
+async function isLike(projectId) {
+    try {
+        const response = await fetch("includes/check-like.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ project: projectId })
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.error);
+        }
+
+        const data = await response.json();
+        return data.exists === true; // devuelve true si el like ya existe
+
+    } catch (err) {
+        return false; // fallback
+    }
+}
+
 loadCard();
 </script>
 </body>

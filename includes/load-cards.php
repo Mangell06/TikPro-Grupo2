@@ -18,8 +18,12 @@ try {
 
     $whereSql = '';
     if (!empty($excludeIds)) {
-        $whereSql = 'WHERE p.id NOT IN (' . implode(',', $excludeIds) . ')';
+        $excludeIds = array_filter($excludeIds, fn($id) => $id > 0);
+        if (!empty($excludeIds)) {
+            $whereSql = 'WHERE p.id NOT IN (' . implode(',', $excludeIds) . ')';
+        }
     }
+    error_log("Exclude IDs: " . implode(',', $excludeIds));
 
     $userId = $_SESSION['user_id'];
 
@@ -40,8 +44,9 @@ try {
 
     // Consulta
     $sql = "
-    SELECT p.id, p.title, p.description, p.video, GROUP_CONCAT(c.name) AS tags, COUNT(ucp.id_category) AS coincidences
-    FROM projects p
+    SELECT p.id, p.title, p.description, p.video, GROUP_CONCAT(c.name) AS tags, COUNT(ucp.id_category) AS coincidences,
+    u.name, u.entity_name, u.entity_type FROM projects p
+    LEFT JOIN users u ON p.id_owner = u.id
     LEFT JOIN categories_project cp ON p.id = cp.id_project
     LEFT JOIN categories c ON cp.id_category = c.id
     $orderSql
@@ -63,7 +68,10 @@ try {
             "title" => $row["title"],
             "description" => $row["description"],
             "video" => $row["video"],
-            "tags" => $tagsArray
+            "tags" => $tagsArray,
+            "username" => $row["name"],
+            "entity_name" => $row["entity_name"],
+            "entity_type" => $row["entity_type"], 
         ];
     }
 

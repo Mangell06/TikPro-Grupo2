@@ -13,8 +13,10 @@ use simbiodb;
 create table if not exists users (
   id int auto_increment primary key,
   email varchar(255) not null unique,
+  tfn varchar(15) not null unique,
   password char(64) not null,
   name varchar(100) not null,
+  poblation varchar(100) not null,
   entity_name varchar(255) not null,
   entity_type enum('center', 'company') not null,
   logo_image varchar(255) not null,
