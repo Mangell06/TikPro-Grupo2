@@ -92,8 +92,12 @@ function createCard(projectData) {
     const userWithEntity =createElement("<pre></pre>", mother).text(projectData.username +" - "+ projectData.entity_name);
     const description =createElement("<p></p>", mother, "trunc").text(projectData.description);
     
-    const infoButton = createElement("<button></button>", mother, "info-toggle").text("Mostra info");
-
+    
+    const ancoreDiv = createElement("<div></div>", mother, "divAncore");
+    const profile = createElement("<a href='profile.php'></a>", ancoreDiv, "ancore").text("Perfil");
+    const chats = createElement("<a href='chats.php'></a>", ancoreDiv, "ancore").text("Chat");
+    const infoButton = createElement("<button></button>", ancoreDiv, "ancore").text("Detalls");
+    
     const divInfo = createElement("<div></div>", mother, "project-info hiddenSuave");
     
     const infoButtonClick = () => {
@@ -103,7 +107,7 @@ function createCard(projectData) {
         sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} toggle info: ${divInfo.hasClass("hiddenSuave") ? 'oculto' : 'visible'}`);
     }
 
-    const infoButtonClose = createElement("<button></button>", divInfo, "info-toggle").text("Amagar info");
+    const infoButtonClose = createElement("<button></button>", divInfo, "info-toggle").text("Amagar detalls");
     infoButton.on("click", infoButtonClick);
     infoButtonClose.on("click", infoButtonClick);
     
