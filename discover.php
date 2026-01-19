@@ -85,8 +85,8 @@ function createCard(projectData) {
     const mother =createElement("<div></div>", divCard, "allInfoDiv");
     
     const divButtons = createElement("<div></div>", mother, "actions");
-    const btnLike = createElement("<button></button>", divButtons, "like").text("❤");
-    const btnNope = createElement("<button></button>", divButtons, "nope").text("✖");
+    const btnLike = createElement("<button></button>", divButtons, "like").text("M'agrada");
+    const btnNope = createElement("<button></button>", divButtons, "nope").text("No m'agrada");
     
     const title =createElement("<p></p>", mother,"project-title").text(projectData.title);
     const userWithEntity =createElement("<pre></pre>", mother).text(projectData.username +" - "+ projectData.entity_name);

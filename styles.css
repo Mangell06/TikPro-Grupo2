@@ -4,14 +4,12 @@
    ========================= */
 :root {
     /* Colores Principales (Ajustados para sofisticación) */
-    --color-primary: #E63946;      /* Rojo Carmesí (Autoridad) */
-    --color-secondary: #F28482;    /* Salmón Suave (Elegancia) */
-    --color-dark: #1D3557;         /* Azul Medianoche (Sustituye al púrpura para seriedad) */
-    --color-neutral: #4A4E69;      /* Gris Azulado (Texto más moderno) */
-    --color-error: #D62828;        /* Rojo Alerta */
+    --color-primary: #E63946; 
+    --color-secondary: #F28482;
+    --color-dark: #1D3557;
+    --color-neutral: #4A4E69;
+    --color-error: #D62828;
 
-    /* Gradiente "Modern Sunset" */
-    /* Usamos un ángulo de 135deg para dar dinamismo */
     --bg-gradient: linear-gradient(
         135deg, 
         #E63946 0%, 
@@ -19,7 +17,6 @@
         #F4A261 100%
     );
 
-    /* Variante para botones o elementos pequeños (más intenso) */
     --btn-gradient: linear-gradient(
         90deg, 
         #E63946, 
@@ -256,7 +253,7 @@
 .profile-chat-header a{
     color: var(--color-primary);
     text-decoration: none;
-    font-weight: 501;
+    font-weight: 600;
 }
 
 /* DISCOVER.PHP */
@@ -356,7 +353,7 @@
 
 .project-title{
   font-size: 17px;
-  font-weight: 599;
+  font-weight: 600;
   margin-bottom: 5px;
   margin-top: -3px;
 }
@@ -402,22 +399,24 @@
 }
 
 .actions {
-    display: flex;
-    gap: 10px;
-    position: absolute;
-    flex-direction: column;
-    top: 50%;
-    right: 9px;
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  flex-direction: row;
+  width: 100%;
+  right: -84px;
+  top: 64%;
+  z-index: 10;
 }
 
 .actions button {
-    font-size: 1rem;
-    border: none;
-    border-radius: 37px;
-    cursor: pointer;
-    width: 36px;
-    height: 36px;
-    transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
+  border: none;
+  border-radius: 37px;
+  cursor: pointer;
+  height: 36px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 9px;
 }
 
 .actions button:hover {
