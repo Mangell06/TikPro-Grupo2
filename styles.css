@@ -358,6 +358,32 @@
   margin-top: -3px;
 }
 
+.ancore{
+    display: inline-block;
+    margin: 10px 0;
+    /* margin-top: 10px; */
+    padding: 10px 18px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    color: var(--color-error);
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.ancore:hover{
+    text-decoration: underline;
+}
+
+.divAncore{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
 /* Ajustes móviles grandes */
 @media screen and (max-width: 700px) {
    
