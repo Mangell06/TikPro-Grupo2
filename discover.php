@@ -216,7 +216,7 @@ function handleAction(card, action) {
 }
 
 sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} abrió la página Discover`);
-showNotification("success","Benvingut, " + <?php echo json_encode($user['username']); ?>);
+showNotification("info","Benvingut, " + <?php echo json_encode($user['username']); ?>);
 loadCard();
 </script>
 </body>
