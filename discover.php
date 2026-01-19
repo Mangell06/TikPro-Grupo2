@@ -35,7 +35,7 @@
         
         // Mostrar el nombre
         if ($user) {
-            echo "<h3 class='user'>" . htmlspecialchars($user['username']) . "</h3>";
+            echo "<h3 class='user'>" . htmlspecialchars($user['name']) . "</h3>";
         } else {
             echo "<h1>Usuari no encontrat</h1>";
         }
@@ -79,63 +79,10 @@ let projectsShows = []
 
 
 // funcion para crear cartas
-function createCard(projectData) {
+function createCard(projectData, isLike) {
     const divCard = createElement("<div></div>", "", "project-card");
-    
-    createElement("<video controls muted autoplay loop playsinline></video>", divCard, "", { 
-        src: projectData.video,
-    });
-    const mother =createElement("<div></div>", divCard, "allInfoDiv");
-    
-    const divButtons = createElement("<div></div>", mother, "actions");
-    const btnLike = createElement("<button></button>", divButtons, "like").text("M'agrada");
-    const btnNope = createElement("<button></button>", divButtons, "nope").text("No m'agrada");
-    
-    const title =createElement("<p></p>", mother,"project-title").text(projectData.title);
-    const userWithEntity =createElement("<pre></pre>", mother).text(projectData.username +" - "+ projectData.entity_name);
-    const description =createElement("<p></p>", mother, "trunc").text(projectData.description);
-    
-    
-    const ancoreDiv = createElement("<div></div>", mother, "divAncore");
-    const profile = createElement("<a href='profile.php'></a>", ancoreDiv, "ancore").text("Perfil");
-    const chats = createElement("<a href='chats.php'></a>", ancoreDiv, "ancore").text("Chat");
-    const infoButton = createElement("<button></button>", ancoreDiv, "ancore").text("Detalls");
-    
-    const divInfo = createElement("<div></div>", mother, "project-info hiddenSuave");
-    
-    const infoButtonClick = () => {
-        divInfo.toggleClass("hiddenSuave");
-        mother.toggleClass("allInfoDiv");
-        divCard.toggleClass("dimLight");
-        sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} toggle info: ${divInfo.hasClass("hiddenSuave") ? 'oculto' : 'visible'}`);
-    }
 
-    const infoButtonClose = createElement("<button></button>", divInfo, "info-toggle").text("Amagar detalls");
-    infoButton.on("click", infoButtonClick);
-    infoButtonClose.on("click", infoButtonClick);
-    
-    
-    console.log(projectData);
-    createElement("<p></p>", divInfo,"project-title").text(projectData.title);
-    createElement("<pre></pre>", divInfo).text(projectData.username +" - "+ projectData.entity_name);
-    createElement("<p></p>", divInfo).text(projectData.description);
-    createElement("<p></p>", divInfo, "bold").text("Categories: ");
-
-
-    const divTags = createElement("<div></div>", divInfo, "tags");
-    (projectData.tags || []).forEach(tag => {
-        createElement("<span></span>", divTags).text(tag);
-    });
-
-            btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Nope en el proyecto con id ${projectData.id_project}`));
-            btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Like en el proyecto con id ${projectData.id_project}`));
-        } else {
-            const btnNext = createElement("<button></button>", divButtons, "nope").text("Seguent");
-            btnNext.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó next en el proyecto con id ${projectData.id_project}`));
-
-        }
-
-    } else {
+    if (!projectData) {
         // Carta final sin proyecto
         divCard.addClass("final-card");
 
@@ -146,7 +93,6 @@ function createCard(projectData) {
 
         btnTornar.on("click", async () => {
             btnTornar.prop("disabled", true).addClass("loading").text("Carregant");
-
             projectsShows = [];
             projectsData = [];
             for (let i = projectsData.length; i < 3; i++) {
@@ -155,10 +101,64 @@ function createCard(projectData) {
             loadCard();
             sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} vuelve a ver los projectos`);
         });
+
+        return divCard;
     }
+
+    // Carta normal con proyecto
+    createElement("<video controls muted autoplay loop playsinline></video>", divCard, "", { 
+        src: projectData.video
+    });
+
+    const mother = createElement("<div></div>", divCard, "allInfoDiv");
+
+    const divButtons = createElement("<div></div>", mother, "actions");
+
+    if (!isLike) {
+        const btnLike = createElement("<button></button>", divButtons, "like").text("M'agrada");
+        const btnNope = createElement("<button></button>", divButtons, "nope").text("No m'agrada");
+
+        btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Like en proyecto ${projectData.id_project}`));
+        btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó Nope en proyecto ${projectData.id_project}`));
+    } else {
+        const btnNext = createElement("<button></button>", divButtons, "nope").text("Seguent");
+        btnNext.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó next en el proyecto con id ${projectData.id_project}`));
+    }
+
+    const title = createElement("<p></p>", mother,"project-title").text(projectData.title);
+    createElement("<pre></pre>", mother).text(projectData.username +" - "+ projectData.entity_name);
+    createElement("<p></p>", mother, "trunc").text(projectData.description);
+
+    const ancoreDiv = createElement("<div></div>", mother, "divAncore");
+    createElement("<a href='profile.php'></a>", ancoreDiv, "ancore").text("Perfil");
+    createElement("<a href='chats.php'></a>", ancoreDiv, "ancore").text("Chat");
+    const infoButton = createElement("<button></button>", ancoreDiv, "ancore").text("Detalls");
+
+    const divInfo = createElement("<div></div>", mother, "project-info hiddenSuave");
+    const infoButtonClick = () => {
+        divInfo.toggleClass("hiddenSuave");
+        mother.toggleClass("allInfoDiv");
+        divCard.toggleClass("dimLight");
+        sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} toggle info: ${divInfo.hasClass("hiddenSuave") ? 'oculto' : 'visible'}`);
+    }
+
+    const infoButtonClose = createElement("<button></button>", divInfo, "info-toggle").text("Amagar detalls");
+    infoButton.on("click", infoButtonClick);
+    infoButtonClose.on("click", infoButtonClick);
+
+    createElement("<p></p>", divInfo,"project-title").text(projectData.title);
+    createElement("<pre></pre>", divInfo).text(projectData.username +" - "+ projectData.entity_name);
+    createElement("<p></p>", divInfo).text(projectData.description);
+    createElement("<p></p>", divInfo, "bold").text("Categories: ");
+
+    const divTags = createElement("<div></div>", divInfo, "tags");
+    (projectData.tags || []).forEach(tag => {
+        createElement("<span></span>", divTags).text(tag);
+    });
 
     return divCard;
 }
+
 
 function deleteData() {
     if (projectsData.length !== 0) {
@@ -296,7 +296,7 @@ async function isLike(projectId) {
     }
 }
 
-showNotification("info","Benvingut, " + <?php echo json_encode($user['username']); ?>);
+showNotification("info","Benvingut, " + <?php echo json_encode($user['name']); ?>);
 loadCard();
 </script>
 </body>
