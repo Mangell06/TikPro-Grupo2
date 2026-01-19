@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Editar usuario
     if (isset($_POST['save_user'])) {
         $username = $_POST['username'] ?? '';
+        $email = $_POST['email'] ?? '';
         $entity_name = $_POST['entity_name'] ?? '';
         $entity_type = $_POST['entity_type'] ?? '';
         $presentation = $_POST['presentation'] ?? '';
@@ -21,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("
             UPDATE users
             SET username = :username,
+                email = :email,
                 entity_name = :entity_name,
                 entity_type = :entity_type,
                 presentation = :presentation
@@ -28,20 +30,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ");
         $stmt->execute([
             'username' => $username,
+            'email' => $email,
             'entity_name' => $entity_name,
             'entity_type' => $entity_type,
             'presentation' => $presentation,
             'id' => $iduser
         ]);
-        $success_msg = "Dades guardades correctament!";
     }
 
     // Añadir nueva etiqueta
     if (isset($_POST['add_tag']) && !empty($_POST['new_tag'])) {
         $tagName = trim($_POST['new_tag']);
 
-        if($tagName !== '') {
-            // Buscar categoría existente
+        if ($tagName !== '') {
             $stmt = $pdo->prepare("SELECT id_category FROM categories WHERE name_category = :name LIMIT 1");
             $stmt->execute(['name' => $tagName]);
             $category = $stmt->fetch();
@@ -49,21 +50,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($category) {
                 $id_category = $category['id_category'];
             } else {
-                // Crear nueva categoría, tipo 'family' por defecto
-                $stmt = $pdo->prepare("INSERT INTO categories (name_category, type) VALUES (:name, :type)");
+                $stmt = $pdo->prepare("
+                    INSERT INTO categories (name_category, type)
+                    VALUES (:name, :type)
+                ");
                 $stmt->execute([
                     'name' => $tagName,
-                    'type' => 'family' // Cambiado a valor válido del ENUM
+                    'type' => 'family'
                 ]);
                 $id_category = $pdo->lastInsertId();
             }
 
-            // Insertar relación en category_user si no existe
-            $stmt = $pdo->prepare("SELECT 1 FROM category_user WHERE id_user = :user AND id_category = :cat");
-            $stmt->execute(['user'=>$iduser,'cat'=>$id_category]);
-            if(!$stmt->fetch()) {
-                $stmt = $pdo->prepare("INSERT INTO category_user (id_user, id_category) VALUES (:user, :cat)");
-                $stmt->execute(['user'=>$iduser,'cat'=>$id_category]);
+            $stmt = $pdo->prepare("
+                SELECT 1 FROM category_user
+                WHERE id_user = :user AND id_category = :cat
+            ");
+            $stmt->execute([
+                'user' => $iduser,
+                'cat' => $id_category
+            ]);
+
+            if (!$stmt->fetch()) {
+                $stmt = $pdo->prepare("
+                    INSERT INTO category_user (id_user, id_category)
+                    VALUES (:user, :cat)
+                ");
+                $stmt->execute([
+                    'user' => $iduser,
+                    'cat' => $id_category
+                ]);
             }
         }
     }
@@ -71,18 +86,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Eliminar etiqueta
     if (isset($_POST['delete_tag']) && !empty($_POST['delete_tag_id'])) {
         $id_category = (int)$_POST['delete_tag_id'];
-        $stmt = $pdo->prepare("DELETE FROM category_user WHERE id_user = :user AND id_category = :cat");
-        $stmt->execute(['user'=>$iduser,'cat'=>$id_category]);
+        $stmt = $pdo->prepare("
+            DELETE FROM category_user
+            WHERE id_user = :user AND id_category = :cat
+        ");
+        $stmt->execute([
+            'user' => $iduser,
+            'cat' => $id_category
+        ]);
     }
 
-    // Recargar la página para reflejar cambios
     header("Location: profile.php");
     exit;
 }
 
 // ====== CARGAR DATOS DEL USUARIO ======
 $stmt = $pdo->prepare("
-    SELECT username, entity_name, entity_type, logo_image, presentation
+    SELECT username, email, entity_name, entity_type, logo_image, presentation
     FROM users
     WHERE id_user = :id
     LIMIT 1
@@ -100,6 +120,7 @@ $stmtTags = $pdo->prepare("
 $stmtTags->execute(['user_id' => $iduser]);
 $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -107,8 +128,8 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
     <title>Perfil</title>
     <link rel="stylesheet" href="styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
 </head>
+
 <body id="profile-body">
 
 <header class="profile-header">
@@ -120,14 +141,16 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
     <!-- DATOS USUARIO -->
     <section class="profile-card">
         <h2 class="profile-section-title">Dades de l'entitat</h2>
-        <?php if (!empty($success_msg)): ?>
-            <p class="success-msg"><?= htmlspecialchars($success_msg) ?></p>
-        <?php endif; ?>
 
         <form method="POST">
             <div class="profile-field">
                 <label>Nom i cognoms</label>
                 <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>">
+            </div>
+
+            <div class="profile-field">
+                <label>Email</label>
+                <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>">
             </div>
 
             <div class="profile-field">
@@ -154,19 +177,19 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
         <h2 class="profile-section-title">Etiquetes</h2>
 
         <div class="profile-tags">
-        <?php foreach($tags as $t): ?>
-            <form method="POST" style="display:inline-block;">
-                <span class="profile-tag">
-                    <?= htmlspecialchars($t['name_category']) ?>
-                    <input type="hidden" name="delete_tag_id" value="<?= $t['id_category'] ?>">
-                    <button type="submit" name="delete_tag">✕</button>
-                </span>
-            </form>
-        <?php endforeach; ?>
+            <?php foreach ($tags as $t): ?>
+                <form method="POST" style="display:inline-block;">
+                    <span class="profile-tag">
+                        <?= htmlspecialchars($t['name_category']) ?>
+                        <input type="hidden" name="delete_tag_id" value="<?= $t['id_category'] ?>">
+                        <button type="submit" name="delete_tag">✕</button>
+                    </span>
+                </form>
+            <?php endforeach; ?>
         </div>
 
         <form method="POST" style="margin-top:10px;">
-            <input type="text" name="new_tag" placeholder="Nova etiqueta" required></br>
+            <input type="text" name="new_tag" placeholder="Nova etiqueta" required>
             <button type="submit" name="add_tag">+ Afegir</button>
         </form>
     </section>
@@ -189,19 +212,19 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
             $stmt->execute(['id' => $iduser]);
             $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            if ($projects && count($projects) > 0):
+            if ($projects):
                 foreach ($projects as $proj):
             ?>
-                    <div class="profile-project-item">
-                        <a href="project.php?id=<?= (int)$proj['id_project'] ?>">
-                            <?php if (!empty($proj['video'])): ?>
-                                <video src="<?= htmlspecialchars($proj['video']) ?>" muted playsinline preload="metadata"></video>
-                            <?php else: ?>
-                                <div class="profile-project-placeholder">Sense vídeo</div>
-                            <?php endif; ?>
-                            <span><?= htmlspecialchars($proj['title']) ?></span>
-                        </a>
-                    </div>
+                <div class="profile-project-item">
+                    <a href="project.php?id=<?= (int)$proj['id_project'] ?>">
+                        <?php if (!empty($proj['video'])): ?>
+                            <video src="<?= htmlspecialchars($proj['video']) ?>" muted playsinline preload="metadata"></video>
+                        <?php else: ?>
+                            <div class="profile-project-placeholder">Sense vídeo</div>
+                        <?php endif; ?>
+                        <span><?= htmlspecialchars($proj['title']) ?></span>
+                    </a>
+                </div>
             <?php
                 endforeach;
             else:
