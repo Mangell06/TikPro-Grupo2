@@ -25,6 +25,16 @@
         #E63946, 
         #F07167
     );
+
+    --color-info: #457B9D;   
+    --color-success: #84A59D; 
+    --color-warning: #F4A261;
+    --color-error: #E63946;
+    
+
+    --color-info-light: rgba(69, 123, 157, 0.15);
+    --color-success-light: rgba(132, 165, 157, 0.15);
+    --color-warning-light: rgba(233, 196, 106, 0.15);
 }
 
 /* =========================
@@ -246,6 +256,7 @@
 .profile-chat-header a{
     color: var(--color-primary);
     text-decoration: none;
+    font-weight: 501;
 }
 
 /* DISCOVER.PHP */
@@ -266,7 +277,7 @@
     width: 100%;
     position: relative;
     overflow-x: hidden;
-    overflow-y: auto;                               /* scroll vertical si hace falta */
+    overflow-y: auto;
     flex-grow: 1;
 }
 
@@ -274,13 +285,13 @@
 .project-card {
     width: 380px;
     max-width: 50%;
-    height: 687px;
+    height: 713px;
     background: white;
     border-radius: 20px;
     text-align: center;
-    position: relative;      /* cambiar de absolute */
+    position: relative;
     box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-    overflow: hidden;        /* evitar que el video sobresalga */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -307,7 +318,10 @@
 }
 
 .allInfoDiv{
-    padding: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
 /* Boton de desplegar informacion*/
@@ -315,13 +329,14 @@
     display: inline-block;
     margin: 10px 0;       /* separación arriba y abajo */
     padding: 10px 18px;   /* tamaño cómodo */
-    background: var(--color-primary);
+    background: linear-gradient( 135deg, var(--color-primary), var(--color-secondary) );
     color: white;
     border: none;
     border-radius: 12px;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
+    margin-top: 8px;
     transition: 
         background 0.3s, 
         transform 0.2s, 
@@ -339,8 +354,15 @@
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
+.project-title{
+  font-size: 17px;
+  font-weight: 599;
+  margin-bottom: 5px;
+  margin-top: -3px;
+}
+
 /* Ajustes móviles grandes */
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 700px) {
    
     .project-card{
         width: 100%;
@@ -351,7 +373,7 @@
 
     .project-card video{
         max-height: unset;
-        height: 100%;
+        height: 25px;
         flex-grow: 1;
     }
 
@@ -368,6 +390,11 @@
 
     .user{
         display: none;
+    }
+    
+    .project-info.hiddenSuave{
+        display: none;
+
     }
  
 
@@ -430,22 +457,43 @@
     }
 }
 
+@keyframes entrada-suave {
+  0% { top: 150px }
+  100% { top: 0px }
+}
+
 .project-info {
-    margin-top: -200px;
+    margin-top: -275px;
     position: relative;
     background-color: white;
     padding: 20px;
     margin-bottom: -20px;
     height: 300px;
     overflow-y: auto;
-    border-top: 1px solid #eee;
     z-index: 10;
-
+    transition: top 0.3s ease;
 }
 
+.project-info:not(.hiddenSuave) {
+    /* animation: entrada-suave 0.5s forwards; */
+    top: 0;
+}
+
+.project-info.hiddenSuave {
+    top: 220%;
+}
+
+.project-card .actions, .project-card video {
+    transition: filter 0.2s ease;
+}
+
+.dimLight .actions, .dimLight video {
+    filter: brightness(0.3);
+    pointer-events: none;
+}
 
 .project-hidden-button{
-margin-top: -180px;
+  margin-top: -180px;
   position: absolute;
   padding: 10px;
   z-index: 9999;
@@ -454,6 +502,13 @@ margin-top: -180px;
 
 .hidden {
     display: none;
+}
+
+.trunc{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: 10px;
 }
 
 .tags span {
@@ -527,16 +582,23 @@ margin-top: -180px;
 }
 
 /*Texto descripcion de cartas*/
-.project-info p {
+.project-info p{
     font-family: var(--font-secondary);
     font-size: 0.95rem;
     color: var(--color-dark);
     line-height: 1.5;
     margin-bottom: 10px;
-    text-align: left;
+    text-align: left !important;
     word-break: break-word;
-    padding: 20px;
-    
+}
+
+.project-info pre{
+    margin-bottom: 15px;
+    text-align: left !important;
+}
+
+.bold{
+    font-weight: 501;
 }
 
 /* =========================
@@ -582,34 +644,37 @@ margin-top: -180px;
 
 /* Tipos de notificación */
 .notification.info {
-    background: #007bff; /* Azul */
+    background: var(--color-info);
 }
 
 .notification.warning {
-    background: #ffc107; /* Amarillo */
+    background: var(--color-warning);
     color: #333;
 }
 
 .notification.error {
-    background: #e63946; /* Rojo */
+    background: var(--color-error);
 }
 
+.notification.success{
+    background-color: var(--color-success);
+}
 /* Botón de cerrar */
 .notification .close-btn {
-    margin-left: 15px;
     background: rgba(255,255,255,0.3);
     border: none;
     color: white;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background 0.2s;
+    text-align: center;
 }
 
 .notification.warning .close-btn {

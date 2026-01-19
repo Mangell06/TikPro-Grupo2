@@ -35,7 +35,7 @@
         
         // Mostrar el nombre
         if ($user) {
-            echo "<h3 class='user'> Benvingut, " . htmlspecialchars($user['username']) . "</h3>";
+            echo "<h3 class='user'>" . htmlspecialchars($user['username']) . "</h3>";
         } else {
             echo "<h1>Usuari no encontrat</h1>";
         }
@@ -53,6 +53,14 @@
 <script type="module">
 import { showNotification } from './notificaciones.js';
 import { sendLog } from './create-logs.js'; // importar función de logging
+
+// preventDefault F5
+$(document).on("keydown", function(e) {
+    if ((e.which || e.keyCode) == 116 || ((e.ctrlKey || e.metaKey) && (e.which || e.keyCode) == 82)) {
+        e.preventDefault();
+        console.log("Refresh prevented");
+    }
+});
 
 let projectsData = [];
 
@@ -80,15 +88,19 @@ function createCard(projectData) {
     const btnLike = createElement("<button></button>", divButtons, "like").text("❤");
     const btnNope = createElement("<button></button>", divButtons, "nope").text("✖");
     
-
+    const title =createElement("<p></p>", mother,"project-title").text(projectData.title);
+    const userWithEntity =createElement("<pre></pre>", mother).text(projectData.username +" - "+ projectData.entity_name);
+    const description =createElement("<p></p>", mother, "trunc").text(projectData.description);
+    
     const infoButton = createElement("<button></button>", mother, "info-toggle").text("Mostra info");
 
-    const divInfo = createElement("<div></div>", mother, "project-info hidden");
-
+    const divInfo = createElement("<div></div>", mother, "project-info hiddenSuave");
+    
     const infoButtonClick = () => {
-        divInfo.toggleClass("hidden");
+        divInfo.toggleClass("hiddenSuave");
         mother.toggleClass("allInfoDiv");
-        sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} toggle info: ${divInfo.hasClass("hidden") ? 'oculto' : 'visible'}`);
+        divCard.toggleClass("dimLight");
+        sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} toggle info: ${divInfo.hasClass("hiddenSuave") ? 'oculto' : 'visible'}`);
     }
 
     const infoButtonClose = createElement("<button></button>", divInfo, "info-toggle").text("Amagar info");
@@ -96,8 +108,12 @@ function createCard(projectData) {
     infoButtonClose.on("click", infoButtonClick);
     
     
-    console.log(projectData)
+    console.log(projectData);
+    createElement("<p></p>", divInfo,"project-title").text(projectData.title);
+    createElement("<pre></pre>", divInfo).text(projectData.username +" - "+ projectData.entity_name);
     createElement("<p></p>", divInfo).text(projectData.description);
+    createElement("<p></p>", divInfo, "bold").text("Categories: ");
+
 
     const divTags = createElement("<div></div>", divInfo, "tags");
     (projectData.tags || []).forEach(tag => {
@@ -200,6 +216,7 @@ function handleAction(card, action) {
 }
 
 sendLog(`Usuario ${<?php echo json_encode($user['username']); ?>} abrió la página Discover`);
+showNotification("success","Benvingut, " + <?php echo json_encode($user['username']); ?>);
 loadCard();
 </script>
 </body>

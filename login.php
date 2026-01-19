@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $error = "Email o contrasenya incorrectes";
         }
     } else {
-        $error = "Introdueix email y contrasenya";
+        $error = "Introdueix email i contrasenya";
     }
 }
 ?>
