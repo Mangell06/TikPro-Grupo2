@@ -142,15 +142,21 @@ try {
     $stmt = $pdo->query("SELECT id FROM users WHERE entity_type='center' LIMIT 6");
     $centersUsers = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    $projects_titles = ['Amazon','CocaCola','Mercedes-Benz','Microsoft','PayPal','YouTube'];
-    $projects_videos = ['amazon','cocacola','mercedes','microsoft','paypal','youtube'];
+    $projects_titles = [
+        'Enviaments ràpids amb Amazon', '¿Podries esbrinar el nou sabor de CocaCola?', 'Nou Mercedes-Benz elèctric', 'Prova el nou Office amb IA', 'Necessitem col·laboració amb el nostre nou model de Paypal', 'Volem crear un programa que ajudi a renderitzar un video más ràpid'
+    ];
+    
+    $projects_videos = [
+        'amazon', 'cocacola', 'mercedes', 'microsoft', 'paypal', 'youtube'
+    ];
+
     $descriptions = [
-        'Campaña de vídeo promocional para Amazon.',
-        'Vídeo de marketing de CocaCola.',
-        'Proyecto audiovisual Mercedes.',
-        'Serie de vídeos Microsoft.',
-        'Vídeo explicativo PayPal.',
-        'Campaña de vídeos YouTube.'
+        "Gaudeix de la màxima comoditat amb els nostres enviaments ràpids a través d'Amazon, dissenyats perquè rebis els teus productes en temps rècord. Gràcies a la seva logística avançada, garantim una entrega eficient i totalment segura directament a la teva porta. Ja no cal esperar: demana avui mateix i tingues el que necessites a les teves mans abans del que t'imagines.",
+        "Prepara els teus sentits per a una experiència totalment inesperada i refrescant. T’atreveixes a acceptar el repte i esbrinar el nou sabor de Coca-Cola abans que ningú? No et quedis amb el dubte i deixa’t sorprendre per aquesta edició única que canviarà tot el que coneixies.",
+        "Descobreix el futur de la conducció amb el nou Mercedes-Benz elèctric, on el luxe i la sostenibilitat s'uneixen en un disseny impecable. Experimenta una potència silenciosa i una tecnologia d'avantguarda que redefineixen cada quilòmetre del teu trajecte. Passa a l'emissió zero sense renunciar a l'elegància i al rendiment excepcional que només una estrella pot oferir.",
+        "Porta la teva productivitat al següent nivell i prova el nou Office amb IA, l'eina definitiva per treballar de manera més intel·ligent. Deixa que la intel·ligència artificial redacti esborranys, resumeixi documents complexos i organitzi les teves dades en un obrir i tancar d'ulls. Transforma la teva rutina creativa i estalvia temps amb una experiència totalment integrada que pensa amb tu.",
+        "Estem impulsant un canvi en el món dels pagaments digitals i necessitem col·laboració amb el nostre nou model de PayPal. El teu coneixement i la teva experiència són claus per optimitzar aquesta eina i fer-la més accessible per a tothom. Suma’t a aquest projecte innovador i ajuda’ns a definir el futur de les transaccions financeres amb total seguretat.",
+        "Volem crear un programa que ajudi a renderitzar un vídeo més ràpid, eliminant les llargues esperes i optimitzant al màxim els recursos del teu ordinador. El nostre objectiu és oferir una eina fluida i potent que permeti als creadors de contingut centrar-se en la creativitat en lloc de la càrrega del sistema. Uneix-te a la nostra iniciativa i ajuda'ns a transformar el flux de treball en l'edició de vídeo professional.",
     ];
     $id_empresas = [1,2,3,4,5,6]; // ajustar según usuarios insertados
 
