@@ -11,6 +11,7 @@
     <meta charset="UTF-8">
     <title>Descobrir</title>
     <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="icono-simbio.png" type="image/png">
 </head>
 <body id="discover-body">
