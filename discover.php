@@ -52,6 +52,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script type="module">
 import { showNotification } from './notificaciones.js';
+import { createElement } from './createElement.js';
 import { sendLog } from './create-logs.js'; // importar función de logging
 
 // preventDefault F5
@@ -65,15 +66,7 @@ $(document).on("keydown", function(e) {
 let projectsData = [];
 
 // funcion para crear elementos.
-function createElement(tag, parent = "", className = "", attr = {}) {
-    const $element = $(tag);
-    if (className) $element.addClass(className);
-    if (attr && typeof attr === "object") {
-        for (const key in attr) $element.attr(key, attr[key]);
-    }
-    if (parent) $(parent).append($element);
-    return $element;
-}
+
 
 // funcion para crear cartas
 function createCard(projectData) {
