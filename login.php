@@ -40,9 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error = "Introdueix email i contrasenya";
     }
 }
+$requestUri = $_SERVER['REQUEST_URI'];
+$scriptName = $_SERVER['SCRIPT_NAME'];
+
+if ($requestUri !== $scriptName && strpos($requestUri, $scriptName . '/') === 0) {
+    // Redirige a la URL correcta
+    header("Location: $scriptName");
+    exit;
+}
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <?php endif; ?>
 
     <?php if ($error): ?>
-    showNotification('error', <?= json_encode($error) ?>, <?php echo json_encode($user['name']); ?>);
+    showNotification('error', <?= json_encode($error) ?>);
     sendLog(`Intent de login amb email: <?= addslashes($email) ?>`);
     <?php endif; ?>
     </script>

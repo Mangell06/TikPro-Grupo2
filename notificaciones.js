@@ -1,7 +1,7 @@
 import { sendLog } from './create-logs.js';
 
 let notificationCount = 0;
-export function showNotification(type, message, username) {
+export function showNotification(type, message, username='') {
     //Sumar la cantidad de notificaciones mostradas
     notificationCount++;
     // Crear contenedor
@@ -23,7 +23,11 @@ export function showNotification(type, message, username) {
     closeBtn.onclick = () => {
         notif.remove();
         notificationCount--;
-        sendLog(`Usuario ${username} a cerrat la notificació`);
+        if (username !== "") {
+            sendLog(`Usuario ${username} a cerrat la notificació`);
+        } else {
+            sendLog(`El usuario a cerrat la notificació`);
+        }
     };
     notif.appendChild(closeBtn);
 

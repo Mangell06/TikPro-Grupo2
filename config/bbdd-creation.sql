@@ -19,7 +19,9 @@ create table if not exists users (
   poblation varchar(100) not null,
   entity_name varchar(255) not null,
   entity_type enum('center', 'company') not null,
-  logo_image varchar(255) not null,
+  isActive BOOLEAN not null default TRUE,
+  code_Activate INT,
+  logo_image varchar(255),
   presentation text
 );
 

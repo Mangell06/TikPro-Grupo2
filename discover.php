@@ -4,15 +4,23 @@
         header("Location: login.php");
         exit;
     }
+    $requestUri = $_SERVER['REQUEST_URI'];
+    $scriptName = $_SERVER['SCRIPT_NAME'];
+
+    if ($requestUri !== $scriptName && strpos($requestUri, $scriptName . '/') === 0) {
+        // Redirige a la URL correcta
+        header("Location: $scriptName");
+        exit;
+    }
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descobrir</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="icono-simbio.png" type="image/png">
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="/icono-simbio.png" type="image/png">
 </head>
 <body id="discover-body">
     <header class="header-discovered">
@@ -48,9 +56,9 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script type="module">
-import { showNotification } from './notificaciones.js';
-import { createElement } from './createElement.js';
-import { sendLog } from './create-logs.js';
+import { showNotification } from '/notificaciones.js';
+import { createElement } from '/createElement.js';
+import { sendLog } from '/create-logs.js';
 
 $(document).on("keydown", function(e) {
     if ((e.which || e.keyCode) == 116 || ((e.ctrlKey || e.metaKey) && (e.which || e.keyCode) == 82)) {
@@ -100,6 +108,9 @@ function createCard(projectData) {
     if (projectData.liked) {
         const star = createElement("<div></div>", divCard, "liked-star");
         star.text("★");
+    } else if (projectData.posibilityMatch) {
+        const matchBadge = createElement("<div></div>", divCard, "possible-match");
+        matchBadge.text("Possible Match");
     }
     createElement("<video controls muted autoplay loop playsinline></video>", divCard, "", { 
         src: projectData.video

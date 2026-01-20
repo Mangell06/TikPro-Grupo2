@@ -861,3 +861,197 @@
         opacity: 1;
     }
 }
+
+/* =========================
+   Text Posible Match
+   ========================= */
+.possible-match {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-warning);
+    color: white;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    z-index: 10;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   FORMULARIO REGISTER
+   ========================= */
+
+/* =========================
+   BODY Y FONDO
+   ========================= */
+#register-body {
+    font-family: var(--font-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: var(--bg-gradient);
+    padding-top: 120px; /* espacio para header fijo */
+}
+
+/* =========================
+   HEADER
+   ========================= */
+.main-header {
+    width: 100%;
+    padding: 20px 0;
+    background: white;
+    text-align: left;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.header-title {
+    margin-left: 50px;
+    font-family: var(--font-primary);
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    letter-spacing: 1.5px;
+}
+
+/* =========================
+   CONTENEDOR DEL FORMULARIO
+   ========================= */
+#register-container {
+    width: 420px;
+    max-width: 95%;
+    background: linear-gradient(180deg, #ffffff 0%, #fff5f7 100%);
+    border-radius: 22px;
+    padding: 40px 30px;
+    box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 77, 109, 0.15);
+    animation: fadeIn 0.7s ease-in-out;
+}
+
+/* =========================
+   TÍTULO DEL FORMULARIO
+   ========================= */
+#register-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--color-primary);
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+/* =========================
+   FORMULARIO
+   ========================= */
+#register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================
+   LABELS
+   ========================= */
+#register-form label {
+    margin-bottom: 6px;
+    color: var(--color-neutral);
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: var(--font-secondary);
+}
+
+/* =========================
+   INPUTS Y SELECTS
+   ========================= */
+#register-form input,
+#register-form select,
+#register-form textarea {
+    padding: 12px 14px;
+    margin-bottom: 20px;
+    border-radius: 14px;
+    border: 1px solid #ffd1da;
+    font-size: 1rem;
+    background-color: #ffffff;
+    transition: border 0.3s, box-shadow 0.3s, transform 0.15s;
+    font-family: var(--font-primary);
+}
+
+#register-form input:focus,
+#register-form select:focus,
+#register-form textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.25);
+    transform: translateY(-2px);
+}
+
+#register-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* =========================
+   BOTÓN DE REGISTRO
+   ========================= */
+#register-button {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: #ffffff;
+    border: none;
+    padding: 15px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#register-button:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 18px 40px rgba(255, 77, 109, 0.55);
+}
+
+#register-button:active {
+    transform: scale(0.98);
+    box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+}
+
+/* =========================
+   ANIMACIONES
+   ========================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* =========================
+   AJUSTES MÓVILES
+   ========================= */
+@media screen and (max-width: 500px) {
+    #register-container {
+        padding: 30px 20px;
+    }
+
+    .header-title {
+        margin-left: 20px;
+        font-size: 1.6rem;
+    }
+
+    #register-button {
+        padding: 12px;
+        font-size: 1rem;
+    }
+}

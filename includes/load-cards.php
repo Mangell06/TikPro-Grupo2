@@ -71,6 +71,7 @@ try {
             "entity_name" => $row["entity_name"],
             "entity_type" => $row["entity_type"],
             "liked" => ($row['liked'] > 0),
+            "posibilityMatch" => ($row['coincidences'] > 0),
         ];
     }
 
