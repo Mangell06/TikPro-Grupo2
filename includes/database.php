@@ -1,5 +1,4 @@
 <?php
-// === CONFIGURACIÓN BD ===
 $host = 'localhost';
 $db   = 'simbiodb';
 $user = 'simbdmin';

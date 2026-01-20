@@ -285,7 +285,7 @@
     height: 713px;
     background: white;
     border-radius: 20px;
-    text-align: center;
+    text-align: left;
     position: relative;
     box-shadow: 0 25px 50px rgba(0,0,0,0.3);
     overflow: hidden;
@@ -309,7 +309,7 @@
 .project-card video {
     width: 100%;
     height: 540px;          /* mantiene proporción */
-    max-height: 60vh;       /* nunca más alto que la pantalla */
+    max-height: 53vh;       /* nunca más alto que la pantalla */
     border-radius: 16px;
     object-fit: cover;      /* recorta si es necesario */
 }
@@ -318,11 +318,11 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    text-align: left;
+    margin-top: -10px;
 }
 
 /* Boton de desplegar informacion*/
-.info-toggle {
+.info-toggle, .like{
     display: inline-block;
     margin: 10px 0;       /* separación arriba y abajo */
     padding: 10px 18px;   /* tamaño cómodo */
@@ -340,13 +340,31 @@
         box-shadow 0.2s;
 }
 
-.info-toggle:hover {
+.info-toggle:hover, .like{
     background: var(--color-secondary);
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(0,0,0,0.2);
 }
+.info-toggle-dont-like, .nope{
+    display: inline-block;
+    margin: 10px 0;
+    padding: 10px 18px; 
+    background: #4C4645A3;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: 
+        background 0.3s, 
+        transform 0.2s, 
+        box-shadow 0.2s;
+}
 
-.info-toggle:active {
+
+.info-toggle:active, .like, .nope {
     transform: scale(0.97);
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
@@ -365,8 +383,8 @@
     padding: 10px 18px;
     border: none;
     border-radius: 12px;
-    font-size: 1rem;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 601;
     cursor: pointer;
     margin-top: 8px;
     color: var(--color-error);
@@ -419,20 +437,16 @@
         display: none;
 
     }
- 
-
-  
 }
 
 .actions {
   display: flex;
   gap: 10px;
-  position: absolute;
   flex-direction: row;
   width: 100%;
-  right: -84px;
-  top: 64%;
   z-index: 10;
+  justify-content: center;
+    margin-bottom: 8px;
 }
 
 .actions button {
@@ -448,16 +462,6 @@
 .actions button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
-.like {
-    background: #E63946;
-    color: white;
-}
-
-.nope {
-    background: #484848;
-    color: white;
 }
 
 .swipe-right {
@@ -493,6 +497,8 @@
     background-color: white;
     padding: 20px;
     margin-bottom: -20px;
+    margin-left: -20px;
+    margin-right: -20px;
     height: 300px;
     overflow-y: auto;
     z-index: 10;
@@ -505,7 +511,7 @@
 }
 
 .project-info.hiddenSuave {
-    top: 220%;
+    top: 100vh;
 }
 
 .project-card .actions, .project-card video {
@@ -716,7 +722,142 @@
     transform: translateX(-50%) translateY(0);
 }
 
+/* =========================
+   CARTA FINAL (SIN PROYECTOS)
+   ========================= */
 
+.project-card.final-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(
+        180deg,
+        #ffffff 0%,
+        #fff0f3 100%
+    );
+    border-radius: 24px;
+    box-shadow:
+        0 30px 60px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(230, 57, 70, 0.2);
+    animation: finalCardAppear 0.6s ease-out;
+}
 
+@keyframes finalCardAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
 
+/* Contenido interno */
+.final-info-card {
+    text-align: center;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
 
+/* Texto principal */
+.final-info-card p:first-child {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--color-primary);
+}
+
+/* Texto secundario */
+.final-info-card p:nth-child(2) {
+    font-size: 1rem;
+    color: var(--color-neutral);
+}
+
+/* Botón volver a ver */
+.final-info-card button {
+    margin-top: 20px;
+    background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-secondary)
+    );
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 16px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        background 0.3s;
+}
+
+.final-info-card button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 35px rgba(230, 57, 70, 0.45);
+}
+
+.final-info-card button:active {
+    transform: scale(0.97);
+}
+
+/* Estado cargando */
+.final-info-card button.loading {
+    background: var(--color-neutral);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* =========================
+   ESTRELLA DE LIKE
+   ========================= */
+
+.liked-star {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+    color: #fff;
+
+    background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-secondary)
+    );
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,0.25),
+        0 0 0 2px rgba(255,255,255,0.85);
+
+    z-index: 20;
+    pointer-events: none;
+
+    animation: starPop 0.35s ease-out;
+}
+
+@keyframes starPop {
+    0% {
+        transform: translateX(-50%) scale(0.6);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(-50%) scale(1);
+        opacity: 1;
+    }
+}

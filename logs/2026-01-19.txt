@@ -1,0 +1,13 @@
+
+[21:01:47] [37.222.10.101] Usuario "PayPal" cargó proyecto 1
+[21:01:47] [37.222.10.101] Usuario "PayPal" cargó proyecto 3
+[21:01:48] [37.222.10.101] Usuario "PayPal" cargó proyecto 4
+[21:01:50] [37.222.10.101] Usuario PayPal a cerrat la notificació
+[21:01:55] [37.222.10.101] Usuario PayPal a cerrado sesion
+[21:02:02] [37.222.10.101] Usuario "paypal@empresa.com" inició sesión
+[21:02:03] [37.222.10.101] Usuario "PayPal" cargó proyecto 1
+[21:02:03] [37.222.10.101] Usuario "PayPal" cargó proyecto 3
+[21:02:03] [37.222.10.101] Usuario "PayPal" cargó proyecto 4
+[21:02:07] [37.222.10.101] Usuario PayPal presionó "següent" en el proyecto Enviaments ràpids amb Amazon con id 1
+[21:02:08] [37.222.10.101] Usuario PayPal eliminó la carta visible
+[21:02:08] [37.222.10.101] Usuario "PayPal" cargó proyecto 5
