@@ -226,7 +226,7 @@
     text-align: center;
     z-index: 1000;
     position: relative;
-    justify-content: space-between;
+    justify-content: right;
     display: flex;
     gap: 24px;
     align-items: center;
@@ -427,10 +427,6 @@
     }
     #nav-logout{
         padding: 5px;
-    }
-
-    .user{
-        display: none;
     }
     
     .project-info.hiddenSuave{

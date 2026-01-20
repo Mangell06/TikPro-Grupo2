@@ -16,10 +16,6 @@
 </head>
 <body id="discover-body">
     <header class="header-discovered">
-        <div class="profile-chat-header">
-            <a href="profile.php">Perfil</a>
-            <a href="chats.php">Chats</a>
-        </div>
         <div class="close-session">
             <?php
         include("includes/database.php");
