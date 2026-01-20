@@ -1,0 +1,16 @@
+[14:41:29] [127.0.0.1] Intent de login amb email: google@empresa.com
+[14:41:30] [127.0.0.1] Usuario google cargó proyecto 2
+[14:41:30] [127.0.0.1] Usuario google cargó proyecto 1
+[14:41:30] [127.0.0.1] Usuario google cargó proyecto 6
+[14:41:30] [127.0.0.1] Usuario google cargó proyecto 5
+[14:41:30] [127.0.0.1] Usuario google abrió la página Discover
+[14:42:11] [127.0.0.1] Usuario google cargó proyecto 2
+[14:42:11] [127.0.0.1] Usuario google cargó proyecto 3
+[14:42:11] [127.0.0.1] Usuario google cargó proyecto 6
+[14:42:11] [127.0.0.1] Usuario google cargó proyecto 5
+[14:42:11] [127.0.0.1] Usuario google abrió la página Discover
+[14:42:44] [127.0.0.1] Usuario google cargó proyecto 1
+[14:42:44] [127.0.0.1] Usuario google cargó proyecto 3
+[14:42:44] [127.0.0.1] Usuario google cargó proyecto 4
+[14:42:44] [127.0.0.1] Usuario google cargó proyecto 2
+[14:42:44] [127.0.0.1] Usuario google abrió la página Discover
