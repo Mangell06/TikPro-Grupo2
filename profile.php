@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Editar usuario
     if (isset($_POST['save_user'])) {
-        $username = $_POST['username'] ?? '';
+        $name = $_POST['name'] ?? '';
         $email = $_POST['email'] ?? '';
         $entity_name = $_POST['entity_name'] ?? '';
         $entity_type = $_POST['entity_type'] ?? '';
@@ -21,15 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $pdo->prepare("
             UPDATE users
-            SET username = :username,
+            SET name = :name,
                 email = :email,
                 entity_name = :entity_name,
                 entity_type = :entity_type,
                 presentation = :presentation
-            WHERE id_user = :id
+            WHERE id = :id
         ");
         $stmt->execute([
-            'username' => $username,
+            'name' => $name,
             'email' => $email,
             'entity_name' => $entity_name,
             'entity_type' => $entity_type,
@@ -43,41 +43,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $tagName = trim($_POST['new_tag']);
 
         if ($tagName !== '') {
-            $stmt = $pdo->prepare("SELECT id_category FROM categories WHERE name_category = :name LIMIT 1");
+            $stmt = $pdo->prepare("SELECT id FROM categories WHERE name = :name LIMIT 1");
             $stmt->execute(['name' => $tagName]);
             $category = $stmt->fetch();
 
             if ($category) {
-                $id_category = $category['id_category'];
+                $id = $category['id'];
             } else {
                 $stmt = $pdo->prepare("
-                    INSERT INTO categories (name_category, type)
+                    INSERT INTO categories (name, type)
                     VALUES (:name, :type)
                 ");
                 $stmt->execute([
                     'name' => $tagName,
                     'type' => 'family'
                 ]);
-                $id_category = $pdo->lastInsertId();
+                $id = $pdo->lastInsertId();
             }
 
             $stmt = $pdo->prepare("
-                SELECT 1 FROM category_user
-                WHERE id_user = :user AND id_category = :cat
+                SELECT 1 FROM categories_user
+                WHERE id = :user AND id = :cat
             ");
             $stmt->execute([
                 'user' => $iduser,
-                'cat' => $id_category
+                'cat' => $id
             ]);
 
             if (!$stmt->fetch()) {
                 $stmt = $pdo->prepare("
-                    INSERT INTO category_user (id_user, id_category)
+                    INSERT INTO categories_user (id, id)
                     VALUES (:user, :cat)
                 ");
                 $stmt->execute([
                     'user' => $iduser,
-                    'cat' => $id_category
+                    'cat' => $id
                 ]);
             }
         }
@@ -85,14 +85,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Eliminar etiqueta
     if (isset($_POST['delete_tag']) && !empty($_POST['delete_tag_id'])) {
-        $id_category = (int)$_POST['delete_tag_id'];
+        $id = (int)$_POST['delete_tag_id'];
         $stmt = $pdo->prepare("
-            DELETE FROM category_user
-            WHERE id_user = :user AND id_category = :cat
+            DELETE FROM categories_user
+            WHERE id = :user AND id = :cat
         ");
         $stmt->execute([
             'user' => $iduser,
-            'cat' => $id_category
+            'cat' => $id
         ]);
     }
 
@@ -102,20 +102,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // ====== CARGAR DATOS DEL USUARIO ======
 $stmt = $pdo->prepare("
-    SELECT username, email, entity_name, entity_type, logo_image, presentation
+    SELECT name, email, entity_name, entity_type, logo_image, presentation
     FROM users
-    WHERE id_user = :id
+    WHERE id = :id
     LIMIT 1
 ");
 $stmt->execute(['id' => $iduser]);
 $user = $stmt->fetch();
 
 // ====== CARGAR ETIQUETAS DEL USUARIO ======
-$stmtTags = $pdo->prepare("
-    SELECT c.id_category, c.name_category, c.type
+$stmtTags = $pdo->prepare(
+    "SELECT c.id, c.name AS name_category, c.type 
     FROM categories c
-    JOIN category_user cu ON cu.id_category = c.id_category
-    WHERE cu.id_user = :user_id
+    JOIN categories_user cu ON cu.id_category = c.id
+    WHERE cu.id_user = :user_id;
 ");
 $stmtTags->execute(['user_id' => $iduser]);
 $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
@@ -126,7 +126,7 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Perfil</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
@@ -145,7 +145,7 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
         <form method="POST">
             <div class="profile-field">
                 <label>Nom i cognoms</label>
-                <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>">
+                <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>">
             </div>
 
             <div class="profile-field">
@@ -181,7 +181,7 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
                 <form method="POST" style="display:inline-block;">
                     <span class="profile-tag">
                         <?= htmlspecialchars($t['name_category']) ?>
-                        <input type="hidden" name="delete_tag_id" value="<?= $t['id_category'] ?>">
+                        <input type="hidden" name="delete_tag_id" value="<?= $t['id'] ?>">
                         <button type="submit" name="delete_tag">✕</button>
                     </span>
                 </form>
@@ -204,10 +204,10 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
         <div class="profile-project-list">
             <?php
             $stmt = $pdo->prepare("
-                SELECT id_project, title, video
+                SELECT id, title, video
                 FROM projects
                 WHERE id_owner = :id
-                ORDER BY id_project DESC
+                ORDER BY id DESC
             ");
             $stmt->execute(['id' => $iduser]);
             $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -216,7 +216,7 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($projects as $proj):
             ?>
                 <div class="profile-project-item">
-                    <a href="project.php?id=<?= (int)$proj['id_project'] ?>">
+                    <a href="project.php?id=<?= (int)$proj['id'] ?>">
                         <?php if (!empty($proj['video'])): ?>
                             <video src="<?= htmlspecialchars($proj['video']) ?>" muted playsinline preload="metadata"></video>
                         <?php else: ?>
