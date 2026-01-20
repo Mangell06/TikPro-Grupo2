@@ -102,9 +102,9 @@ try {
 
     // 20 empresas
     $empreses = [
-        'Google','Microsoft','Amazon','Apple','Facebook','IBM','Intel','Oracle',
-        'Samsung','Sony','CocaCola','Mercedes-Benz','Netflix','Tesla','Adobe','Uber',
-        'Airbnb','Spotify','PayPal','YouTube'
+        'Google','Microsoft','Amazon','CocaCola','Mercedes-Benz','PayPal','Apple','Facebook','IBM','Intel','Oracle',
+        'Samsung','Sony','Netflix','Tesla','Adobe','Uber',
+        'Airbnb','Spotify','YouTube'
     ];
 
     // logos de centros (debe coincidir con $centres)
@@ -116,47 +116,47 @@ try {
 
     // logos de empresas (debe coincidir con $empreses)
     $empresa_logo = [
-        'google','microsoft','amazon','apple','faceboock','ibm','intel','oracle',
-        'samsumg','sony','cocacola','mercedes','netflix','tesla','adobe','uber',
-        'airbnb','spotify','paypal','youtube'
+        'google','microsoft','amazon','cocacola','mercedes','paypal','apple','faceboock','ibm','intel','oracle',
+        'samsumg','sony','netflix','tesla','adobe','uber',
+        'airbnb','spotify','youtube'
     ];
 
     // Insertar centros
     foreach ($centres as $i => $nom) {
         $email = strtolower(preg_replace('/[^a-zA-Z]/','',$nom)).'@edu.cat';
-        $pdo->prepare("INSERT INTO users (email,password,name,entity_name,entity_type,presentation,logo_image) VALUES (?,?,?,?,?,?,?)")
-            ->execute([$email, hash('sha256','constraseña'.$i), $nom, $nom, 'center', "Usuario del centro $nom", "uploads/logos/".$centro_logo[$i].".png"]);
+        $pdo->prepare("INSERT INTO users (email,password,name,tfn,entity_name,entity_type,poblation,presentation,logo_image) VALUES (?,?,?,?,?,?,?,?,?)")
+            ->execute([$email, hash('sha256','constraseña'.$i), $centro_logo[$i], '65423300'.$i, $nom, 'center', 'Cornellà', "Usuario del centro $nom", "uploads/logos/".$centro_logo[$i].".png"]);
     }
 
     // Insertar empresas
     foreach ($empreses as $i => $nom) {
         $email = strtolower(preg_replace('/[^a-zA-Z]/','',$nom)).'@empresa.com';
-        $pdo->prepare("INSERT INTO users (email,password,name,entity_name,entity_type,presentation,logo_image) VALUES (?,?,?,?,?,?,?)")
-            ->execute([$email, hash('sha256','password'.$i), $nom, $nom, 'company', "Usuario de la empresa $nom", "uploads/logos/".$empresa_logo[$i].".png"]);
+        $pdo->prepare("INSERT INTO users (email,password,name,entity_name,entity_type,tfn,poblation,presentation,logo_image) VALUES (?,?,?,?,?,?,?,?,?)")
+            ->execute([$email, hash('sha256','password'.$i), $nom, $nom.' S.L.', 'company', '95423300'.$i, 'Cornellà', "Usuario de la empresa $nom", "uploads/logos/".$empresa_logo[$i].".png"]);
     }
 
     /* -------------------------------------------------
     3. PROJECTS (6 proyectos)
     -------------------------------------------------- */
     echo "📁 Insertando proyectos...\n";
-    $stmt = $pdo->query("SELECT id FROM users WHERE entity_type='center' LIMIT 6");
+    $stmt = $pdo->query("SELECT id FROM users WHERE entity_type='company' LIMIT 6");
     $centersUsers = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
     $projects_titles = [
-        'Enviaments ràpids amb Amazon', '¿Podries esbrinar el nou sabor de CocaCola?', 'Nou Mercedes-Benz elèctric', 'Prova el nou Office amb IA', 'Necessitem col·laboració amb el nostre nou model de Paypal', 'Volem crear un programa que ajudi a renderitzar un video más ràpid'
+        'Volem crear un programa que ajudi a renderitzar un video más ràpid','Prova el nou Office amb IA','Enviaments ràpids amb Amazon', '¿Podries esbrinar el nou sabor de CocaCola?', 'Nou Mercedes-Benz elèctric', 'Necessitem col·laboració amb el nostre nou model de Paypal', 
     ];
     
     $projects_videos = [
-        'amazon', 'cocacola', 'mercedes', 'microsoft', 'paypal', 'youtube'
+        'youtube', 'microsoft', 'amazon', 'cocacola', 'mercedes',  'paypal', 
     ];
 
     $descriptions = [
+        "Volem crear un programa que ajudi a renderitzar un vídeo més ràpid, eliminant les llargues esperes i optimitzant al màxim els recursos del teu ordinador. El nostre objectiu és oferir una eina fluida i potent que permeti als creadors de contingut centrar-se en la creativitat en lloc de la càrrega del sistema. Uneix-te a la nostra iniciativa i ajuda'ns a transformar el flux de treball en l'edició de vídeo professional.",    
+        "Porta la teva productivitat al següent nivell i prova el nou Office amb IA, l'eina definitiva per treballar de manera més intel·ligent. Deixa que la intel·ligència artificial redacti esborranys, resumeixi documents complexos i organitzi les teves dades en un obrir i tancar d'ulls. Transforma la teva rutina creativa i estalvia temps amb una experiència totalment integrada que pensa amb tu.",
         "Gaudeix de la màxima comoditat amb els nostres enviaments ràpids a través d'Amazon, dissenyats perquè rebis els teus productes en temps rècord. Gràcies a la seva logística avançada, garantim una entrega eficient i totalment segura directament a la teva porta. Ja no cal esperar: demana avui mateix i tingues el que necessites a les teves mans abans del que t'imagines.",
         "Prepara els teus sentits per a una experiència totalment inesperada i refrescant. T’atreveixes a acceptar el repte i esbrinar el nou sabor de Coca-Cola abans que ningú? No et quedis amb el dubte i deixa’t sorprendre per aquesta edició única que canviarà tot el que coneixies.",
         "Descobreix el futur de la conducció amb el nou Mercedes-Benz elèctric, on el luxe i la sostenibilitat s'uneixen en un disseny impecable. Experimenta una potència silenciosa i una tecnologia d'avantguarda que redefineixen cada quilòmetre del teu trajecte. Passa a l'emissió zero sense renunciar a l'elegància i al rendiment excepcional que només una estrella pot oferir.",
-        "Porta la teva productivitat al següent nivell i prova el nou Office amb IA, l'eina definitiva per treballar de manera més intel·ligent. Deixa que la intel·ligència artificial redacti esborranys, resumeixi documents complexos i organitzi les teves dades en un obrir i tancar d'ulls. Transforma la teva rutina creativa i estalvia temps amb una experiència totalment integrada que pensa amb tu.",
         "Estem impulsant un canvi en el món dels pagaments digitals i necessitem col·laboració amb el nostre nou model de PayPal. El teu coneixement i la teva experiència són claus per optimitzar aquesta eina i fer-la més accessible per a tothom. Suma’t a aquest projecte innovador i ajuda’ns a definir el futur de les transaccions financeres amb total seguretat.",
-        "Volem crear un programa que ajudi a renderitzar un vídeo més ràpid, eliminant les llargues esperes i optimitzant al màxim els recursos del teu ordinador. El nostre objectiu és oferir una eina fluida i potent que permeti als creadors de contingut centrar-se en la creativitat en lloc de la càrrega del sistema. Uneix-te a la nostra iniciativa i ajuda'ns a transformar el flux de treball en l'edició de vídeo professional.",
     ];
     $id_empresas = [1,2,3,4,5,6]; // ajustar según usuarios insertados
 
@@ -169,7 +169,7 @@ try {
                 "uploads/videos/".$projects_videos[$i].".mp4",
                 date('Y-m-d'),
                 'active',
-                $id_empresas[$i]
+                $centerId
             ]);
         
         $projectId = $pdo->lastInsertId(); // obtener id del proyecto insertado
