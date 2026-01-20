@@ -10,6 +10,7 @@ if (!empty($_SESSION['user_id'])) {
 include("includes/database.php");
 
 $error = "";
+$loginSuccess = false;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST['email'] ?? '');
@@ -48,7 +49,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title>Iniciar sessió</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="icono-simbio.png" type="image/png">
+    <script type="module">
+    import { showNotification } from './notificaciones.js';
+    import { sendLog } from './create-logs.js'; // tu función para guardar logs
+
+    // Capturar el formulario
+    const form = document.getElementById('login-form');
+    const emailInput = document.getElementById('input-email');
+    // Si el login fue exitoso, hacer log y redirigir
+    <?php if ($loginSuccess): ?>
+    (async () => {
+        await sendLog(`Usuario "<?= addslashes($email) ?>" inició sesión`);
+        window.location.href = 'discover.php';
+    })();
+    <?php endif; ?>
+
+    <?php if ($error): ?>
+    showNotification('error', <?= json_encode($error) ?>, <?php echo json_encode($user['name']); ?>);
+    sendLog(`Intent de login amb email: <?= addslashes($email) ?>`);
+    <?php endif; ?>
+    </script>
 </head>
+<?php if (!$loginSuccess): ?>
 <body id="login-body">
 <header class="main-header">
     <h1 class="header-title">SIMBIO</h1>
@@ -66,28 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <button id="login-button" type="submit">Iniciar sessió</button>
     </form>
 </div>
-<script type="module">
-import { showNotification } from './notificaciones.js';
-import { sendLog } from './create-logs.js'; // tu función para guardar logs
-
-// Capturar el formulario
-const form = document.getElementById('login-form');
-const emailInput = document.getElementById('input-email');
-
-// Si el login fue exitoso, hacer log y redirigir
-<?php if ($loginSuccess): ?>
-(async () => {
-    await sendLog(`Usuario "<?= addslashes($email) ?>" inició sesión`);
-    window.location.href = 'discover.php';
-})();
-<?php endif; ?>
-
-<?php if ($error): ?>
-showNotification('error', <?= json_encode($error) ?>, <?php echo json_encode($user['name']); ?>);
-sendLog(`Intent de login amb email: <?= addslashes($email) ?>`);
-<?php endif; ?>
-
-</script>
-
 </body>
+<?php endif; ?>
 </html>
