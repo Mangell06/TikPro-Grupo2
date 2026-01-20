@@ -867,7 +867,7 @@
   display: flex;
   justify-content: center;
 }
-.project-form{
+#project-form{
   display: flex;
   justify-content: center;
   flex-direction: column;
