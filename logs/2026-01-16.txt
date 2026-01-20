@@ -1,0 +1,77 @@
+[14:58:09] [127.0.0.1] Intent de login amb email: apple@empresa.com
+[14:58:53] [127.0.0.1] Intent de login amb email: google@empresa.com
+[14:58:53] [127.0.0.1] Usuario company1 cargó proyecto 1
+[14:58:53] [127.0.0.1] Usuario company1 cargó proyecto 6
+[14:58:53] [127.0.0.1] Usuario company1 cargó proyecto 2
+[14:58:53] [127.0.0.1] Usuario company1 cargó proyecto 3
+[14:58:53] [127.0.0.1] Usuario company1 abrió la página Discover
+[14:59:35] [127.0.0.1] Usuario company1 cargó proyecto 1
+[14:59:35] [127.0.0.1] Usuario company1 cargó proyecto 5
+[14:59:35] [127.0.0.1] Usuario company1 cargó proyecto 2
+[14:59:35] [127.0.0.1] Usuario company1 cargó proyecto 6
+[14:59:35] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:05:59] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:05:59] [127.0.0.1] Usuario company1 cargó proyecto 1
+[15:05:59] [127.0.0.1] Usuario company1 cargó proyecto 6
+[15:05:59] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:05:59] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:06:04] [127.0.0.1] Usuario company1 toggle info: visible
+[15:06:05] [127.0.0.1] Usuario company1 toggle info: oculto
+[15:06:06] [127.0.0.1] Usuario company1 toggle info: visible
+[15:09:45] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:09:45] [127.0.0.1] Usuario company1 cargó proyecto 5
+[15:09:45] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:09:45] [127.0.0.1] Usuario company1 cargó proyecto 6
+[15:09:45] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:10:09] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:10:09] [127.0.0.1] Usuario company1 cargó proyecto 2
+[15:10:09] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:10:09] [127.0.0.1] Usuario company1 cargó proyecto 1
+[15:10:09] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:36:01] [127.0.0.1] Usuario company1 cargó proyecto 1
+[15:36:01] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:36:01] [127.0.0.1] Usuario company1 cargó proyecto 2
+[15:36:01] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:36:01] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:37:17] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:37:17] [127.0.0.1] Usuario company1 cargó proyecto 5
+[15:37:17] [127.0.0.1] Usuario company1 cargó proyecto 6
+[15:37:17] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:37:17] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:41:55] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:41:55] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:41:55] [127.0.0.1] Usuario company1 cargó proyecto 1
+[15:41:55] [127.0.0.1] Usuario company1 cargó proyecto 2
+[15:41:55] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:41:56] [127.0.0.1] Usuario company1 cargó proyecto 1
+[15:41:56] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:41:56] [127.0.0.1] Usuario company1 cargó proyecto 2
+[15:41:56] [127.0.0.1] Usuario company1 cargó proyecto 5
+[15:41:56] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:42:28] [127.0.0.1] Usuario company1 cargó proyecto 2
+[15:42:28] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:42:28] [127.0.0.1] Usuario company1 cargó proyecto 1
+[15:42:28] [127.0.0.1] Usuario company1 cargó proyecto 6
+[15:42:28] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:42:29] [127.0.0.1] Usuario company1 cargó proyecto 6
+[15:42:29] [127.0.0.1] Usuario company1 cargó proyecto 2
+[15:42:29] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:42:29] [127.0.0.1] Usuario company1 cargó proyecto 1
+[15:42:29] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:42:33] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:42:33] [127.0.0.1] Usuario company1 cargó proyecto 2
+[15:42:33] [127.0.0.1] Usuario company1 cargó proyecto 6
+[15:42:33] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:42:33] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:42:43] [127.0.0.1] Intent de login amb email: google@empresa.com
+[15:42:50] [127.0.0.1] Intent de login amb email: google@empresa.com
+[15:42:50] [127.0.0.1] Usuario company1 cargó proyecto 5
+[15:42:50] [127.0.0.1] Usuario company1 cargó proyecto 2
+[15:42:50] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:42:50] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:42:50] [127.0.0.1] Usuario company1 abrió la página Discover
+[15:43:03] [127.0.0.1] Usuario company1 cargó proyecto 4
+[15:43:03] [127.0.0.1] Usuario company1 cargó proyecto 3
+[15:43:03] [127.0.0.1] Usuario company1 cargó proyecto 2
+[15:43:03] [127.0.0.1] Usuario company1 cargó proyecto 6
+[15:43:03] [127.0.0.1] Usuario company1 abrió la página Discover
