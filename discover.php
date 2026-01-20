@@ -133,7 +133,7 @@ function createCard(projectData) {
     const divInfo = createElement("<div></div>", mother, "project-info hiddenSuave");
     const infoButtonClick = () => {
         divInfo.toggleClass("hiddenSuave");
-        mother.toggleClass("allInfoDiv");
+        // mother.toggleClass("allInfoDiv");
         divCard.toggleClass("dimLight");
         sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} toggle info: ${divInfo.hasClass("hiddenSuave") ? 'oculto' : 'visible'}`);
     }
