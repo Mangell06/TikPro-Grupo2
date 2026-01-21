@@ -5,6 +5,7 @@ use PHPMailer\PHPMailer\Exception;
 
 require '../vendor/autoload.php';
 include("database.php");
+header('Content-Type: application/json');
 try {
 
     // Solo permitir POST
@@ -26,6 +27,7 @@ try {
     $email = $registerData["email"];
     $tfn = $registerData["tfn"];
     $password = hash('sha256', $registerData["password"]);
+    $categories = $registerData["categories"];
     $population = $registerData["population"];
     $nameentity = $registerData["nameentity"];
     $typeentity = $registerData["typeentity"];
@@ -43,6 +45,29 @@ try {
     try {
         $stmt= $pdo->prepare($sqlcreation);
         $stmt->execute($values);
+
+        // 1. Obtener el ID del usuario recién creado
+        $userId = $pdo->lastInsertId();
+
+        if (!empty($categories) && is_array($categories)) {
+            // 2. Preparar la consulta para obtener los IDs de las categorías por su nombre
+            // Usamos IN para buscarlas todas de golpe
+            $placeholders = implode(',', array_fill(0, count($categories), '?'));
+            $sqlCatIds = "SELECT id FROM categories WHERE name IN ($placeholders)";
+            $stmtCats = $pdo->prepare($sqlCatIds);
+            $stmtCats->execute($categories);
+            $categoryData = $stmtCats->fetchAll(PDO::FETCH_ASSOC);
+
+            // 3. Insertar las relaciones en la tabla intermedia
+            if ($categoryData) {
+                $sqlRelation = "INSERT INTO categories_user (id_user, id_category) VALUES (?, ?)";
+                $stmtRel = $pdo->prepare($sqlRelation);
+
+                foreach ($categoryData as $cat) {
+                    $stmtRel->execute([$userId, $cat['id']]);
+                }
+            }
+        }
     } catch (PDOException $err) {
         http_response_code(500);
         echo json_encode([

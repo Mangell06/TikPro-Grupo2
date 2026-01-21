@@ -80,6 +80,9 @@ if (isset($_GET['validate'])) {
             <option value="company">Empresa</option>
         </select>
 
+        <div id="view-categories"></div>
+        <button id="open-categories-btn" type="button">Obrir categories</button>
+
         <label for="input-presentation">Presentació (opcional)</label>
         <textarea id="input-presentation" name="presentation"></textarea>
 
@@ -95,6 +98,123 @@ import { loadNotifications } from './load-notifications.js';
 
 loadNotifications();
 
+let categoriaSeleccionada = [];
+let seleccionTemporal = null;
+
+function updateCategoriesView() {
+    const $container = $('#view-categories');
+    $container.empty();
+
+    categoriaSeleccionada.forEach((cat, index) => {
+        const $tag = $(`
+            <div class="category-tag">
+                <span>${cat}</span> 
+                
+                <span class="remove-cat" data-index="${index}">×</span>
+            </div>
+        `);
+        $container.append($tag);
+    });
+
+    const count = categoriaSeleccionada.length;
+    $('#open-categories-btn').text(count > 0 ? `Categories: ${count} seleccionades` : 'Obrir categories');
+}
+
+$(document).on('click', '.remove-cat', function() {
+    const index = $(this).data('index');
+    categoriaSeleccionada.splice(index, 1); // Eliminamos del array
+    updateCategoriesView(); // Refrescamos la vista
+});
+
+function loadCategories(query = '') {
+    const categoryData = {
+        searchcat: query,
+        excludecategory: categoriaSeleccionada.join(',') 
+    };
+
+    fetch('includes/search-category.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ 
+            'categoryData[searchcat]': categoryData.searchcat,
+            'categoryData[excludecategory]': categoryData.excludecategory
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            const html = data.categories.map(c => `
+                <div class="category-item" 
+                     data-name="${c.name}">
+                    ${c.name}
+                </div>
+            `).join('');
+            $('#extra-content').html(html || '<div>No hi ha categories disponibles</div>');
+        }
+    })
+    .catch(err => console.error("Error carregant categories:", err));
+}
+
+$('#open-categories-btn').on('click', function() {
+    sendLog(`Usuario abrió el selector de categorías`);
+    const $overlay = $('<div id="modal-overlay"></div>').css({
+        position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+        background: 'rgba(0,0,0,0.5)', zIndex: 9998
+    });
+
+    const $modal = $(`
+        <div id="categories-modal">
+            <button id="close-modal">✖</button>
+            <h3>Categories</h3>
+            <input type="text" id="category-input" placeholder="Escriu per filtrar..." />
+            <div id="extra-content" ></div>
+            <button id="save-category" >Guardar</button>
+        </div>
+    `).css({
+        position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+        background: '#fff', padding: '20px', width: '300px', borderRadius: '8px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.3)', zIndex: 9999
+    });
+
+    // 2. Añadir al DOM
+    $('body').append($overlay).append($modal);
+    
+    // 3. Cargar categorías iniciales
+    loadCategories('');
+
+    // Evento de filtrado
+    $('#category-input').on('input', function (e) {
+        const value = e.target.value.trim();
+        loadCategories(value.length < 3 ? '' : value);
+    });
+
+    // Manejo de selección VISUAL
+    $(document).off('click', '.category-item').on('click', '.category-item', function() {
+        $('.category-item').css('background', 'transparent');
+        $(this).css('background', '#d1e7dd');
+        seleccionTemporal = $(this).data('name'); 
+    });
+
+    // Función para cerrar
+    const closeModal = () => {
+        $modal.remove();
+        $overlay.remove();
+        seleccionTemporal = null;
+    };
+
+    $overlay.on('click', closeModal);
+    $modal.find('#close-modal').on('click', closeModal);
+
+    // Acción de GUARDAR
+    $modal.find('#save-category').on('click', function() {
+        if (seleccionTemporal) {
+            categoriaSeleccionada.push(seleccionTemporal);
+            updateCategoriesView();
+        }
+        closeModal();
+    });
+});
+
 function sendRegister(data) {
     fetch('includes/register-user.php', {
         method: 'POST',
@@ -105,13 +225,16 @@ function sendRegister(data) {
     .then(res => {
         if (res.error) {
             showNotification('error', res.error);
+            sendLog(`Error de servidor en el registro de ${data.email}: ${res.error}`);
         } else {
             showNotification('success', 'Usuario registrado correctamente. Revisa tu email para verificar la cuenta.');
+            sendLog(`Solicitud de registro enviada con éxito para el usuario: ${data.username} (${data.email})`);
             window.location.href = 'login.php';
         }
     })
     .catch(err => {
         console.error(err);
+        sendLog(`Fallo crítico de red al intentar registrar al usuario ${data.email}`);
         showNotification('error', err.message);
     });
 }
@@ -124,6 +247,7 @@ $('#register-form').on('submit', (e) => {
     const name = formData.get('name');
     if (name.length  > 12 || name.length  < 3) {
         showNotification("warning","El nombre te que ser menor a 13 carecters y major a 3 caracters");
+        sendLog(`Intento de registro fallido: Nombre fuera de rango (${name})`);
         isValid = false;
     }
 
@@ -145,12 +269,14 @@ $('#register-form').on('submit', (e) => {
 
     if (!onlyNumbers || tfn[0] !== "+" || tfn.length < 12 || tfn.length > 13) {
         showNotification("warning","El nombre del telefon te per exemple aquest format (+34675842021, +321675842021 o +04675842021)");
+        sendLog(`Intento de registro fallido: Formato de teléfono no válido (${tfn})`);
         isValid = false;
     }
 
     const password = formData.get('password');
     if (password.length < 8) {
         showNotification("warning","La contrasenya te que medir mes de 8 caracters");
+        sendLog(`Intento de registro fallido: Contraseña no cumple criterios de seguridad para el email ${email}`);
         isValid = false;
     }
 
@@ -211,7 +337,12 @@ $('#register-form').on('submit', (e) => {
     }
 
     if (isValid) {
-        $("#register-button").prop('disabled',true);
+        if (categoriaSeleccionada.length === 0) {
+            showNotification("warning", "Has de seleccionar almenys una categoria");
+            return;
+        }
+
+        $("#register-button").prop('disabled', true);
         
         const registerData = {
             username: name,
@@ -220,13 +351,14 @@ $('#register-form').on('submit', (e) => {
             password: password,
             population: poblation,
             nameentity: entity_name,
-            typeentity: entity_type
+            typeentity: entity_type,
+            categories: categoriaSeleccionada // <-- Añadimos el array aquí
         };
 
-        // Añadir presentación si existe
         if (presentation) {
             registerData.presentation = presentation.trim();
         }
+        
         sendRegister(registerData);
     }
 });
