@@ -9,7 +9,9 @@ export async function loadNotifications() {
         if (Array.isArray(data.notifications)) {
             let newData = [];
             data.notifications.forEach(notif => {
-                showNotification(notif.type, notif.message, "", true);
+                if (notif && typeof notif.type === 'string' && typeof notif.message === 'string') {
+                    showNotification(notif.type, notif.message, "", true);
+                }
             });
         }
     } catch (err) {

@@ -211,6 +211,8 @@ $('#register-form').on('submit', (e) => {
     }
 
     if (isValid) {
+        $("#register-button").prop('disabled',true);
+        
         const registerData = {
             username: name,
             email: email,
