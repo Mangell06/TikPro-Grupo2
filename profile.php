@@ -3,33 +3,131 @@ session_start();
 include("includes/database.php");
 
 $iduser = $_SESSION['user_id'] ?? 0;
-
 if (!$iduser) {
     header("Location: login.php");
     exit;
 }
 
-// Cargar datos del usuario activo
+// ====== GUARDAR CAMBIOS DEL USUARIO ======
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // Editar usuario
+    if (isset($_POST['save_user'])) {
+        $username = $_POST['username'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $entity_name = $_POST['entity_name'] ?? '';
+        $entity_type = $_POST['entity_type'] ?? '';
+        $presentation = $_POST['presentation'] ?? '';
+
+        $stmt = $pdo->prepare("
+            UPDATE users
+            SET username = :username,
+                email = :email,
+                entity_name = :entity_name,
+                entity_type = :entity_type,
+                presentation = :presentation
+            WHERE id_user = :id
+        ");
+        $stmt->execute([
+            'username' => $username,
+            'email' => $email,
+            'entity_name' => $entity_name,
+            'entity_type' => $entity_type,
+            'presentation' => $presentation,
+            'id' => $iduser
+        ]);
+    }
+
+    // Añadir nueva etiqueta
+    if (isset($_POST['add_tag']) && !empty($_POST['new_tag'])) {
+        $tagName = trim($_POST['new_tag']);
+
+        if ($tagName !== '') {
+            $stmt = $pdo->prepare("SELECT id_category FROM categories WHERE name_category = :name LIMIT 1");
+            $stmt->execute(['name' => $tagName]);
+            $category = $stmt->fetch();
+
+            if ($category) {
+                $id_category = $category['id_category'];
+            } else {
+                $stmt = $pdo->prepare("
+                    INSERT INTO categories (name_category, type)
+                    VALUES (:name, :type)
+                ");
+                $stmt->execute([
+                    'name' => $tagName,
+                    'type' => 'family'
+                ]);
+                $id_category = $pdo->lastInsertId();
+            }
+
+            $stmt = $pdo->prepare("
+                SELECT 1 FROM category_user
+                WHERE id_user = :user AND id_category = :cat
+            ");
+            $stmt->execute([
+                'user' => $iduser,
+                'cat' => $id_category
+            ]);
+
+            if (!$stmt->fetch()) {
+                $stmt = $pdo->prepare("
+                    INSERT INTO category_user (id_user, id_category)
+                    VALUES (:user, :cat)
+                ");
+                $stmt->execute([
+                    'user' => $iduser,
+                    'cat' => $id_category
+                ]);
+            }
+        }
+    }
+
+    // Eliminar etiqueta
+    if (isset($_POST['delete_tag']) && !empty($_POST['delete_tag_id'])) {
+        $id_category = (int)$_POST['delete_tag_id'];
+        $stmt = $pdo->prepare("
+            DELETE FROM category_user
+            WHERE id_user = :user AND id_category = :cat
+        ");
+        $stmt->execute([
+            'user' => $iduser,
+            'cat' => $id_category
+        ]);
+    }
+
+    header("Location: profile.php");
+    exit;
+}
+
+// ====== CARGAR DATOS DEL USUARIO ======
 $stmt = $pdo->prepare("
-    SELECT username,
-           entity_name,
-           entity_type,
-           logo_image,
-           presentation
+    SELECT username, email, entity_name, entity_type, logo_image, presentation
     FROM users
     WHERE id_user = :id
     LIMIT 1
 ");
 $stmt->execute(['id' => $iduser]);
 $user = $stmt->fetch();
+
+// ====== CARGAR ETIQUETAS DEL USUARIO ======
+$stmtTags = $pdo->prepare("
+    SELECT c.id_category, c.name_category, c.type
+    FROM categories c
+    JOIN category_user cu ON cu.id_category = c.id_category
+    WHERE cu.id_user = :user_id
+");
+$stmtTags->execute(['user_id' => $iduser]);
+$tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Perfil</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="icono-simbio.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body id="profile-body">
@@ -42,33 +140,36 @@ $user = $stmt->fetch();
 
     <!-- DATOS USUARIO -->
     <section class="profile-card">
-
-        <?php if (!empty($user['logo_image'])): ?>
-            <img src="<?= htmlspecialchars($user['logo_image']) ?>" class="profile-logo">
-        <?php endif; ?>
-
         <h2 class="profile-section-title">Dades de l'entitat</h2>
 
-        <div class="profile-field">
-            <label>Nom i cognoms</label>
-            <input type="text" value="<?= htmlspecialchars($user['username']) ?>">
-        </div>
+        <form method="POST">
+            <div class="profile-field">
+                <label>Nom i cognoms</label>
+                <input type="text" name="username" value="<?= htmlspecialchars($user['username']) ?>">
+            </div>
 
-        <div class="profile-field">
-            <label>Nom entitat</label>
-            <input type="text" value="<?= htmlspecialchars($user['entity_name']) ?>">
-        </div>
+            <div class="profile-field">
+                <label>Email</label>
+                <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>">
+            </div>
 
-        <div class="profile-field">
-            <label>Tipus entitat</label>
-            <input type="text" value="<?= htmlspecialchars($user['entity_type']) ?>">
-        </div>
+            <div class="profile-field">
+                <label>Nom entitat</label>
+                <input type="text" name="entity_name" value="<?= htmlspecialchars($user['entity_name']) ?>">
+            </div>
 
-        <div class="profile-field">
-            <label>Presentació</label>
-            <textarea class="profile-textarea"><?= htmlspecialchars($user['presentation']) ?></textarea>
-        </div>
+            <div class="profile-field">
+                <label>Tipus entitat</label>
+                <input type="text" name="entity_type" value="<?= htmlspecialchars($user['entity_type']) ?>">
+            </div>
 
+            <div class="profile-field">
+                <label>Presentació</label>
+                <textarea name="presentation"><?= htmlspecialchars($user['presentation']) ?></textarea>
+            </div>
+
+            <button type="submit" name="save_user">Guardar</button>
+        </form>
     </section>
 
     <!-- ETIQUETAS -->
@@ -76,41 +177,60 @@ $user = $stmt->fetch();
         <h2 class="profile-section-title">Etiquetes</h2>
 
         <div class="profile-tags">
-            <span class="profile-tag">Informàtica <button type="button" class="profile-tag-remove">✕</button></span>
-            <span class="profile-tag">DAM <button type="button" class="profile-tag-remove">✕</button></span>
+            <?php foreach ($tags as $t): ?>
+                <form method="POST" style="display:inline-block;">
+                    <span class="profile-tag">
+                        <?= htmlspecialchars($t['name_category']) ?>
+                        <input type="hidden" name="delete_tag_id" value="<?= $t['id_category'] ?>">
+                        <button type="submit" name="delete_tag">✕</button>
+                    </span>
+                </form>
+            <?php endforeach; ?>
         </div>
 
-        <button type="button" class="profile-add-tag">+ Afegir</button>
+        <form method="POST" style="margin-top:10px;">
+            <input type="text" name="new_tag" placeholder="Nova etiqueta" required>
+            <button type="submit" name="add_tag">+ Afegir</button>
+        </form>
     </section>
 
     <!-- PROJECTES -->
     <section class="profile-card">
         <div class="profile-projects-header">
             <h2 class="profile-section-title">Projectes</h2>
-            <button class="profile-new-project">+ Nou projecte</button>
+            <button type="button" class="profile-new-project">+ Nou projecte</button>
         </div>
 
         <div class="profile-project-list">
             <?php
-            $stmt = $pdo->prepare("SELECT id_project, title, featured_image FROM projects WHERE id_user = :id ORDER BY id_project DESC");
+            $stmt = $pdo->prepare("
+                SELECT id_project, title, video
+                FROM projects
+                WHERE id_owner = :id
+                ORDER BY id_project DESC
+            ");
             $stmt->execute(['id' => $iduser]);
-            $projects = $stmt->fetchAll();
+            $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             if ($projects):
                 foreach ($projects as $proj):
             ?>
-                    <div class="profile-project-item">
-                        <a href="project.php?id=<?= $proj['id_project'] ?>">
-                            <img src="<?= htmlspecialchars($proj['featured_image']) ?>" alt="<?= htmlspecialchars($proj['title']) ?>">
-                            <span><?= htmlspecialchars($proj['title']) ?></span>
-                        </a>
-                    </div>
+                <div class="profile-project-item">
+                    <a href="project.php?id=<?= (int)$proj['id_project'] ?>">
+                        <?php if (!empty($proj['video'])): ?>
+                            <video src="<?= htmlspecialchars($proj['video']) ?>" muted playsinline preload="metadata"></video>
+                        <?php else: ?>
+                            <div class="profile-project-placeholder">Sense vídeo</div>
+                        <?php endif; ?>
+                        <span><?= htmlspecialchars($proj['title']) ?></span>
+                    </a>
+                </div>
             <?php
                 endforeach;
             else:
-                echo '<p class="profile-no-projects">Encara no tens projectes.</p>';
-            endif;
             ?>
+                <p class="profile-no-projects">Encara no tens projectes.</p>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -121,7 +241,5 @@ $user = $stmt->fetch();
     </section>
 
 </main>
-
-
 </body>
 </html>

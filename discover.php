@@ -19,15 +19,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descobrir</title>
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="icon" href="/icono-simbio.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="icono-simbio.png" type="image/png">
 </head>
 <body id="discover-body">
     <header class="header-discovered">
-        <div class="profile-chat-header">
-            <a href="profile.php">Perfil</a>
-            <a href="chats.php">Chats</a>
-        </div>
         <div class="close-session">
             <?php
         include("includes/database.php");

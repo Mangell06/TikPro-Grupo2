@@ -226,7 +226,7 @@
     text-align: center;
     z-index: 1000;
     position: relative;
-    justify-content: space-between;
+    justify-content: right;
     display: flex;
     gap: 24px;
     align-items: center;
@@ -322,7 +322,7 @@
 }
 
 /* Boton de desplegar informacion*/
-.info-toggle, .like{
+.info-toggle, .like, input[type="file"]::file-selector-button{
     display: inline-block;
     margin: 10px 0;       /* separación arriba y abajo */
     padding: 10px 18px;   /* tamaño cómodo */
@@ -340,7 +340,7 @@
         box-shadow 0.2s;
 }
 
-.info-toggle:hover, .like{
+.info-toggle:hover, .like:hover, input[type="file"]::file-selector-button:hover{
     background: var(--color-secondary);
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(0,0,0,0.2);
@@ -364,7 +364,7 @@
 }
 
 
-.info-toggle:active, .like, .nope {
+.info-toggle:active, .like:active, .nope:active {
     transform: scale(0.97);
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
@@ -427,10 +427,6 @@
     }
     #nav-logout{
         padding: 5px;
-    }
-
-    .user{
-        display: none;
     }
     
     .project-info.hiddenSuave{
@@ -861,6 +857,36 @@
         opacity: 1;
     }
 }
+
+
+/* crear project */
+.main-edit{
+  width: 100%;
+  height: auto;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.project-form{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 600px;
+  align-self: anchor-center;
+  background-color: white;
+  border: grey 1px solid;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+
+input[type="file"]{
+    padding: 13px;
+    display: flex;
+    gap: 10px;
+
+}
+
 
 /* =========================
    Text Posible Match
