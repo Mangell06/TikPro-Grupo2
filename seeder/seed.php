@@ -124,15 +124,15 @@ try {
     // Insertar centros
     foreach ($centres as $i => $nom) {
         $email = strtolower(preg_replace('/[^a-zA-Z]/','',$nom)).'@edu.cat';
-        $pdo->prepare("INSERT INTO users (email,password,name,tfn,entity_name,entity_type,poblation,presentation,logo_image) VALUES (?,?,?,?,?,?,?,?,?)")
-            ->execute([$email, hash('sha256','constraseña'.$i), $centro_logo[$i], '65423300'.$i, $nom, 'center', 'Cornellà', "Usuario del centro $nom", "uploads/logos/".$centro_logo[$i].".png"]);
+        $pdo->prepare("INSERT INTO users (email,password,name,tfn,entity_name,entity_type,poblation,presentation) VALUES (?,?,?,?,?,?,?,?)")
+            ->execute([$email, hash('sha256','constraseña'.$i), $centro_logo[$i], '65423300'.$i, $nom, 'center', 'Cornellà', "Usuario del centro $nom",]);
     }
 
     // Insertar empresas
     foreach ($empreses as $i => $nom) {
         $email = strtolower(preg_replace('/[^a-zA-Z]/','',$nom)).'@empresa.com';
-        $pdo->prepare("INSERT INTO users (email,password,name,entity_name,entity_type,tfn,poblation,presentation,logo_image) VALUES (?,?,?,?,?,?,?,?,?)")
-            ->execute([$email, hash('sha256','password'.$i), $nom, $nom.' S.L.', 'company', '95423300'.$i, 'Cornellà', "Usuario de la empresa $nom", "uploads/logos/".$empresa_logo[$i].".png"]);
+        $pdo->prepare("INSERT INTO users (email,password,name,entity_name,entity_type,tfn,poblation,presentation) VALUES (?,?,?,?,?,?,?,?)")
+            ->execute([$email, hash('sha256','password'.$i), $nom, $nom.' S.L.', 'company', '95423300'.$i, 'Cornellà', "Usuario de la empresa $nom"]);
     }
 
     /* -------------------------------------------------
@@ -162,11 +162,12 @@ try {
 
     foreach ($centersUsers as $i => $centerId) {
         // Insertar proyecto
-        $pdo->prepare("INSERT INTO projects (title, description, video, date_creation, state, id_owner) VALUES (?,?,?,?,?,?)")
+        $pdo->prepare("INSERT INTO projects (title, description, video, logo_image, date_creation, state, id_owner) VALUES (?,?,?,?,?,?,?)")
             ->execute([
                 $projects_titles[$i],
                 $descriptions[$i],
                 "uploads/videos/".$projects_videos[$i].".mp4",
+                "uploads/logos/".$empresa_logo[$i].".png",
                 date('Y-m-d'),
                 'active',
                 $centerId

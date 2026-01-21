@@ -1,3 +1,43 @@
+<?php
+session_start();
+if (isset($_GET['validate'])) {
+    include("includes/database.php");
+    if (!isset($_SESSION['notifications'])) {
+        $_SESSION['notifications'] = [];
+    }
+    $code = $_GET['validate'];
+
+    $stmt = $pdo->prepare("SELECT id, code_expire FROM users WHERE code_activate = ? AND is_active = 0");
+    $stmt->execute([$code]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+        $now = new DateTime();
+        $expire = new DateTime($user['code_expire']);
+
+        if ($now <= $expire) {
+            $stmt = $pdo->prepare("UPDATE users SET is_active = 1, code_activate = NULL, code_expire = NULL WHERE id = ?");
+            $stmt->execute([$user['id']]);
+            $_SESSION['notifications'][] = [
+                "message" => "Cuenta verificada correctamente",
+                "type" => "success"
+            ];
+        } else {
+            $_SESSION['notifications'][] = [
+                "message" => "El código ha expirado",
+                "type" => "error"
+            ];
+        }
+    } else {
+        $_SESSION['notifications'][] = [
+            "message" => "Código inválido o usuario ya verificado",
+            "type" => "warning"
+        ];
+    }
+    header("Location: login.php");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="ca">
 <head>
@@ -40,9 +80,6 @@
             <option value="company">Empresa</option>
         </select>
 
-        <label for="input-logo">Logo (opcional)</label>
-        <input id="input-logo" type="file" name="logo_image" accept="image/*">
-
         <label for="input-presentation">Presentació (opcional)</label>
         <textarea id="input-presentation" name="presentation"></textarea>
 
@@ -54,14 +91,42 @@
 <script type="module">
 import { showNotification } from '/notificaciones.js';
 import { sendLog } from '/create-logs.js';
+import { loadNotifications } from './load-notifications.js';
+
+loadNotifications();
+
+function sendRegister(data) {
+    fetch('includes/register-user.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ registerData: JSON.stringify(data) })
+    })
+    .then(res => res.json())
+    .then(res => {
+        if (res.error) {
+            showNotification('error', res.error);
+        } else {
+            showNotification('success', 'Usuario registrado correctamente. Revisa tu email para verificar la cuenta.');
+            window.location.href = 'login.php';
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        showNotification('error', err.message);
+    });
+}
 
 $('#register-form').on('submit', (e) => {
     e.preventDefault();
+    let isValid = true;
     const formData = new FormData(e.target);
+
     const name = formData.get('name');
-    if (name > 12 || name < 3) {
+    if (name.length  > 12 || name.length  < 3) {
         showNotification("warning","El nombre te que ser menor a 13 carecters y major a 3 caracters");
+        isValid = false;
     }
+
     const email = formData.get('email');
     let countPointEmail = 0;
     for (const characterEmail of email) {
@@ -69,27 +134,99 @@ $('#register-form').on('submit', (e) => {
     }
     if (countPointEmail !== 1) {
         showNotification("warning","En el correu te que haber una extensió");
+        isValid = false;
     }
+
     const tfn = formData.get('tfn');
     let onlyNumbers = true;
-    for (const num of tfn.slice(1,-1)) {
-        if (num > 0 || num < 9) {
-            onlyNumbers = false;
-            break;
-        }
+    for (const num of tfn.slice(1)) {
+        if (num < "0" || num > "9") onlyNumbers = false;
     }
-    if (!onlyNumbers || tfn[0] !== "+") {
-        showNotification("warning","El nombre de telefon te aquest format (+34675842021)");
+
+    if (!onlyNumbers || tfn[0] !== "+" || tfn.length < 12 || tfn.length > 13) {
+        showNotification("warning","El nombre del telefon te per exemple aquest format (+34675842021, +321675842021 o +04675842021)");
+        isValid = false;
     }
+
     const password = formData.get('password');
+    if (password.length < 8) {
+        showNotification("warning","La contrasenya te que medir mes de 8 caracters");
+        isValid = false;
+    }
+
+    // Inicializar flags
+    let hasUpper = false;
+    let hasLower = false;
+    let hasNumber = false;
+    let hasSpecial = false;
+
+    // Lista de caracteres especiales permitidos
+    const specialChars = "!@#$%^&*(),.?\":{}|<>";
+
+    // Comprobar cada carácter
+    for (let i = 0; i < password.length; i++) {
+        const c = password[i];
+        if (c >= 'A' && c <= 'Z') hasUpper = true;
+        else if (c >= 'a' && c <= 'z') hasLower = true;
+        else if (c >= '0' && c <= '9') hasNumber = true;
+        else if (specialChars.indexOf(c) !== -1) hasSpecial = true;
+    }
+
+    // Mostrar notificaciones según falten criterios
+    if (!hasUpper){
+        showNotification("warning", "La contrasenya te que tindre almens una letra mayúscula");
+        isValid = false;
+    }
+    if (!hasLower) {
+        showNotification("warning", "La contrasenya te que tindre almens una letra minúscula");
+        isValid = false;
+    }
+    if (!hasNumber){
+        showNotification("warning", "La contrasenya te que tindre almens un número");
+        isValid = false;
+    } 
+    if (!hasSpecial) {
+        showNotification("warning", "La contrasenya te que tindre almens un caràcter especial");
+        isValid = false;
+    } 
+
     const poblation = formData.get('poblation');
+    if (poblation.length > 22 || poblation.length < 3) {
+        showNotification("warning","la població te que ser menor a 18 carecters y major a 3 caracters");
+        isValid = false;
+    }
+
     const entity_name = formData.get('entity_name');
+    if (entity_name.length  > 22 || entity_name.length  < 3) {
+        showNotification("warning","el nom de l'entitat te que ser menor a 18 carecters y major a 3 caracters");
+        isValid = false;
+    }
+
     const entity_type = formData.get('entity_type');
-    const logo_image = formData.get('logo_image'); // tipo File
-    const presentation = formData.get('presentation');
 
-    console.log({ name, email, tfn, password, poblation, entity_name, entity_type, logo_image, presentation });
+    let presentation = false;
 
+    if (formData.get('presentation').trim() !== "") {
+        presentation = formData.get('presentation');
+    }
+
+    if (isValid) {
+        const registerData = {
+            username: name,
+            email: email,
+            tfn: tfn,
+            password: password,
+            population: poblation,
+            nameentity: entity_name,
+            typeentity: entity_type
+        };
+
+        // Añadir presentación si existe
+        if (presentation) {
+            registerData.presentation = presentation.trim();
+        }
+        sendRegister(registerData);
+    }
 });
 </script>
 </body>

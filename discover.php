@@ -59,6 +59,9 @@
 import { showNotification } from '/notificaciones.js';
 import { createElement } from '/createElement.js';
 import { sendLog } from '/create-logs.js';
+import { loadNotifications } from './load-notifications.js';
+
+loadNotifications();
 
 $(document).on("keydown", function(e) {
     if ((e.which || e.keyCode) == 116 || ((e.ctrlKey || e.metaKey) && (e.which || e.keyCode) == 82)) {

@@ -1,7 +1,7 @@
 import { sendLog } from './create-logs.js';
 
 let notificationCount = 0;
-export function showNotification(type, message, username='') {
+export function showNotification(type, message, username='', exist=false) {
     //Sumar la cantidad de notificaciones mostradas
     notificationCount++;
     // Crear contenedor
@@ -20,7 +20,7 @@ export function showNotification(type, message, username='') {
     const closeBtn = document.createElement('button');
     closeBtn.className = 'close-btn';
     closeBtn.innerHTML = '&times;';
-    closeBtn.onclick = () => {
+    closeBtn.onclick = async function () {
         notif.remove();
         notificationCount--;
         if (username !== "") {
@@ -28,9 +28,35 @@ export function showNotification(type, message, username='') {
         } else {
             sendLog(`El usuario a cerrat la notificació`);
         }
+        await fetch('includes/delete-notifications-session.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ message: message })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) {
+                console.warn('No se pudo borrar la notificación en el servidor:', data.error);
+            }
+        })
+        .catch(err => console.error('Error borrando la notificación:', err));
     };
     notif.appendChild(closeBtn);
 
     // Añadir al body
     document.body.appendChild(notif);
+
+    fetch('includes/create-notifications-session.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ message: message, type: type, exist: exist })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (!data.success) {
+            console.warn('No se pudo registrar la notificación en el servidor:', data.error);
+        }
+    })
+    .catch(err => console.error('Error enviando la notificación:', err));
+   
 }
