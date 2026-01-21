@@ -79,6 +79,8 @@ if ($requestUri !== $scriptName && strpos($requestUri, $scriptName . '/') === 0)
         <input id="input-password" type="password" name="password" required>
 
         <button id="login-button" type="submit">Iniciar sessió</button>
+
+        <a id="register-button" href="register.php">Donar d'alta a l'usuari</a>
     </form>
 </div>
 </body>

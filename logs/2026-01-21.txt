@@ -1,0 +1,4 @@
+[22:28:12] [37.223.168.138] Usuario "Miguel" cargó proyecto 1
+[22:28:12] [37.223.168.138] Usuario "Miguel" cargó proyecto 2
+[22:28:12] [37.223.168.138] Usuario "Miguel" cargó proyecto 3
+[22:29:26] [37.223.168.138] Usuario Miguel a cerrado sesion

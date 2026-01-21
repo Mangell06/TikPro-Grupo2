@@ -87,6 +87,8 @@ if (isset($_GET['validate'])) {
         <textarea id="input-presentation" name="presentation"></textarea>
 
         <button id="register-button" type="submit">Registrar</button>
+
+        <a id="register-button" href="login.php">Tinc una conta</a>
     </form>
 </div>
 

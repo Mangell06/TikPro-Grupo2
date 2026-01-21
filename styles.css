@@ -1159,3 +1159,46 @@ input[type="file"]{
     transform: scale(0.95);
     box-shadow: 0 3px 8px rgba(230,57,70,0.35);
 }
+
+/* =========================
+   REGISTER LINK (UNDER LOGIN)
+   ========================= */
+
+#register-button {
+    margin-top: 18px;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+
+    padding: 14px;
+    border-radius: 16px;
+
+    background: transparent;
+    color: var(--color-primary);
+
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+
+    border: 2px solid rgba(230,57,70,0.35);
+
+    transition:
+        background 0.25s,
+        color 0.25s,
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+#register-button:hover {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(230,57,70,0.45);
+    text-decoration: none;
+}
+
+#register-button:active {
+    transform: scale(0.97);
+    box-shadow: 0 6px 16px rgba(230,57,70,0.35);
+}
