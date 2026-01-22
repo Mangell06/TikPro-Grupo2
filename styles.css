@@ -1203,60 +1203,88 @@ input[type="file"]{
     box-shadow: 0 6px 16px rgba(230,57,70,0.35);
 }
 
-/* style.css - Estilos para páginas de error personalizadas */
 /* =========================
-   ESTILOS GENERALES
+   ERROR PAGES (404 / 403 / 500)
    ========================= */
-* {
+
+body {
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    min-height: 100vh;
+    font-family: var(--font-primary);
+    background: var(--bg-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Contenedor central */
+body > * {
+    max-width: 500px;
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* altura completa de la ventana */
-    font-family: 'Arial', sans-serif;
-    background: var(--bg-gradient);
-    color: var(--color-dark);
     text-align: center;
 }
 
-/* Contenedor centrado */
-.container {
-    background-color: #fff;
-    padding: 40px 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    max-width: 400px;
-    width: 90%;
+/* Caja principal */
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(6px);
+}
+
+/* Envolver visualmente todo */
+body h1,
+body h2,
+body p,
+body address {
+    position: relative;
+    background: linear-gradient(180deg, #ffffff 0%, #fff5f7 100%);
+    padding: 22px 26px;
+    border-radius: 22px;
+    margin: 10px 0;
+    box-shadow:
+        0 25px 50px rgba(0,0,0,0.3),
+        0 0 0 1px rgba(255,77,109,0.15);
 }
 
 /* Título */
 h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
     color: var(--color-primary);
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 1px;
 }
 
-/* Mensaje o párrafo */
+/* Error code */
+h2 {
+    color: var(--color-secondary);
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+/* Texto */
 p {
-    font-size: 16px;
+    font-size: 0.95rem;
     color: var(--color-neutral);
+    line-height: 1.6;
 }
 
-/* Botón con gradiente */
-button {
-  margin-top: 25px;
-  padding: 12px 25px;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  background: var(--color-primary);
-  color: white;
+/* Dirección */
+address {
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--color-dark);
+}
+
+/* Enlace */
+a {
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
