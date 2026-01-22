@@ -60,11 +60,10 @@
     padding: 20px 0;
     background: white;
     text-align: left;
+    position: fixed;
     top: 0;
-    position: absolute;
-    flex-direction: row;
-    display: flex;
-    justify-content: space-between;
+    left: 0;
+    z-index: 1000;
 }
 
 .header-title {
@@ -237,7 +236,6 @@
     gap: 24px;
     display: flex;
     align-items: center;
-    margin-right: 20px;
 }
 
 .user{
@@ -371,31 +369,11 @@
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
-.project-title, .project-description, .profile-field input{
-  font-size: 16px;
+.project-title{
+  font-size: 17px;
+  font-weight: 600;
   margin-bottom: 5px;
   margin-top: -3px;
-  padding: 5px;
-  border-radius: 8px;
-  background: #f3986c57;
-  color: black;
-}
-
-.profile-field input{
-    margin-top: 18px;
-  margin-bottom: 10px;
-}
-
-
-label{
-    margin-bottom: 10px;
-}
-
-.profile-field select, .profile-field textarea{
-    background: #fbdccd;
-  padding: 10px;
-  border-radius: 9px;
-  margin-bottom: 3px;
 }
 
 .ancore{
@@ -724,7 +702,6 @@ label{
     justify-content: center;
     transition: background 0.2s;
     text-align: center;
-    margin-left: 5px;
 }
 
 .notification.warning .close-btn {
@@ -885,12 +862,12 @@ label{
 /* crear project */
 .main-edit{
   width: 100%;
+  height: auto;
   align-items: center;
   display: flex;
   justify-content: center;
-  height: 100vh;
 }
-#project-form{
+.project-form{
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -910,192 +887,318 @@ input[type="file"]{
 
 }
 
-.project-title-discover{
-    font-weight: 609;
-}
-
-/* css profile.php y edit_project.php */
-.profile-links{
-    margin-top: 20px;
-}
-
-.profile-edit-container{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: var(--font-primary);
-  background: var(--bg-gradient);
-  height: 100vh;
-  padding-top: 83px;
-}
-
-.profile-card{
-    border: grey solid 1px;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    width: 641px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-height: 50vh;
-    overflow-y: scroll;
-    
-}
-
-.profile-project-item > a{
-    display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.profile-project-list video{
-    width: 200px;
-}
-
-.imagePreviewProfile {
-    width: 150px;
-}
-.profile-projects-header{
-    width: 100%;
-  display: flex;
-  justify-content: space-around;
-}
-/* modal buscador */
-/* Contenedor de etiquetas */
-.buttonEtiquetes, .profile-new-project{
-    width: 113px;
-  background: #b79f93;
-  color: white;
-  border-radius: 5px;
-  padding: 5px;
-  cursor: pointer;
-  margin-left: 10px;
-  margin-bottom: 10px;
-  text-decoration: none;
-}
-.tags-wrapper { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-
-.tag-badge {
-    background: 'rgb(148, 136, 130)'; color: white; padding: 5px 10px;
-    border-radius: 15px; display: flex; align-items: center; font-size: 14px;
-}
-
-.tag-badge .remove-btn {
-    margin-left: 8px; cursor: pointer; font-weight: bold; color: #ffcccc;
-}
-
-/* Modal Estilos */
-.custom-modal {
-    display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-    width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-    background-color: white; margin: 10% auto; padding: 20px;
-    width: 400px; border-radius: 8px; position: relative;
-}
-
-.close-btn-modal { position: absolute; right: 20px; cursor: pointer; font-size: 24px; }
-
-.results-list { max-height: 200px; overflow-y: auto; margin-top: 10px; }
-
-.result-item {
-    padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;
-}
-
-.result-item:hover { background-color: #f0f0f0; }
 
 /* =========================
-   ERROR PAGES (APACHE)
+   Text Posible Match
+   ========================= */
+.possible-match {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-warning);
+    color: white;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    z-index: 10;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   REGISTER PAGE (SCROLLABLE FORM)
    ========================= */
 
-html, body {
-    height: 100%;
-}
-
-body {
+#register-body {
     margin: 0;
     font-family: var(--font-primary);
+    min-height: 100vh;
     background: var(--bg-gradient);
     display: flex;
-    flex-direction: column;          /* arriba → abajo */
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    text-align: center;
-    position: relative;
 }
 
-/* Capa de desenfoque */
-body::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    backdrop-filter: blur(6px);
-    z-index: 0;
-}
-
-/* Todos los bloques */
-body h1,
-body h2,
-body p,
-body address {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 520px;
-    background: linear-gradient(
-        180deg,
-        #ffffff 0%,
-        #fff5f7 100%
-    );
-    padding: 22px 28px;
-    border-radius: 22px;
-    margin-bottom: 16px;
+/* Contenedor principal */
+#register-container {
+    margin-top: 120px;
+    margin-bottom: 80px;
+    width: 460px;
+    max-width: 92%;
+    background: linear-gradient(180deg, #ffffff 0%, #fff5f7 100%);
+    border-radius: 26px;
+    padding: 30px 28px 24px;
     box-shadow:
-        0 25px 50px rgba(0,0,0,0.35),
-        0 0 0 1px rgba(230,57,70,0.15);
+        0 30px 60px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 77, 109, 0.15);
+    animation: fadeIn 0.7s ease-in-out;
+
+    display: flex;
+    flex-direction: column;
 }
 
-/* Título principal */
-h1 {
+/* Título */
+#register-title {
+    text-align: center;
+    margin-bottom: 20px;
     color: var(--color-primary);
-    font-size: 2.3rem;
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-
-/* Código de error */
-h2 {
-    color: var(--color-secondary);
-    font-size: 1.4rem;
+    font-size: 1.9rem;
     font-weight: 800;
 }
 
-/* Texto */
-p {
-    font-size: 0.95rem;
+/* =========================
+   FORM WITH SCROLL
+   ========================= */
+#register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    max-height: 60dvh;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* Scroll bonito */
+#register-form::-webkit-scrollbar {
+    width: 8px;
+}
+
+#register-form::-webkit-scrollbar-track {
+    background: rgba(230,57,70,0.05);
+    border-radius: 10px;
+}
+
+#register-form::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        180deg,
+        var(--color-primary),
+        var(--color-secondary)
+    );
+    border-radius: 10px;
+}
+
+/* =========================
+   LABELS
+   ========================= */
+#register-form label {
+    margin-top: 10px;
     color: var(--color-neutral);
-    line-height: 1.6;
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
-/* Dirección del servidor */
-address {
-    font-style: normal;
-    font-size: 0.85rem;
-    color: var(--color-dark);
+/* =========================
+   INPUTS / SELECT / TEXTAREA
+   ========================= */
+#register-form input,
+#register-form select,
+#register-form textarea {
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #ffd1da;
+    font-size: 0.95rem;
+    background-color: #ffffff;
+    transition:
+        border 0.3s,
+        box-shadow 0.3s,
+        transform 0.15s;
 }
 
-/* Enlaces */
-a {
+#register-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#register-form input:focus,
+#register-form select:focus,
+#register-form textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.25);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   CATEGORIES
+   ========================= */
+#view-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.category-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(230, 57, 70, 0.15);
     color: var(--color-primary);
+    padding: 6px 12px;
+    border-radius: 14px;
+    font-size: 0.8rem;
     font-weight: 700;
+}
+
+.category-tag .remove-cat {
+    cursor: pointer;
+    background: rgba(230,57,70,0.25);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+#open-categories-btn {
+    margin-top: 6px;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#register-button {
+    margin-top: 14px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 18px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* =========================
+   MODAL
+   ========================= */
+#modal-overlay {
+    backdrop-filter: blur(4px);
+}
+
+#categories-modal {
+    background: linear-gradient(180deg, #ffffff 0%, #fff5f7 100%);
+    border-radius: 20px;
+    padding: 22px;
+    width: 320px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#extra-content {
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.category-item {
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#save-category {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* =========================
+   CLOSE MODAL BUTTON
+   ========================= */
+
+#close-modal {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(230, 57, 70, 0.15);
+    color: var(--color-primary);
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background 0.2s,
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+#close-modal:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 14px rgba(230,57,70,0.45);
+}
+
+#close-modal:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 8px rgba(230,57,70,0.35);
+}
+
+/* =========================
+   REGISTER LINK (UNDER LOGIN)
+   ========================= */
+
+#register-button {
+    margin-top: 18px;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+
+    padding: 14px;
+    border-radius: 16px;
+
+    background: transparent;
+    color: var(--color-primary);
+
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+
+    border: 2px solid rgba(230,57,70,0.35);
+
+    transition:
+        background 0.25s,
+        color 0.25s,
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+#register-button:hover {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(230,57,70,0.45);
     text-decoration: none;
 }
 
-a:hover {
-    text-decoration: underline;
+#register-button:active {
+    transform: scale(0.97);
+    box-shadow: 0 6px 16px rgba(230,57,70,0.35);
 }
