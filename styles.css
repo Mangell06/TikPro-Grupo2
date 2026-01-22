@@ -1007,3 +1007,318 @@ input[type="file"]{
 }
 
 .result-item:hover { background-color: #f0f0f0; }
+
+/* =========================
+   Text Posible Match
+   ========================= */
+.possible-match {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-warning);
+    color: white;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    z-index: 10;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   REGISTER PAGE (SCROLLABLE FORM)
+   ========================= */
+
+#register-body {
+    margin: 0;
+    font-family: var(--font-primary);
+    min-height: 100vh;
+    background: var(--bg-gradient);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Contenedor principal */
+#register-container {
+    margin-top: 120px;
+    margin-bottom: 80px;
+    width: 460px;
+    max-width: 92%;
+    background: linear-gradient(180deg, #ffffff 0%, #fff5f7 100%);
+    border-radius: 26px;
+    padding: 30px 28px 24px;
+    box-shadow:
+        0 30px 60px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 77, 109, 0.15);
+    animation: fadeIn 0.7s ease-in-out;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* Título */
+#register-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--color-primary);
+    font-size: 1.9rem;
+    font-weight: 800;
+}
+
+/* =========================
+   FORM WITH SCROLL
+   ========================= */
+#register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    max-height: 60dvh;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* Scroll bonito */
+#register-form::-webkit-scrollbar {
+    width: 8px;
+}
+
+#register-form::-webkit-scrollbar-track {
+    background: rgba(230,57,70,0.05);
+    border-radius: 10px;
+}
+
+#register-form::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        180deg,
+        var(--color-primary),
+        var(--color-secondary)
+    );
+    border-radius: 10px;
+}
+
+/* =========================
+   LABELS
+   ========================= */
+#register-form label {
+    margin-top: 10px;
+    color: var(--color-neutral);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* =========================
+   INPUTS / SELECT / TEXTAREA
+   ========================= */
+#register-form input,
+#register-form select,
+#register-form textarea {
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #ffd1da;
+    font-size: 0.95rem;
+    background-color: #ffffff;
+    transition:
+        border 0.3s,
+        box-shadow 0.3s,
+        transform 0.15s;
+}
+
+#register-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#register-form input:focus,
+#register-form select:focus,
+#register-form textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.25);
+    transform: translateY(-2px);
+}
+
+/* =========================
+   CATEGORIES
+   ========================= */
+#view-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.category-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(230, 57, 70, 0.15);
+    color: var(--color-primary);
+    padding: 6px 12px;
+    border-radius: 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.category-tag .remove-cat {
+    cursor: pointer;
+    background: rgba(230,57,70,0.25);
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================
+   BUTTONS
+   ========================= */
+#open-categories-btn {
+    margin-top: 6px;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+#register-button {
+    margin-top: 14px;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 18px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+/* =========================
+   MODAL
+   ========================= */
+#modal-overlay {
+    backdrop-filter: blur(4px);
+}
+
+#categories-modal {
+    background: linear-gradient(180deg, #ffffff 0%, #fff5f7 100%);
+    border-radius: 20px;
+    padding: 22px;
+    width: 320px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#extra-content {
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.category-item {
+    padding: 10px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#save-category {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* =========================
+   CLOSE MODAL BUTTON
+   ========================= */
+
+#close-modal {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(230, 57, 70, 0.15);
+    color: var(--color-primary);
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background 0.2s,
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+#close-modal:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 6px 14px rgba(230,57,70,0.45);
+}
+
+#close-modal:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 8px rgba(230,57,70,0.35);
+}
+
+/* =========================
+   REGISTER LINK (UNDER LOGIN)
+   ========================= */
+
+#register-button {
+    margin-top: 18px;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+
+    padding: 14px;
+    border-radius: 16px;
+
+    background: transparent;
+    color: var(--color-primary);
+
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+
+    border: 2px solid rgba(230,57,70,0.35);
+
+    transition:
+        background 0.25s,
+        color 0.25s,
+        transform 0.2s,
+        box-shadow 0.2s;
+}
+
+#register-button:hover {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(230,57,70,0.45);
+    text-decoration: none;
+}
+
+#register-button:active {
+    transform: scale(0.97);
+    box-shadow: 0 6px 16px rgba(230,57,70,0.35);
+}
