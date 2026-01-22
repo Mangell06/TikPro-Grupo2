@@ -19,7 +19,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descobrir</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?q=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="icono-simbio.png" type="image/png">
 </head>

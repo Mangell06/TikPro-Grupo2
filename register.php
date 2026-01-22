@@ -44,7 +44,7 @@ if (isset($_GET['validate'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alta d'usuari</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/styles.css?q=1">
     <link rel="icon" href="icono-simbio.png" type="image/png">
 </head>
 <body id="register-body">
