@@ -36,73 +36,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'presentation' => $presentation,
             'id' => $iduser
         ]);
-    }
 
-    // Añadir nueva etiqueta
-    if (isset($_POST['add_tag']) && !empty($_POST['new_tag'])) {
-        $tagName = trim($_POST['new_tag']);
+        $sqlTagDelete = "DELETE from categories_user where id_user = ?";
+        $stmtTagDelete = $pdo->prepare($sqlTagDelete);
+        $stmtTagDelete -> execute([$iduser]);
 
-        if ($tagName !== '') {
-            $stmt = $pdo->prepare("SELECT id FROM categories WHERE name = :name LIMIT 1");
-            $stmt->execute(['name' => $tagName]);
-            $category = $stmt->fetch();
-
-            if ($category) {
-                $id = $category['id'];
-            } else {
-                $stmt = $pdo->prepare("
-                    INSERT INTO categories (name, type)
-                    VALUES (:name, :type)
-                ");
-                $stmt->execute([
-                    'name' => $tagName,
-                    'type' => 'family'
-                ]);
-                $id = $pdo->lastInsertId();
+        $etiquetes_seleccionades = $_POST['categories'] ?? [];
+            if (!empty($etiquetes_seleccionades)) {
+                foreach ($etiquetes_seleccionades as $id_categoria) {
+                    try {
+                        $sql = "INSERT INTO categories_user (id_user, id_category) VALUES (?, ?)";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute([$iduser, $id_categoria]);
+                    } catch (\Throwable $th) {
+                    }
+                }
             }
-
-            $stmt = $pdo->prepare("
-                SELECT 1 FROM categories_user
-                WHERE id = :user AND id = :cat
-            ");
-            $stmt->execute([
-                'user' => $iduser,
-                'cat' => $id
-            ]);
-
-            if (!$stmt->fetch()) {
-                $stmt = $pdo->prepare("
-                    INSERT INTO categories_user (id, id)
-                    VALUES (:user, :cat)
-                ");
-                $stmt->execute([
-                    'user' => $iduser,
-                    'cat' => $id
-                ]);
-            }
-        }
     }
 
-    // Eliminar etiqueta
-    if (isset($_POST['delete_tag']) && !empty($_POST['delete_tag_id'])) {
-        $id = (int)$_POST['delete_tag_id'];
-        $stmt = $pdo->prepare("
-            DELETE FROM categories_user
-            WHERE id = :user AND id = :cat
-        ");
-        $stmt->execute([
-            'user' => $iduser,
-            'cat' => $id
-        ]);
-    }
+    // // Añadir nueva etiqueta
+    // if (isset($_POST['add_tag']) && !empty($_POST['new_tag'])) {
+    //     $tagName = trim($_POST['new_tag']);
 
-    header("Location: profile.php");
+    //     if ($tagName !== '') {
+    //         $stmt = $pdo->prepare("SELECT id FROM categories WHERE name = :name LIMIT 1");
+    //         $stmt->execute(['name' => $tagName]);
+    //         $category = $stmt->fetch();
+
+    //         if ($category) {
+    //             $id = $category['id'];
+    //         } else {
+    //             $stmt = $pdo->prepare("
+    //                 INSERT INTO categories (name, type)
+    //                 VALUES (:name, :type)
+    //             ");
+    //             $stmt->execute([
+    //                 'name' => $tagName,
+    //                 'type' => 'family'
+    //             ]);
+    //             $id = $pdo->lastInsertId();
+    //         }
+
+    //         $stmt = $pdo->prepare("
+    //             SELECT 1 FROM categories_user
+    //             WHERE id = :user AND id = :cat
+    //         ");
+    //         $stmt->execute([
+    //             'user' => $iduser,
+    //             'cat' => $id
+    //         ]);
+
+    //         if (!$stmt->fetch()) {
+    //             $stmt = $pdo->prepare("
+    //                 INSERT INTO categories_user (id, id)
+    //                 VALUES (:user, :cat)
+    //             ");
+    //             $stmt->execute([
+    //                 'user' => $iduser,
+    //                 'cat' => $id
+    //             ]);
+    //         }
+    //     }
+    // }
+
+    // // Eliminar etiqueta
+    // if (isset($_POST['delete_tag']) && !empty($_POST['delete_tag_id'])) {
+    //     $id = (int)$_POST['delete_tag_id'];
+    //     $stmt = $pdo->prepare("
+    //         DELETE FROM categories_user
+    //         WHERE id_user = :user AND id_category = :cat
+    //     ");
+    //     $stmt->execute([
+    //         'user' => $iduser,
+    //         'cat' => $id
+    //     ]);
+    // }
+
+    header("Location: profile.php?success=true");
     exit;
 }
 
 // ====== CARGAR DATOS DEL USUARIO ======
 $stmt = $pdo->prepare("
-    SELECT name, email, entity_name, entity_type, logo_image, presentation
+    SELECT name, email, entity_name, entity_type, presentation
     FROM users
     WHERE id = :id
     LIMIT 1
@@ -112,13 +128,16 @@ $user = $stmt->fetch();
 
 // ====== CARGAR ETIQUETAS DEL USUARIO ======
 $stmtTags = $pdo->prepare(
-    "SELECT c.id, c.name AS name_category, c.type 
+    "SELECT c.id, c.name, c.type, cu.id_category 
     FROM categories c
     JOIN categories_user cu ON cu.id_category = c.id
     WHERE cu.id_user = :user_id;
 ");
 $stmtTags->execute(['user_id' => $iduser]);
 $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
+if (!$tags) {
+    $tags = [];
+}
 ?>
 
 <!DOCTYPE html>
@@ -132,79 +151,74 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
 
 <body id="profile-body">
 
-<header class="profile-header">
-    <h1 class="profile-title">Perfil</h1>
+<header class="main-header">
+    <h1 class="header-title">Perfil</h1>
+    <div class="close-session">
+            <?php        
+        if ($user) {
+            echo "<h3 class='user'>" . htmlspecialchars($user['name']) . "</h3>";
+        } else {
+            echo "<h1>Usuari no encontrat</h1>";
+        }
+        ?>
+        
+        <a href="logout.php" id="nav-logout" class="logout-button">Tancar sessió</a>
+    
+        </div>
 </header>
 
-<main class="profile-container">
+<main class="profile-edit-container">
 
     <!-- DATOS USUARIO -->
     <section class="profile-card">
         <h2 class="profile-section-title">Dades de l'entitat</h2>
 
         <form method="POST">
-            <div class="profile-field">
+            <div>
+                <div class="profile-field">
                 <label>Nom i cognoms</label>
                 <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>">
-            </div>
-
-            <div class="profile-field">
                 <label>Email</label>
                 <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>">
             </div>
 
-            <div class="profile-field">
+          <div class="profile-field">
                 <label>Nom entitat</label>
                 <input type="text" name="entity_name" value="<?= htmlspecialchars($user['entity_name']) ?>">
+                <label>Tipus entitat</label>
+                <select name="entity_type" class="select">
+                    <option value="company" <?= $user['entity_type'] === 'company' ? 'selected' : '' ?>>Empresa</option>
+                    <option value="center" <?= $user['entity_type'] === 'center' ? 'selected' : '' ?>>Centre</option>
+                </select>
             </div>
 
-            <div class="profile-field">
-                <label>Tipus entitat</label>
-                <input type="text" name="entity_type" value="<?= htmlspecialchars($user['entity_type']) ?>">
-            </div>
 
             <div class="profile-field">
                 <label>Presentació</label>
                 <textarea name="presentation"><?= htmlspecialchars($user['presentation']) ?></textarea>
             </div>
-
-            <button type="submit" name="save_user">Guardar</button>
+            <label>Etiquetes</label>
+            <div id="etiquetes-contenidor" class="tags-wrapper"></div>
+            <button type="button" id="btnObrirModal" class="buttonEtiquetes">Afegir etiqueta</button>
+            <button type="submit" name="add_tag" disabled>+ Afegir</button>
+            </div>
+            <button type="submit" name="save_user" class="buttonEtiquetes">Guardar</button>
         </form>
     </section>
 
-    <!-- ETIQUETAS -->
-    <section class="profile-card">
-        <h2 class="profile-section-title">Etiquetes</h2>
-
-        <div class="profile-tags">
-            <?php foreach ($tags as $t): ?>
-                <form method="POST" style="display:inline-block;">
-                    <span class="profile-tag">
-                        <?= htmlspecialchars($t['name_category']) ?>
-                        <input type="hidden" name="delete_tag_id" value="<?= $t['id'] ?>">
-                        <button type="submit" name="delete_tag">✕</button>
-                    </span>
-                </form>
-            <?php endforeach; ?>
-        </div>
-
-        <form method="POST" style="margin-top:10px;">
-            <input type="text" name="new_tag" placeholder="Nova etiqueta" required>
-            <button type="submit" name="add_tag">+ Afegir</button>
-        </form>
-    </section>
+    
 
     <!-- PROJECTES -->
     <section class="profile-card">
         <div class="profile-projects-header">
             <h2 class="profile-section-title">Projectes</h2>
-            <button type="button" class="profile-new-project">+ Nou projecte</button>
+            <input type="button" class="profile-new-project" onclick="window.location.href='edit_project.php'" value="+ Nou projecte">
         </div>
 
         <div class="profile-project-list">
             <?php
             $stmt = $pdo->prepare("
-                SELECT id, title, video
+                SELECT id, title, logo_image
                 FROM projects
                 WHERE id_owner = :id
                 ORDER BY id DESC
@@ -216,11 +230,12 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
                 foreach ($projects as $proj):
             ?>
                 <div class="profile-project-item">
-                    <a href="project.php?id=<?= (int)$proj['id'] ?>">
-                        <?php if (!empty($proj['video'])): ?>
-                            <video src="<?= htmlspecialchars($proj['video']) ?>" muted playsinline preload="metadata"></video>
+                    <a href="edit_project.php?project_id=<?= (int)$proj['id'] ?>">
+                        <?php if (!empty($proj['logo_image'])): ?>
+                            <img class="imagePreviewProfile" src="<?= htmlspecialchars($proj['logo_image']) ?>" alt="Logo">
+                            <!-- <video src="<?= htmlspecialchars($proj['video']) ?>" muted playsinline preload="metadata"></video> -->
                         <?php else: ?>
-                            <div class="profile-project-placeholder">Sense vídeo</div>
+                            <div class="profile-project-placeholder">Sense imatge</div>
                         <?php endif; ?>
                         <span><?= htmlspecialchars($proj['title']) ?></span>
                     </a>
@@ -236,10 +251,115 @@ $tags = $stmtTags->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- LINKS -->
     <section class="profile-links">
-        <a href="chat.php" class="profile-link-btn">💬 Converses</a>
-        <a href="discover.php" class="profile-link-btn">🔥 Descobrir</a>
+        <a href="chat.php" class="logout-button">Converses</a>
+        <a href="discover.php" class="logout-button">Descobrir</a>
     </section>
+<div id="modalCerca" class="custom-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Cerca Familia o Cicle</h3>
+            <span class="close-btn-modal" id="btnTancarModal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="text" id="inputCerca" placeholder="Escriu al menys 3 caràcters..." autocomplete="off">
+            <div id="llistaResultats" class="results-list"></div>
+        </div>
+    </div>
+</div>
+<script type="module">
+    import { showNotification } from './notificaciones.js';
+// Inicializar categorias con datos de BBDD
 
+const success = <?php echo $_GET["success"] ? "true" : "false" ?>;
+if (success)
+    showNotification("info", "S'han guardat els canvis correctament!")
+
+const tags = <?php echo json_encode($tags) ?>;
+tags.forEach((cat) => {
+    afegirEtiqueta(cat.id_category, cat.name)
+});
+
+
+const modal = document.getElementById('modalCerca');
+const inputCerca = document.getElementById('inputCerca');
+const llistaResultats = document.getElementById('llistaResultats');
+const contenidorEtiquetes = document.getElementById('etiquetes-contenidor');
+
+    // 1. Obrir/Tancar Modal
+document.getElementById('btnObrirModal').onclick = () => modal.style.display = 'block';
+document.getElementById('btnTancarModal').onclick = () => {
+    modal.style.display = 'none';
+    inputCerca.value = '';
+    llistaResultats.innerHTML = '';
+};
+
+// 2. Cerca AJAX
+inputCerca.addEventListener('input', function() {
+    const text = this.value.trim();
+    
+    if (text.length >= 3) {
+        // Simulem la petició AJAX (has de canviar la URL pel teu fitxer PHP)
+        fetch(`search_tags.php?q=${encodeURIComponent(text)}`)
+            .then(res => res.json())
+            .then(data => {
+                llistaResultats.innerHTML = '';
+                data.forEach(cat => {
+                    const div = document.createElement('div');
+                    div.className = 'result-item';
+                    div.textContent = cat.name; // 'name' de la taula categories
+                    div.onclick = () => afegirEtiqueta(cat.id, cat.name);
+                    llistaResultats.appendChild(div);
+                });
+            });
+    } else {
+        llistaResultats.innerHTML = '';
+    }
+});
+
+// 3. Aplicar Selecció i Tancar
+function afegirEtiqueta(id, nom) {
+    const contenidor = document.getElementById('etiquetes-contenidor');
+
+    // 1. Creamos el elemento visual (el badge)
+    const div = document.createElement('div');
+    div.className = 'tag-badge';
+    div.style.display = 'inline-flex';
+    div.style.alignItems = 'center';
+    div.style.margin = '5px';
+    div.style.padding = '5px 10px';
+    div.style.background = 'rgb(148, 136, 130)';
+    div.style.color = 'white';
+    div.style.borderRadius = '15px';
+
+    // 2. Creamos el INPUT OCULTO que se mandará por POST
+    // Usamos name="categories[]" para recibir un array en el servidor
+    const inputHidden = document.createElement('input');
+    inputHidden.type = 'hidden';
+    inputHidden.name = 'categories[]'; 
+    inputHidden.value = id; // El ID de la base de datos (p.ej: 5)
+
+    // 3. Contenido del badge (Texto + Botón eliminar)
+    div.innerHTML = `<span>${nom}</span>`;
+    
+    const btnEliminar = document.createElement('span');
+    btnEliminar.innerHTML = ' &times;';
+    btnEliminar.style.cursor = 'pointer';
+    btnEliminar.style.marginLeft = '10px';
+    
+    // Al eliminar el div, el inputHidden que está dentro también desaparece
+    btnEliminar.onclick = function() {
+        div.remove();
+    };
+
+    // 4. Ensamblamos: metemos el input dentro del div, y el div en el contenedor
+    div.appendChild(inputHidden);
+    div.appendChild(btnEliminar);
+    contenidor.appendChild(div);
+
+    // Cerrar modal
+    document.getElementById('modalCerca').style.display = 'none';
+}
+</script>
 </main>
 </body>
 </html>
