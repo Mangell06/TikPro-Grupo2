@@ -10,17 +10,19 @@ create database simbiodb
 use simbiodb;
 
 -- tabla users
-create table if not exists users (
-  id int auto_increment primary key,
-  email varchar(255) not null unique,
-  tfn varchar(15) not null unique,
-  password char(64) not null,
-  name varchar(100) not null,
-  poblation varchar(100) not null,
-  entity_name varchar(255) not null,
-  entity_type enum('center', 'company') not null,
-  logo_image varchar(255) not null,
-  presentation text
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  tfn VARCHAR(15) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  poblation VARCHAR(100) NOT NULL,
+  entity_name VARCHAR(255) NOT NULL,
+  entity_type ENUM('center', 'company') NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  code_activate VARCHAR(64),
+  code_expire DATETIME,
+  presentation TEXT
 );
 
 -- tabla projects
@@ -32,6 +34,7 @@ create table if not exists projects (
   state enum('active', 'finished', 'archived') not null,
   id_owner int not null, 
   video varchar(255) not null,
+  logo_image varchar(255) not null,
   foreign key (id_owner) references users(id)
 );
 

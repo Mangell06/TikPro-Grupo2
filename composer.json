@@ -1,0 +1,19 @@
+{
+    "name": "mange/tik-pro-grupo2",
+    "autoload": {
+        "psr-4": {
+            "Mange\\TikProGrupo2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Miguel Ángel López",
+            "email": "mangell0624@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "7.0",
+        "php-ffmpeg/php-ffmpeg": "1.4",
+        "ivoglent/ffmpeg-composer-bin": "1.3"
+    }
+}
