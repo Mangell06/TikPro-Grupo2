@@ -131,7 +131,7 @@ function createCard(projectData) {
         btnNext.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "següent" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
     }
 
-    const title = createElement("<p></p>", mother,"project-title").text(projectData.title);
+    const title = createElement("<p></p>", mother,"project-title-discover").text(projectData.title);
     createElement("<pre></pre>", mother).text(projectData.username +" - "+ projectData.entity_name);
     createElement("<p></p>", mother, "trunc").text(projectData.description);
 
@@ -154,7 +154,7 @@ function createCard(projectData) {
     infoButton.on("click", infoButtonClick);
     infoButtonClose.on("click", infoButtonClick);
 
-    createElement("<p></p>", divInfo,"project-title").text(projectData.title);
+    createElement("<p></p>", divInfo,"project-title-discover").text(projectData.title);
     createElement("<pre></pre>", divInfo).text(projectData.username +" - "+ projectData.entity_name);
     createElement("<p></p>", divInfo).text(projectData.description);
     createElement("<p></p>", divInfo, "bold").text("Categories: ");
