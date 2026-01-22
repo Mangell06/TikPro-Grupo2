@@ -267,20 +267,23 @@ if (!$tags) {
 </div>
 <script type="module">
     import { showNotification } from './notificaciones.js';
-// Inicializar categorias con datos de BBDD
+    const urlParams = new URLSearchParams(window.location.search);
+    window.addEventListener('DOMContentLoaded', () => {
+        if (urlParams.get('action') === 'cancelled') {
+            showNotification("info", "S'ha cancelat el procéss");
+            window.history.replaceState({}, document.title, "profile.php");
+        }
 
-// Obtener los parámetros de la URL
-const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('error') === 'no_permission') {
+            showNotification("error", "No tens accés a editar aquest projecte");
+            window.history.replaceState({}, document.title, "profile.php");
+        }
 
-if (urlParams.get('error') === 'no_permission') {
-    showNotification("error", "No tens accés a editar aquest projecte");
-    
-    // Opcional: Limpiar la URL para que no aparezca el error si refrescan
-    window.history.replaceState({}, document.title, window.location.pathname);
-}
-const success = <?php echo $_GET["success"] ? "true" : "false" ?>;
-if (success)
-    showNotification("info", "S'han guardat els canvis correctament!")
+        if (urlParams.get('success') === 'true') {
+            showNotification("info", "S'han guardat els canvis correctament!");
+            window.history.replaceState({}, document.title, "profile.php");
+        }
+    });
 
 const tags = <?php echo json_encode($tags) ?>;
 tags.forEach((cat) => {

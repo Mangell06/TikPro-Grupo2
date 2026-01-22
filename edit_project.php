@@ -154,7 +154,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css?q=2">
+        <link rel="stylesheet" href="styles.css?q=3">
         <title>Crear projecte</title>
     </head>
     <body id="discover-body">
@@ -229,8 +229,11 @@
         const videodestacat = createElement('<label></label>', 'form').text("Video:");
         const pVideo =createElement('<p></p>', 'form', '', {id: 'video'});
         const video = createElement('<input></input>', 'form', 'project-video', { type: 'file', accept: 'video/*', name: 'video' }); //hay que limitarlo
-        const button = createElement('<button></button>', 'form', 'buttonEtiquetes', { type: 'submit'}).text("<?php echo isset($_GET["project_id"]) ? 'Editar projecte' : 'Crear projecte' ?>");
-        
+        const divButtons = createElement('<div></div>','form', 'buttons-edit-project');
+	const button = createElement('<button></button>', divButtons, 'buttonEtiquetes', { type: 'submit'}).text("<?php echo isset($_GET["project_id"]) ? 'Editar projecte' : 'Crear projecte' ?>");
+	const cancelBtn = createElement('<a></a>', divButtons, 'buttonEtiquetes', { 
+    	href: 'profile.php?action=cancelled' 
+	}).text("Cancel·lar");
         
         $(main).append(form);
         const projectData = <?php echo json_encode($project_editar); ?>;

@@ -1304,6 +1304,7 @@ input[type="file"]{
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     margin-top: 10px;
+    text-decoration: none;
 }
 
 .buttonEtiquetes:hover {
@@ -1582,4 +1583,11 @@ input[type="file"]{
     display: flex;
   justify-content: space-around;
   align-items: center;
+}
+
+.buttons-edit-project{
+	display: flex;
+	align-items: center;
+	gap: 10px;
+  	justify-content: center;	
 }
