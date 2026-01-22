@@ -85,7 +85,7 @@
 
             if($project_editar['users_id'] != $_SESSION['user_id'])
             {
-                echo "No tens accés a editar aquest projecte";
+                header("Location: profile.php?error=no_permission");
                 exit;
             }
 
@@ -150,16 +150,15 @@
     }
 ?>
  <!DOCTYPE html>
-    <html lang="en">
+    <html lang="ca">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css?q=1">
+        <link rel="stylesheet" href="styles.css?q=2">
         <title>Crear projecte</title>
     </head>
     <body id="discover-body">
     <header class="main-header">
-        <h1 class="header-title">Crear projecte</h1>
     <div class="close-session">
             <?php
 

@@ -5,8 +5,8 @@ use FFMpeg\FFMpeg;
 use FFMpeg\Format\Video\X264;
 
 // Directorios
-$preuploadsDir = __DIR__ . '/preuploads';
-$uploadsDir = __DIR__ . '/uploads/videos';
+$preuploadsDir = __DIR__.'/preuploads';
+$uploadsDir = __DIR__.'/uploads/videos';
 
 if (!is_dir($uploadsDir)) {
     mkdir($uploadsDir, 0777, true);
@@ -71,4 +71,3 @@ foreach ($files as $file) {
 }
 
 echo "Todos los videos procesados.\n";
-?>

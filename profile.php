@@ -145,14 +145,13 @@ if (!$tags) {
 <head>
     <meta charset="UTF-8">
     <title>Perfil</title>
-    <link rel="stylesheet" href="/styles.css?q=1">
+    <link rel="stylesheet" href="/styles.css?q=2">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body id="profile-body">
 
 <header class="main-header">
-    <h1 class="header-title">Perfil</h1>
     <div class="close-session">
             <?php        
         if ($user) {
@@ -270,6 +269,15 @@ if (!$tags) {
     import { showNotification } from './notificaciones.js';
 // Inicializar categorias con datos de BBDD
 
+// Obtener los parámetros de la URL
+const urlParams = new URLSearchParams(window.location.search);
+
+if (urlParams.get('error') === 'no_permission') {
+    showNotification("error", "No tens accés a editar aquest projecte");
+    
+    // Opcional: Limpiar la URL para que no aparezca el error si refrescan
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
 const success = <?php echo $_GET["success"] ? "true" : "false" ?>;
 if (success)
     showNotification("info", "S'han guardat els canvis correctament!")
