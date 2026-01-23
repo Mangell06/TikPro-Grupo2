@@ -76,19 +76,13 @@
         $stmt->execute(['project_id' => $projectId]);
         $tags_editar = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        if($project_editar['users_id'] != $_SESSION['user_id'])
-        {
-            $error_permisos = true;
+        if($project_editar['users_id'] != $_SESSION['user_id']){
+            header('HTTP/1.1 403 Forbidden');
+            virtual('/errors/HTTP_FORBIDDEN.html.var');
+            exit;
         }
 
         if(isset($projectId) and $_SERVER['REQUEST_METHOD'] === 'POST'){
-
-            if($project_editar['users_id'] != $_SESSION['user_id'])
-            {
-                header("Location: profile.php?error=no_permission");
-                exit;
-            }
-
             $sql=
             "UPDATE projects
             SET title = :title, description = :description, video = :video, logo_image = :logo_image
@@ -254,8 +248,12 @@
             return false;
         }
         
-        if(projectId == null && (!imageName || !videoName)){
-            showNotification("error","S'ha d'introduïr tant una foto com un video");
+        if(projectId == null && (!imageName)){
+            showNotification("error","S'ha d'introduïr una fotografia");
+            return false;
+        }
+        if(projectId == null && (!videoName)){
+            showNotification("error","S'ha d'introduïr una video");
             return false;
         }
 

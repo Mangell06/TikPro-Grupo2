@@ -435,6 +435,67 @@
     }
 }
 
+@media screen and (max-width: 1400px){
+    .notification{
+        top: 120px !important;
+        left: 86% !important;
+        bottom: unset !important;
+    }
+}
+
+@media screen and (max-width: 955px){
+    .notification{
+        left: 56% !important;   
+    }
+}
+
+@media screen and (max-width: 800px){
+    .notification{
+        left: 56% !important;
+    }
+}
+
+@media screen and (max-width: 700px){
+    .notification{
+        top: 84px !important;
+        left: 80% !important;
+    }
+}
+
+@media screen and (max-width: 680px){
+    .notification{
+        top: 84px !important;
+        left: 77% !important;
+    }
+}
+
+@media screen and (max-width: 558px){
+    .notification{
+        top: 84px !important;
+        left: 74% !important;
+    }
+}
+
+@media screen and (max-width: 500px){
+    .notification{
+        top: 80px !important;
+        left: 73% !important;
+    }
+}
+
+@media screen and (max-width: 450px){
+    .notification{
+        top: 80px !important;
+        left: 66% !important;
+    }
+}
+
+@media screen and (max-width: 393px){
+    .notification{
+        top: 80px !important;
+        left: 62% !important;
+    }
+}
 .actions {
   display: flex;
   gap: 10px;
@@ -642,31 +703,31 @@
     }
 }
 
-
-
 /* =========================
    MENSAJES DE NOTIFICACIÓN
    ========================= */
 /* Contenedor base */
 .notification {
     position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-20px);
+    top: 120px;
+    left: 90%;
     padding: 15px 25px;
-    border-radius: 12px;
+    border-radius: 7px;
     font-weight: bold;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     z-index: 2000;
-    opacity: 0;
     pointer-events: auto;
     transition: opacity 0.4s, transform 0.4s;
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-width: 250px;
+}
+.notification-section {
+  border-left: 5px solid var(--color-primary);
+  padding-left: 15px;
 }
 
 /* Tipos de notificación */
@@ -717,6 +778,8 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
+
+
 
 /* =========================
    CARTA FINAL (SIN PROYECTOS)
@@ -1379,7 +1442,7 @@ input[type="file"]{
 }
 
 /* Responsive */
-@media (max-width: 650px) {
+@media screen and (max-width: 650px) {
     .profile-edit-container {
         width: 90%;
     }

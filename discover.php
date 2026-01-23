@@ -121,8 +121,8 @@ function createCard(projectData) {
     const divButtons = createElement("<div></div>", mother, "actions");
 
     if (!projectData.liked) {
-        const btnLike = createElement("<button></button>", divButtons, "like").text("M'agrada");
         const btnNope = createElement("<button></button>", divButtons, "nope").text("No m'interessa");
+        const btnLike = createElement("<button></button>", divButtons, "like").text("M'agrada");
 
         btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "No M'interessa" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
         btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "M'agrada" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
@@ -244,7 +244,7 @@ function addCardEvents(card) {
 }
 
 async function handleAction(card, action) {
-    card.addClass(action === "like" ? "swipe-left" : "swipe-right");
+    card.addClass(action === "like" ? "swipe-right" : "swipe-left");
     setTimeout(() => {
         loadCard();
     }, 400);

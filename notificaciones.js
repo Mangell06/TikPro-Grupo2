@@ -9,12 +9,15 @@ export function showNotification(type, message, username='', exist=false) {
     notif.className = `notification ${type} show`;
     //Animación de crear el margin, cuando hay más notificaciones
     if (notificationCount > 1){
-        notif.style.marginTop = 5*notificationCount+"px";
+        notif.style.marginTop = 100*notificationCount+"px";
     }
     // Texto
+    const divNoti = document.createElement('div');
+    divNoti.classList.add("notification-section");
     const text = document.createElement('span');
     text.textContent = message;
-    notif.appendChild(text);
+    notif.appendChild(divNoti);
+    divNoti.appendChild(text);
 
     // Botón de cerrar
     const closeBtn = document.createElement('button');

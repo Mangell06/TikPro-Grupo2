@@ -18,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $entity_name = $_POST['entity_name'] ?? '';
         $entity_type = $_POST['entity_type'] ?? '';
         $presentation = $_POST['presentation'] ?? '';
+        $tfn = $_POST['tfn'] ?? '';
+        $poblation = $_POST['poblation'] ?? '';
 
         $stmt = $pdo->prepare("
             UPDATE users
@@ -25,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 email = :email,
                 entity_name = :entity_name,
                 entity_type = :entity_type,
-                presentation = :presentation
+                entity_type = :entity_type,
+                tfn = :tfn,
+                poblation = :poblation
             WHERE id = :id
         ");
         $stmt->execute([
@@ -34,6 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'entity_name' => $entity_name,
             'entity_type' => $entity_type,
             'presentation' => $presentation,
+            'tfn' => $tfn,
+            'poblation' => $poblation,
             'id' => $iduser
         ]);
 
@@ -118,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // ====== CARGAR DATOS DEL USUARIO ======
 $stmt = $pdo->prepare("
-    SELECT name, email, entity_name, entity_type, presentation
+    SELECT name, email, entity_name, entity_type, presentation, tfn, poblation
     FROM users
     WHERE id = :id
     LIMIT 1
@@ -179,6 +185,13 @@ if (!$tags) {
                 <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>">
                 <label>Email</label>
                 <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>">
+            </div>
+             <div>
+                <div class="profile-field">
+                <label>Telèfon</label>
+                <input type="text" name="tfn" value="<?= htmlspecialchars($user['tfn']) ?>">
+                <label>Ciutat</label>
+                <input type="email" name="ciutat" value="<?= htmlspecialchars($user['poblation']) ?>">
             </div>
 
           <div class="profile-field">
