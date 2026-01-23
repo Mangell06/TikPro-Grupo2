@@ -4,7 +4,6 @@ require __DIR__ . '/vendor/autoload.php';
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Video\X264;
 
-// Directorios
 $preuploadsDir = __DIR__.'/preuploads';
 $uploadsDir = __DIR__.'/uploads/videos';
 
@@ -12,31 +11,28 @@ if (!is_dir($uploadsDir)) {
     mkdir($uploadsDir, 0777, true);
 }
 
-// Extensiones válidas
 $videoExtensions = ['mp4', 'mov', 'avi', 'mkv'];
 
-// Detectar sistema operativo
+// Rutas binarias
 if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-    // WINDOWS
     $ffmpegPath = 'C:/ffmpeg/bin/ffmpeg.exe';
     $ffprobePath = 'C:/ffmpeg/bin/ffprobe.exe';
 } else {
-    // UBUNTU / LINUX
-    $ffmpegPath = '/usr/bin/ffmpeg';
+    $ffmpegPath = '/usr/bin/ffmpeg'; 
     $ffprobePath = '/usr/bin/ffprobe';
 }
 
+// Configuración básica
 $ffmpeg = FFMpeg::create([
     'ffmpeg.binaries'  => $ffmpegPath,
     'ffprobe.binaries' => $ffprobePath,
-    'timeout' => 3600,
-    'ffmpeg.threads' => 4,
+    'timeout'          => 3600,
+    'ffmpeg.threads'   => 4,
 ]);
 
 $files = scandir($preuploadsDir);
 
 foreach ($files as $file) {
-
     $filePath = $preuploadsDir . '/' . $file;
     if (!is_file($filePath)) continue;
 
@@ -46,28 +42,25 @@ foreach ($files as $file) {
     $cleanName = preg_replace('/[^A-Za-z0-9_\.-]/', '_', $file);
     $outputPath = $uploadsDir . '/' . $cleanName;
 
-    echo "Procesando: $file\n";
+    echo "\nProcesando: $file\n";
 
     try {
         $video = $ffmpeg->open($filePath);
-
         $format = new X264('aac', 'libx264');
+        
         $format->setAdditionalParameters([
             '-crf', '28',
-            '-preset', 'fast'
+            '-preset', 'fast',
+            '-pix_fmt', 'yuv420p'
         ]);
 
         $video->save($format, $outputPath);
-
-        echo "Comprimido: $cleanName\n";
-
-        // BORRAR ARCHIVO ORIGINAL SOLO SI TODO FUE BIEN
+        echo "✅ OK: $cleanName\n";
         unlink($filePath);
-        echo "Eliminado de preuploads: $file\n";
 
     } catch (\Exception $e) {
-        echo "Error comprimiendo $file: " . $e->getMessage() . "\n";
+        echo "❌ ERROR: " . $e->getMessage() . "\n";
+        echo "💡 Intenta ejecutar esto manualmente para ver el error real:\n";
+        echo "$ffmpegPath -i $filePath -vcodec libx264 -crf 28 -preset fast -pix_fmt yuv420p $outputPath 2>&1\n";
     }
 }
-
-echo "Todos los videos procesados.\n";
