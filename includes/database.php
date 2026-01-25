@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
 $db   = 'simbiodb';
-$user = 'root';
-$pass = '1234#1234';
+$user = 'simbdmin';
+$pass = 'Millon202';
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
