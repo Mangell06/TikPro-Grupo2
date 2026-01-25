@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   code_activate VARCHAR(64),
   code_expire DATETIME,
+  logo_image varchar(255),
   presentation TEXT
 );
 
@@ -43,8 +44,9 @@ create table if not exists messages (
   id_message int auto_increment primary key,
   sender int not null,
   destination int not null,
+  id_project int not null,
   text_message text not null,
-  date_message date not null,
+  date_message datetime not null,
   read_status boolean not null default false,
   foreign key (sender) references users(id),
   foreign key (destination) references users(id)
