@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 email = :email,
                 entity_name = :entity_name,
                 entity_type = :entity_type,
-                entity_type = :entity_type,
+                presentation = :presentation,
                 tfn = :tfn,
                 poblation = :poblation
             WHERE id = :id
@@ -147,15 +147,16 @@ if (!$tags) {
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="ca">
 <head>
     <meta charset="UTF-8">
     <title>Perfil</title>
     <link rel="stylesheet" href="/styles.css?q=2">
+    <link rel="icon" href="oak_4986983.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body id="profile-body">
+<body class="profile-body">
 
 <header class="main-header">
     <div class="close-session">
@@ -177,44 +178,43 @@ if (!$tags) {
     <!-- DATOS USUARIO -->
     <section class="profile-card">
         <h2 class="profile-section-title">Dades de l'entitat</h2>
-
         <form method="POST">
             <div>
                 <div class="profile-field">
-                <label>Nom i cognoms</label>
-                <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>">
-                <label>Email</label>
-                <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>">
+                    <label>Nom i cognoms</label>
+                    <input type="text" name="name" value="<?= htmlspecialchars($user['name']) ?>">
+                    <label>Email</label>
+                    <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>">
+                </div>
             </div>
-             <div>
-                <div class="profile-field">
-                <label>Telèfon</label>
-                <input type="text" name="tfn" value="<?= htmlspecialchars($user['tfn']) ?>">
-                <label>Ciutat</label>
-                <input type="email" name="ciutat" value="<?= htmlspecialchars($user['poblation']) ?>">
-            </div>
-
-          <div class="profile-field">
-                <label>Nom entitat</label>
-                <input type="text" name="entity_name" value="<?= htmlspecialchars($user['entity_name']) ?>">
-                <label>Tipus entitat</label>
-                <select name="entity_type" class="select">
-                    <option value="company" <?= $user['entity_type'] === 'company' ? 'selected' : '' ?>>Empresa</option>
-                    <option value="center" <?= $user['entity_type'] === 'center' ? 'selected' : '' ?>>Centre</option>
-                </select>
-            </div>
-
-
             <div class="profile-field">
-                <label>Presentació</label>
-                <textarea name="presentation"><?= htmlspecialchars($user['presentation']) ?></textarea>
+                    <label>Telèfon</label>
+                    <input type="text" name="tfn" value="<?= htmlspecialchars($user['tfn']) ?>">
+                    <label>Ciutat</label>
+                    <input type="text" name="poblation" value="<?= htmlspecialchars($user['poblation']) ?>">
             </div>
-            <label>Etiquetes</label>
-            <div id="etiquetes-contenidor" class="tags-wrapper"></div>
-            <button type="button" id="btnObrirModal" class="buttonEtiquetes">Afegir etiqueta</button>
-            <button type="submit" name="add_tag" disabled>+ Afegir</button>
+            <div class="profile-field">
+                    <label>Nom entitat</label>
+                    <input type="text" name="entity_name" value="<?= htmlspecialchars($user['entity_name']) ?>">
+                    <label>Tipus entitat</label>
+                    <select name="entity_type" class="select">
+                        <option value="company" <?= $user['entity_type'] === 'company' ? 'selected' : '' ?>>Empresa</option>
+                        <option value="center" <?= $user['entity_type'] === 'center' ? 'selected' : '' ?>>Centre</option>
+                    </select>
             </div>
-            <button type="submit" name="save_user" class="buttonEtiquetes">Guardar</button>
+            
+           
+                <div class="profile-field">
+                    <label>Presentació</label>
+                    <textarea name="presentation"><?= htmlspecialchars($user['presentation']) ?></textarea>
+                   
+                <label>Etiquetes</label>
+                <div id="etiquetes-contenidor" class="tags-wrapper"></div>
+                <div class="buttons-profile">
+                    <button type="button" id="btnObrirModal" class="buttonEtiquetes">Afegir etiqueta</button>
+                    <button type="submit" name="save_user" class="buttonEtiquetes">Guardar</button>      
+                </div>
+                </div> 
         </form>
     </section>
 
@@ -224,7 +224,7 @@ if (!$tags) {
     <section class="profile-card">
         <div class="profile-projects-header">
             <h2 class="profile-section-title">Projectes</h2>
-            <input type="button" class="profile-new-project" onclick="window.location.href='edit_project.php'" value="+ Nou projecte">
+            <input type="button" class="buttonEtiquetes" onclick="window.location.href='edit_project.php'" value="+ Nou projecte">
         </div>
 
         <div class="profile-project-list">
@@ -245,7 +245,6 @@ if (!$tags) {
                     <a href="edit_project.php?project_id=<?= (int)$proj['id'] ?>">
                         <?php if (!empty($proj['logo_image'])): ?>
                             <img class="imagePreviewProfile" src="<?= htmlspecialchars($proj['logo_image']) ?>" alt="Logo">
-                            <!-- <video src="<?= htmlspecialchars($proj['video']) ?>" muted playsinline preload="metadata"></video> -->
                         <?php else: ?>
                             <div class="profile-project-placeholder">Sense imatge</div>
                         <?php endif; ?>
@@ -280,6 +279,9 @@ if (!$tags) {
 </div>
 <script type="module">
     import { showNotification } from './notificaciones.js';
+    import { loadNotifications } from './load-notifications.js';
+
+    loadNotifications();
     const urlParams = new URLSearchParams(window.location.search);
     window.addEventListener('DOMContentLoaded', () => {
         if (urlParams.get('action') === 'cancelled') {
@@ -351,7 +353,7 @@ function afegirEtiqueta(id, nom) {
     div.style.alignItems = 'center';
     div.style.margin = '5px';
     div.style.padding = '5px 10px';
-    div.style.background = 'rgb(148, 136, 130)';
+    div.style.background = '#69604e';
     div.style.color = 'white';
     div.style.borderRadius = '15px';
 
