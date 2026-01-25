@@ -19,18 +19,18 @@ if (isset($_GET['validate'])) {
             $stmt = $pdo->prepare("UPDATE users SET is_active = 1, code_activate = NULL, code_expire = NULL WHERE id = ?");
             $stmt->execute([$user['id']]);
             $_SESSION['notifications'][] = [
-                "message" => "Cuenta verificada correctamente",
+                "message" => "Compte verificat correctament",
                 "type" => "success"
             ];
         } else {
             $_SESSION['notifications'][] = [
-                "message" => "El código ha expirado",
+                "message" => "El codi ha expirat",
                 "type" => "error"
             ];
         }
     } else {
         $_SESSION['notifications'][] = [
-            "message" => "Código inválido o usuario ya verificado",
+            "message" => "Codi invàlid o usuari ja verificat",
             "type" => "warning"
         ];
     }
@@ -44,16 +44,16 @@ if (isset($_GET['validate'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alta d'usuari</title>
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="icon" href="icono-simbio.png" type="image/png">
+    <link rel="stylesheet" href="/styles.css?q=1">
+    <link rel="icon" href="oak_4986983.png" type="image/png">
 </head>
 <body id="register-body">
 <header class="main-header">
-    <h1 class="header-title">SIMBIO - Alta d'usuari</h1>
+    <h1 class="header-title">SIMBIO</h1>
 </header>
 
 <div id="register-container">
-    <h2 id="register-title">Registrar un nou compte</h2>
+    <h2 id="login-title">Registrar un nou compte</h2>
 
     <form id="register-form" method="post" enctype="multipart/form-data">
         <label for="input-name">Nom complet</label>
@@ -71,7 +71,7 @@ if (isset($_GET['validate'])) {
         <label for="input-poblation">Població</label>
         <input id="input-poblation" type="text" placeholder="Barcelona" name="poblation" required>
 
-        <label for="input-entity-name">Nom de l'entitat</label>
+        <label for="input-entity-name">Nom d'entitat</label>
         <input id="input-entity-name" type="text" name="entity_name" placeholder="Google" required>
 
         <label for="input-entity-type">Tipus d'entitat</label>
@@ -81,14 +81,14 @@ if (isset($_GET['validate'])) {
         </select>
 
         <div id="view-categories"></div>
-        <button id="open-categories-btn" type="button">Obrir categories</button>
+        <button id="open-categories-btn" class="buttonEtiquetes" type="button">Obrir categories</button>
 
         <label for="input-presentation">Presentació (opcional)</label>
         <textarea id="input-presentation" name="presentation"></textarea>
 
         <button id="register-button" type="submit">Registrar</button>
 
-        <a id="register-button" href="login.php">Tinc una conta</a>
+        <a id="register-button" href="login.php">Tinc un conta</a>
     </form>
 </div>
 
@@ -170,7 +170,7 @@ $('#open-categories-btn').on('click', function() {
             <h3>Categories</h3>
             <input type="text" id="category-input" placeholder="Escriu per filtrar..." />
             <div id="extra-content" ></div>
-            <button id="save-category" >Guardar</button>
+            <button id="save-category" class="buttonEtiquetes">Guardar</button>
         </div>
     `).css({
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
@@ -229,7 +229,7 @@ function sendRegister(data) {
             showNotification('error', res.error);
             sendLog(`Error de servidor en el registro de ${data.email}: ${res.error}`);
         } else {
-            showNotification('success', 'Usuario registrado correctamente. Revisa tu email para verificar la cuenta.');
+            showNotification('success', 'Usuari registrat correctament. Revisa el teu email per verificar el compte.');
             sendLog(`Solicitud de registro enviada con éxito para el usuario: ${data.username} (${data.email})`);
             window.location.href = 'login.php';
         }
@@ -248,7 +248,7 @@ $('#register-form').on('submit', (e) => {
 
     const name = formData.get('name');
     if (name.length  > 12 || name.length  < 3) {
-        showNotification("warning","El nombre te que ser menor a 13 carecters y major a 3 caracters");
+        showNotification("warning","El nombre ha de ser menor a 13 caràcters i major a 3 caràcters");
         sendLog(`Intento de registro fallido: Nombre fuera de rango (${name})`);
         isValid = false;
     }
@@ -259,7 +259,7 @@ $('#register-form').on('submit', (e) => {
         if (characterEmail === ".") countPointEmail ++;
     }
     if (countPointEmail !== 1) {
-        showNotification("warning","En el correu te que haber una extensió");
+        showNotification("warning","En el correu ha d'haver-hi una extensió");
         isValid = false;
     }
 
@@ -270,14 +270,14 @@ $('#register-form').on('submit', (e) => {
     }
 
     if (!onlyNumbers || tfn[0] !== "+" || tfn.length < 12 || tfn.length > 13) {
-        showNotification("warning","El nombre del telefon te per exemple aquest format (+34675842021, +321675842021 o +04675842021)");
+        showNotification("warning","El nombre del telèfon ha de tenir aquest format (+34675842021, +321675842021 o +04675842021)");
         sendLog(`Intento de registro fallido: Formato de teléfono no válido (${tfn})`);
         isValid = false;
     }
 
     const password = formData.get('password');
     if (password.length < 8) {
-        showNotification("warning","La contrasenya te que medir mes de 8 caracters");
+        showNotification("warning","La contrasenya ha de fer més de 8 caràcters de llargada");
         sendLog(`Intento de registro fallido: Contraseña no cumple criterios de seguridad para el email ${email}`);
         isValid = false;
     }
@@ -302,31 +302,31 @@ $('#register-form').on('submit', (e) => {
 
     // Mostrar notificaciones según falten criterios
     if (!hasUpper){
-        showNotification("warning", "La contrasenya te que tindre almens una letra mayúscula");
+        showNotification("warning", "La contrasenya ha de tindre almenys una lletra majúscula");
         isValid = false;
     }
     if (!hasLower) {
-        showNotification("warning", "La contrasenya te que tindre almens una letra minúscula");
+        showNotification("warning", "La contrasenya ha de tindre almenys una lletra minúscula");
         isValid = false;
     }
     if (!hasNumber){
-        showNotification("warning", "La contrasenya te que tindre almens un número");
+        showNotification("warning", "La contrasenya ha de tindre almenys un número");
         isValid = false;
     } 
     if (!hasSpecial) {
-        showNotification("warning", "La contrasenya te que tindre almens un caràcter especial");
+        showNotification("warning", "La contrasenya ha de tindre almenys un caràcter especial");
         isValid = false;
     } 
 
     const poblation = formData.get('poblation');
     if (poblation.length > 22 || poblation.length < 3) {
-        showNotification("warning","la població te que ser menor a 18 carecters y major a 3 caracters");
+        showNotification("warning","La població hi ha de menor a 18 caràcters i major a 3 caràcters");
         isValid = false;
     }
 
     const entity_name = formData.get('entity_name');
     if (entity_name.length  > 22 || entity_name.length  < 3) {
-        showNotification("warning","el nom de l'entitat te que ser menor a 18 carecters y major a 3 caracters");
+        showNotification("warning","El nom de l'entitat ha de ser menor a 18 caràcters i major a 3 caràcters");
         isValid = false;
     }
 
@@ -354,7 +354,7 @@ $('#register-form').on('submit', (e) => {
             population: poblation,
             nameentity: entity_name,
             typeentity: entity_type,
-            categories: categoriaSeleccionada // <-- Añadimos el array aquí
+            categories: categoriaSeleccionada
         };
 
         if (presentation) {

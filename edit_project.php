@@ -76,19 +76,13 @@
         $stmt->execute(['project_id' => $projectId]);
         $tags_editar = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        if($project_editar['users_id'] != $_SESSION['user_id'])
-        {
-            $error_permisos = true;
+        if($project_editar['users_id'] != $_SESSION['user_id']){
+            header('HTTP/1.1 403 Forbidden');
+            virtual('/errors/HTTP_FORBIDDEN.html.var');
+            exit;
         }
 
         if(isset($projectId) and $_SERVER['REQUEST_METHOD'] === 'POST'){
-
-            if($project_editar['users_id'] != $_SESSION['user_id'])
-            {
-                echo "No tens accés a editar aquest projecte";
-                exit;
-            }
-
             $sql=
             "UPDATE projects
             SET title = :title, description = :description, video = :video, logo_image = :logo_image
@@ -150,16 +144,16 @@
     }
 ?>
  <!DOCTYPE html>
-    <html lang="en">
+    <html lang="ca">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
+        <link rel="icon" href="oak_4986983.png" type="image/png">
+        <link rel="stylesheet" href="styles.css?q=3">
         <title>Crear projecte</title>
     </head>
-    <body id="discover-body">
+    <body class="profile-body">
     <header class="main-header">
-        <h1 class="header-title">Crear projecte</h1>
     <div class="close-session">
             <?php
 
@@ -199,6 +193,10 @@
     import { createElement } from './createElement.js';
     import { showNotification } from './notificaciones.js';
     import { sendLog } from './create-logs.js';
+    import { loadNotifications } from './load-notifications.js';
+
+    loadNotifications();
+
     const projectId = <?php echo $projectId ?? "null" ?>;
     const permissionError = <?php echo $error_permisos ? "true" : "false" ?>;
     if (permissionError){
@@ -215,25 +213,30 @@
 
     function createForm(){
         const main = createElement('<main></main>', 'body','main-edit');
-        const section = createElement('<section></section>', main);
-        const form = createElement('<form method="post" enctype="multipart/form-data"></form>', 'main', '', { id: 'project-form' });
-        const titleLabel = createElement('<label></label>', 'form', '', { for: 'title'}).text('Títol del projecte: ');
-        const title = createElement('<input></input>', 'form', 'project-title', { type: 'text', placeholder: 'Títol del projecte', name: 'title', id: 'title' });
-        const descriptionLabel = createElement('<label></label>', 'form', '', {for: 'description'}).text('Descripció del projecte:');
-        const description = createElement('<textarea></textarea>', 'form', 'project-description', { placeholder: 'Descripció del projecte',name: 'description', id: 'description' });
-        const etiquetes = createElement('<label></label>', 'form').text("Etiquetes:");
-        const search = createElement('<div id="etiquetes-contenidor" class="tags-wrapper"></div>', 'form', '', {type: 'search', placeholder: "Cerca les etiquetes", name: "query"})
-        const buttonSearch = createElement('<button type="button" id="btnObrirModal">Afegir etiqueta</button>', 'form', 'buttonEtiquetes');
+        const section = createElement('<section></section>', main, 'profile-card');
+        const form = createElement('<form method="post" enctype="multipart/form-data"></form>', section, '', { id: 'project-form' });
+        const h2 = createElement('<h2></h2>', form, 'profile-section-title').text("<?php echo isset($_GET["project_id"]) ? 'Editar projecte' : 'Crear projecte' ?>");
+        const divEdit = createElement('<div></div>', form, 'profile-field');
+        const titleLabel = createElement('<label></label>', divEdit, '', { for: 'title'}).text('Títol del projecte: ');
+        const title = createElement('<input></input>',divEdit, 'project-title', { type: 'text', placeholder: 'Títol del projecte', name: 'title', id: 'title' });
+        const descriptionLabel = createElement('<label></label>', divEdit, '', {for: 'description'}).text('Descripció del projecte:');
+        const description = createElement('<textarea></textarea>', divEdit, 'project-description', { placeholder: 'Descripció del projecte',name: 'description', id: 'description' });
+        
         const pImage =createElement('<p></p>', 'form', '', {id: 'image'});
         const imatgedestacada = createElement('<label></label>', 'form').text("Imatge destacada:");
         const image = createElement('<input></input>', 'form', 'project-image', { type: 'file', accept: 'image/*', name: 'image'});
         const videodestacat = createElement('<label></label>', 'form').text("Video:");
         const pVideo =createElement('<p></p>', 'form', '', {id: 'video'});
         const video = createElement('<input></input>', 'form', 'project-video', { type: 'file', accept: 'video/*', name: 'video' }); //hay que limitarlo
-        const button = createElement('<button></button>', 'form', 'buttonEtiquetes', { type: 'submit'}).text("<?php echo isset($_GET["project_id"]) ? 'Editar projecte' : 'Crear projecte' ?>");
+        const etiquetes = createElement('<label></label>', 'form').text("Etiquetes:");
+        const search = createElement('<div id="etiquetes-contenidor" class="tags-wrapper"></div>', 'form', '', {type: 'search', placeholder: "Cerca les etiquetes", name: "query"})
+        const buttonSearch = createElement('<button type="button" id="btnObrirModal">Afegir etiqueta</button>', 'form', 'buttonEtiquetes');
+        const divButtons = createElement('<div></div>','form', 'buttons-edit-project');
+	const button = createElement('<button></button>', divButtons, 'buttonEtiquetes', { type: 'submit'}).text("<?php echo isset($_GET["project_id"]) ? 'Editar projecte' : 'Crear projecte' ?>");
+	const cancelBtn = createElement('<a></a>', divButtons, 'buttonEtiquetes', { 
+    	href: 'profile.php?action=cancelled' 
+	}).text("Cancel·lar");
         
-        
-        $(main).append(form);
         const projectData = <?php echo json_encode($project_editar); ?>;
         if(projectData){
             uploadInformation();
@@ -252,8 +255,12 @@
             return false;
         }
         
-        if(projectId == null && (!imageName || !videoName)){
-            showNotification("error","S'ha d'introduïr tant una foto com un video");
+        if(projectId == null && (!imageName)){
+            showNotification("error","S'ha d'introduïr una fotografia");
+            return false;
+        }
+        if(projectId == null && (!videoName)){
+            showNotification("error","S'ha d'introduïr una video");
             return false;
         }
 
@@ -359,7 +366,7 @@ function afegirEtiqueta(id, nom) {
     div.style.alignItems = 'center';
     div.style.margin = '5px';
     div.style.padding = '5px 10px';
-    div.style.background = 'rgb(148, 136, 130)';
+    div.style.background = '#69604e';
     div.style.color = 'white';
     div.style.borderRadius = '15px';
 
