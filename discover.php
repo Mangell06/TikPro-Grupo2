@@ -137,7 +137,7 @@ function createCard(projectData) {
 
     const ancoreDiv = createElement("<div></div>", mother, "divAncore");
     createElement("<a href='profile.php'></a>", ancoreDiv, "ancore").text("Perfil");
-    createElement(`<a href='chat.php?talk=${projectData.id_owner}'></a>`, ancoreDiv, "ancore").text("Chat");
+    createElement(`<a href='chat.php?talk=${projectData.id_project}'></a>`, ancoreDiv, "ancore").text("Chat");
     const infoButton = createElement("<button></button>", ancoreDiv, "ancore").text("Detalls");
     infoButton.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "Detalls" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
 

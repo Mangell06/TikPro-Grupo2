@@ -12,7 +12,7 @@ try {
     $user_id = $_SESSION['user_id'];
 
     $sql = "SELECT 
-                m.id_project,
+                m.id,
                 m.sender,
                 m.destination,
                 u.logo_image,
@@ -49,12 +49,11 @@ try {
 
     $ultimosmensajes = [];
     foreach ($rows as $row) {
-        $otherUser = ($row['sender'] === $user_id) ? $row['destination'] : $row['sender'];
         $sendername = $row['senderid'] === $user_id ? "yo" : $row['sendername'];
 
         $ultimosmensajes[] = [
-            "otherUser"    => $otherUser,
             "logo_image"   => $row['logo_image'],
+            "id_messages"   => $row['id'],
             "user_name"    => $row['nameuser'],
             "text_message" => $row['text_message'],
             "date_message" => $row['date_message'],

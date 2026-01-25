@@ -68,10 +68,10 @@
                     e.preventDefault();
                     $("a").css("pointer-events", "none");
                     await sendLog(`Usuario <?php echo json_encode($user['name']); ?> ha seleccionado el chat del proyecto "${message.project_name}"`);
-                    window.location.href = `chat.php?talk=${message.otherUser}`;
+                    window.location.href = `chat.php?talk=${message.id_messages}`;
                 });
 
-                if (message.read_status === 0) {
+                if (message.read_status === 0 && message.sendername.toLowerCase() !== "yo") {
                     mainContainer.addClass('unread');
                 } else {
                     mainContainer.addClass('read');

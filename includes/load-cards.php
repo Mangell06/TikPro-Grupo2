@@ -40,7 +40,7 @@ try {
     }
     $sql = "
     SELECT p.id, p.title, p.description, p.video, 
-    GROUP_CONCAT(c.name) AS tags, p.id_owner, 
+    GROUP_CONCAT(c.name) AS tags, 
     COUNT(ucp.id_category) AS coincidences,
     u.name, u.entity_name, u.entity_type, 
     (SELECT COUNT(*) FROM likes WHERE id_user = :userid AND id_project = p.id) AS liked
@@ -70,7 +70,6 @@ try {
             "username" => $row["name"],
             "entity_name" => $row["entity_name"],
             "entity_type" => $row["entity_type"],
-            "id_owner" => $row["id_owner"],
             "liked" => ($row['liked'] > 0),
             "posibilityMatch" => ($row['coincidences'] > 0),
         ];

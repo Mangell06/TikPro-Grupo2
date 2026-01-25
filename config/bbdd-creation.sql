@@ -41,7 +41,7 @@ create table if not exists projects (
 
 -- tabla messages
 create table if not exists messages (
-  id_message int auto_increment primary key,
+  id_message int primary key,
   sender int not null,
   destination int not null,
   id_project int not null,
