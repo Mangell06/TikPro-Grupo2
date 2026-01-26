@@ -70,3 +70,43 @@
 [14:29:24] [85.192.71.100] Usuario PayPal eliminó la carta visible
 [14:29:24] [85.192.71.100] Usuario PayPal no tiene proyectos disponibles
 [14:29:24] [85.192.71.100] Usuario PayPal a cerrado sesion
+[15:02:58] [85.192.71.235] Usuario "Google" cargó proyecto 2
+[15:02:58] [85.192.71.235] Usuario "Google" cargó proyecto 6
+[15:02:58] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[15:02:59] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:03:04] [85.192.71.235] Usuario Google a cerrado sesion
+[15:03:17] [85.192.71.235] Usuario "google@empresa.com" inició sesión
+[15:03:18] [85.192.71.235] Usuario "Google" cargó proyecto 2
+[15:03:18] [85.192.71.235] Usuario "Google" cargó proyecto 6
+[15:03:18] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[15:03:19] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:35:39] [85.192.71.235] Usuario "Google" cargó proyecto 2
+[15:35:39] [85.192.71.235] Usuario "Google" cargó proyecto 6
+[15:35:39] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[15:49:26] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:49:35] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:49:39] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:50:44] [85.192.71.235] Usuario Googlee a cerrat la notificació
+[15:53:05] [85.192.71.235] Usuario "Googlee" cargó proyecto 6
+[15:53:05] [85.192.71.235] Usuario "Googlee" cargó proyecto 5
+[15:53:05] [85.192.71.235] Usuario "Googlee" cargó proyecto 1
+[15:59:02] [85.192.71.235] Usuario Googlee a cerrat la notificació
+[16:39:19] [85.192.71.235] Usuario "google@empresa.com" inició sesión
+[16:39:19] [85.192.71.235] Usuario "Googlee" cargó proyecto 6
+[16:39:19] [85.192.71.235] Usuario "Googlee" cargó proyecto 5
+[16:39:20] [85.192.71.235] Usuario "Googlee" cargó proyecto 1
+[16:39:22] [85.192.71.235] Usuario Googlee presionó "M'agrada" en el proyecto Necessitem col·laboració amb el nostre nou model de Paypal con id 6
+[16:39:22] [85.192.71.235] Usuario Googlee eliminó la carta visible
+[16:39:22] [85.192.71.235] Usuario "Googlee" cargó proyecto 2
+[16:39:23] [85.192.71.235] Usuario Googlee presionó "No M'interessa" en el proyecto Nou Mercedes-Benz elèctric con id 5
+[16:39:24] [85.192.71.235] Usuario Googlee eliminó la carta visible
+[16:39:24] [85.192.71.235] Usuario "Googlee" cargó proyecto 3
+[16:39:27] [85.192.71.235] Usuario Googlee presionó "següent" en el proyecto Volem crear un programa que ajudi a renderitzar un video más ràpid con id 1
+[16:39:28] [85.192.71.235] Usuario Googlee eliminó la carta visible
+[16:39:28] [85.192.71.235] Usuario "Googlee" cargó proyecto 4
+[16:39:29] [85.192.71.235] Usuario Googlee presionó "següent" en el proyecto Prova el nou Office amb IA con id 2
+[16:39:29] [85.192.71.235] Usuario Googlee eliminó la carta visible
+[16:39:34] [85.192.71.235] Usuario Googlee presionó "Detalls" en el proyecto Enviaments ràpids amb Amazon con id 3
+[16:39:34] [85.192.71.235] Usuario Googlee toggle info: visible
+[16:39:37] [85.192.71.235] Usuario Googlee presionó "Amagar detalls" en el proyecto Enviaments ràpids amb Amazon con id 3
+[16:39:37] [85.192.71.235] Usuario Googlee toggle info: oculto

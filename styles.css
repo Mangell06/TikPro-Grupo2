@@ -226,7 +226,7 @@
     text-align: center;
     z-index: 1000;
     position: relative;
-    justify-content: right;
+    justify-content: space-between;
     display: flex;
     gap: 24px;
     align-items: center;
@@ -322,7 +322,7 @@
 }
 
 /* Boton de desplegar informacion*/
-.info-toggle, .like, input[type="file"]::file-selector-button{
+.info-toggle, .like{
     display: inline-block;
     margin: 10px 0;       /* separación arriba y abajo */
     padding: 10px 18px;   /* tamaño cómodo */
@@ -340,7 +340,7 @@
         box-shadow 0.2s;
 }
 
-.info-toggle:hover, .like:hover, input[type="file"]::file-selector-button:hover{
+.info-toggle:hover, .like{
     background: var(--color-secondary);
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(0,0,0,0.2);
@@ -364,7 +364,7 @@
 }
 
 
-.info-toggle:active, .like:active, .nope:active {
+.info-toggle:active, .like, .nope {
     transform: scale(0.97);
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
@@ -427,6 +427,10 @@
     }
     #nav-logout{
         padding: 5px;
+    }
+
+    .user{
+        display: none;
     }
     
     .project-info.hiddenSuave{
@@ -859,789 +863,482 @@
 }
 
 
-/* crear project */
-.main-edit{
-  width: 100%;
-  height: 100vh;
-  align-items: center;
-  display: flex;
-  justify-content: center;
-}
-#project-form{
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  width: 600px;
-  align-self: anchor-center;
-  background-color: white;
-  border: grey 1px solid;
-  border-radius: 10px;
-  padding: 10px;
-}
-
-
-input[type="file"]{
-    padding: 13px;
-    display: flex;
-    gap: 10px;
-
-}
-
-
 /* =========================
-   Text Posible Match
+   PROFILE – MOBILE FIRST
    ========================= */
-.possible-match {
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-warning);
-    color: white;
-    font-weight: bold;
-    padding: 6px 12px;
-    border-radius: 12px;
-    font-size: 0.85rem;
-    z-index: 10;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
-}
-
-/* =========================
-   REGISTER PAGE (SCROLLABLE FORM)
-   ========================= */
-
-#register-body {
-    margin: 0;
-    font-family: var(--font-primary);
-    min-height: 100vh;
-    background: var(--bg-gradient);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Contenedor principal */
-#register-container {
-    margin-top: 120px;
-    margin-bottom: 80px;
-    width: 460px;
-    max-width: 92%;
-    background: linear-gradient(180deg, #ffffff 0%, #fff5f7 100%);
-    border-radius: 26px;
-    padding: 30px 28px 24px;
-    box-shadow:
-        0 30px 60px rgba(0, 0, 0, 0.35),
-        0 0 0 1px rgba(255, 77, 109, 0.15);
-    animation: fadeIn 0.7s ease-in-out;
-
-    display: flex;
-    flex-direction: column;
-}
-
-/* Título */
-#register-title {
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--color-primary);
-    font-size: 1.9rem;
-    font-weight: 800;
-}
-
-/* =========================
-   FORM WITH SCROLL
-   ========================= */
-#register-form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    max-height: 60dvh;
-    overflow-y: auto;
-    padding-right: 6px;
-}
-
-/* Scroll bonito */
-#register-form::-webkit-scrollbar {
-    width: 8px;
-}
-
-#register-form::-webkit-scrollbar-track {
-    background: rgba(230,57,70,0.05);
-    border-radius: 10px;
-}
-
-#register-form::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-        180deg,
-        var(--color-primary),
-        var(--color-secondary)
-    );
-    border-radius: 10px;
-}
-
-/* =========================
-   LABELS
-   ========================= */
-#register-form label {
-    margin-top: 10px;
-    color: var(--color-neutral);
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-/* =========================
-   INPUTS / SELECT / TEXTAREA
-   ========================= */
-#register-form input,
-#register-form select,
-#register-form textarea {
-    padding: 12px 14px;
-    border-radius: 14px;
-    border: 1px solid #ffd1da;
-    font-size: 0.95rem;
-    background-color: #ffffff;
-    transition:
-        border 0.3s,
-        box-shadow 0.3s,
-        transform 0.15s;
-}
-
-#register-form textarea {
-    resize: vertical;
-    min-height: 80px;
-}
-
-#register-form input:focus,
-#register-form select:focus,
-#register-form textarea:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.25);
-    transform: translateY(-2px);
-}
-
-/* =========================
-   CATEGORIES
-   ========================= */
-#view-categories {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 6px;
-    margin-bottom: 6px;
-}
-
-.category-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(230, 57, 70, 0.15);
-    color: var(--color-primary);
-    padding: 6px 12px;
-    border-radius: 14px;
-    font-size: 0.8rem;
-    font-weight: 700;
-}
-
-.category-tag .remove-cat {
-    cursor: pointer;
-    background: rgba(230,57,70,0.25);
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* =========================
-   BUTTONS
-   ========================= */
-#open-categories-btn {
-    margin-top: 6px;
-    margin-bottom: 10px;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 14px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-#register-button {
-    margin-top: 14px;
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    color: white;
-    border: none;
-    padding: 14px;
-    border-radius: 18px;
-    font-size: 1.05rem;
-    font-weight: 800;
-    cursor: pointer;
-}
-
-/* =========================
-   MODAL
-   ========================= */
-#modal-overlay {
-    backdrop-filter: blur(4px);
-}
-
-#categories-modal {
-    background: linear-gradient(180deg, #ffffff 0%, #fff5f7 100%);
-    border-radius: 20px;
-    padding: 22px;
-    width: 320px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-#extra-content {
-    max-height: 220px;
-    overflow-y: auto;
-}
-
-.category-item {
-    padding: 10px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-#save-category {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 14px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-/* =========================
-   CLOSE MODAL BUTTON
-   ========================= */
-
-#close-modal {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(230, 57, 70, 0.15);
-    color: var(--color-primary);
-    font-size: 16px;
-    font-weight: 900;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition:
-        background 0.2s,
-        transform 0.2s,
-        box-shadow 0.2s;
-}
-
-#close-modal:hover {
-    background: var(--color-primary);
-    color: white;
-    transform: scale(1.1);
-    box-shadow: 0 6px 14px rgba(230,57,70,0.45);
-}
-
-#close-modal:active {
-    transform: scale(0.95);
-    box-shadow: 0 3px 8px rgba(230,57,70,0.35);
-}
-
-/* =========================
-   REGISTER LINK (UNDER LOGIN)
-   ========================= */
-
-#register-button {
-    margin-top: 18px;
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-
-    padding: 14px;
-    border-radius: 16px;
-
-    background: transparent;
-    color: var(--color-primary);
-
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-decoration: none;
-
-    border: 2px solid rgba(230,57,70,0.35);
-
-    transition:
-        background 0.25s,
-        color 0.25s,
-        transform 0.2s,
-        box-shadow 0.2s;
-}
-
-#register-button:hover {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    color: #ffffff;
-    transform: translateY(-3px);
-    box-shadow: 0 14px 32px rgba(230,57,70,0.45);
-    text-decoration: none;
-}
-
-#register-button:active {
-    transform: scale(0.97);
-    box-shadow: 0 6px 16px rgba(230,57,70,0.35);
-}
-
-/* =========================
-   PROFILE PAGE
-   ========================= */
-
 #profile-body {
-    margin: 0;
     font-family: var(--font-primary);
     min-height: 100vh;
-    background: var(--bg-gradient);
-    display: flex;
-    flex-direction: column;
-    padding-top: 100px; /* Espacio para el header fixed */
-    padding-bottom: 40px;
-    align-items: center;
-}
-
-/* Contenedor Principal */
-.profile-edit-container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    width: 600px;
-    max-width: 95%;
-    animation: fadeIn 0.8s ease-out;
-}
-
-/* Tarjetas de Sección (Datos y Proyectos) */
-.profile-card {
-    background: white;
-    border-radius: 24px;
-    padding: 30px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 77, 109, 0.1);
-}
-
-.profile-section-title {
-    color: var(--color-primary);
-    font-size: 1.6rem;
-    font-weight: 800;
-    margin-bottom: 25px;
-    border-left: 5px solid var(--color-primary);
-    padding-left: 15px;
-}
-
-/* Formulario de Perfil */
-.profile-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.profile-field label {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-neutral);
-    margin-top: 10px;
-}
-
-.profile-field input, 
-.profile-field select, 
-.profile-field textarea {
-    padding: 12px 15px;
-    border-radius: 12px;
-    border: 1px solid #ffd1da;
-    font-family: var(--font-primary);
-    font-size: 1rem;
-    transition: all 0.3s;
-}
-
-.profile-field input:focus, 
-.profile-field textarea:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.15);
-}
-
-.profile-field textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-/* Etiquetas en el perfil */
-.tags-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 15px 0;
-}
-
-/* Botones de acción */
-.buttonEtiquetes {
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    margin-top: 10px;
-    text-decoration: none;
-}
-
-.buttonEtiquetes:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(230, 57, 70, 0.3);
-}
-
-/* Lista de Proyectos en Perfil */
-.profile-projects-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.profile-new-project {
-    background: var(--color-success);
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.profile-new-project:hover {
-    filter: brightness(1.1);
-    transform: scale(1.05);
-}
-
-.profile-project-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.profile-project-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px;
-    background: #fffafa;
-    border: 1px solid #ffe5e9;
-    border-radius: 16px;
-    transition: background 0.3s;
-}
-
-.profile-project-item:hover {
-    background: #fff0f2;
-}
-
-/* Header Ajustes */
-.main-header {
-    display: flex;
-    justify-content: right;
-    align-items: center;
-    padding: 0 40px;
-    height: 80px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-}
-
-.close-session {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.user {
-    color: var(--color-dark);
-    font-size: 1.1rem;
-}
-
-/* Responsive */
-@media (max-width: 650px) {
-    .profile-edit-container {
-        width: 90%;
-    }
-    
-    .profile-projects-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-}
-
-/* =========================================
-   PÁGINA PROYECTO (CREAR/EDITAR)
-   ========================================= */
-
-/* Contenedor principal que centra el formulario */
-.main-project-container {
-    padding-top: 120px; /* Espacio para el header fixed */
     padding-bottom: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
 }
 
-/* Tarjeta del formulario (basada en register-container) */
-.project-form-card {
-    width: 550px;
-    max-width: 92%;
-    background: linear-gradient(180deg, #ffffff 0%, #fffafb 100%);
-    border-radius: 26px;
-    padding: 35px;
-    box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.3),
-        0 0 0 1px rgba(255, 77, 109, 0.1);
-    animation: fadeIn 0.6s ease-out;
+/* =========================
+   HEADER
+   ========================= */
+.profile-header {
+    width: 100%;
+    padding: 18px 0;
+    background: var(--color-white);
+    text-align: center;
+    position: relative;
+    margin-bottom: 20px;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Título de la tarjeta */
-.project-form-title {
+.profile-title {
     color: var(--color-primary);
     font-size: 1.8rem;
     font-weight: 800;
-    margin-bottom: 25px;
-    text-align: center;
+    letter-spacing: 1px;
 }
 
-/* Cuerpo del formulario con scroll similar al registro */
-.project-form-scrollable {
+/* =========================
+   CONTENEDOR PRINCIPAL
+   ========================= */
+.profile-container {
+    padding: 20px 16px 100px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    max-height: 65vh;
-    overflow-y: auto;
-    padding-right: 10px;
+    gap: 20px;
 }
 
-/* Personalización del scroll (igual que en registro) */
-.project-form-scrollable::-webkit-scrollbar {
-    width: 6px;
-}
-.project-form-scrollable::-webkit-scrollbar-thumb {
-    background: var(--btn-gradient);
-    border-radius: 10px;
+/* =========================
+   TARJETAS
+   ========================= */
+.profile-card {
+    background: var(--color-white);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: fadeIn 0.4s ease;
 }
 
-/* Estilos de inputs y labels */
-.project-field {
+/* =========================
+   TÍTULOS SECCIÓN
+   ========================= */
+.profile-section-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-dark);
+    margin-bottom: 6px;
+}
+
+/* =========================
+   CAMPOS
+   ========================= */
+.profile-field {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-.project-field label {
+.profile-field label {
     font-size: 0.85rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--color-neutral);
-    margin-left: 4px;
 }
 
-.project-field input[type="text"],
-.project-field textarea,
-.project-field select {
-    padding: 13px;
+.profile-field input,
+.profile-textarea {
+    padding: 12px 14px;
     border-radius: 14px;
-    border: 1px solid #ffd1da;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+    border: 1px solid var(--color-secondary);
+    font-size: 0.95rem;
+    font-family: var(--font-primary);
+    background: var(--color-white);
+    transition: border 0.2s, box-shadow 0.2s;
 }
 
-.project-field input:focus,
-.project-field textarea:focus {
+.profile-textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.profile-field input:focus,
+.profile-textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 4px rgba(255, 77, 109, 0.2);
-    transform: translateY(-1px);
+    box-shadow: 0 0 0 3px rgba(230,57,70,0.25);
 }
 
-/* Estilo especial para inputs de archivo */
-.project-field input[type="file"] {
-    background: #fff;
-    padding: 10px;
-    border: 1px dashed var(--color-secondary);
-    cursor: pointer;
-}
-
-.project-field input[type="file"]::file-selector-button {
+/* =========================
+   BOTÓN GUARDAR USUARIO
+   ========================= */
+.profile-card button[name="save_user"] {
     background: var(--btn-gradient);
-    border: none;
-    padding: 8px 15px;
-    border-radius: 10px;
-    color: white;
+    color: var(--color-white);
+    padding: 12px 18px;
+    margin-top: 20px;
+    font-size: 1rem;
+    align-self: flex-start;
     font-weight: bold;
-    margin-right: 15px;
+    border-radius: 14px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
 }
 
-/* Contenedor de etiquetas seleccionadas */
-#view-categories-project {
+.profile-card button[name="save_user"]:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.profile-card button[name="save_user"]:active {
+    transform: scale(0.97);
+    filter: brightness(0.95);
+}
+
+/* =========================
+   ETIQUETAS
+   ========================= */
+.profile-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin: 10px 0;
 }
 
-/* Botón de acción principal */
-.btn-save-project {
-    background: var(--btn-gradient);
-    color: white;
+.profile-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: rgba(230,57,70,0.15);
+    color: var(--color-primary);
+    font-weight: bold;
+    font-size: 0.85rem;
+    border-radius: 14px;
+}
+
+/* Botón eliminar etiqueta */
+.profile-tag button[name="delete_tag"] {
+    background: none;
     border: none;
-    padding: 16px;
-    border-radius: 18px;
-    font-size: 1.1rem;
-    font-weight: 800;
+    color: var(--color-primary);
+    font-weight: bold;
+    font-size: 0.85rem;
     cursor: pointer;
+    transition: color 0.2s, transform 0.15s;
+}
+
+.profile-tag button[name="delete_tag"]:hover {
+    color: var(--color-secondary);
+    transform: scale(1.1);
+}
+
+.profile-tag button[name="delete_tag"]:active {
+    transform: scale(0.95);
+}
+
+/* Añadir nueva etiqueta */
+form input[name="new_tag"],form textarea[name="presentation"] {
+    padding: 10px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--color-secondary);
+    font-size: 0.9rem;
+    font-family: var(--font-primary);
+    width: 100%;
+    margin-right: 10px;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+form input[name="new_tag"]:focus,form textarea[name="presentation"]:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(230,57,70,0.25);
+}
+
+/* Botón añadir etiqueta */
+form button[name="add_tag"] {
     margin-top: 20px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 10px 20px rgba(230, 57, 70, 0.2);
+    background: var(--btn-gradient);
+    color: var(--color-white);
+    padding: 10px 16px;
+    border-radius: 14px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.btn-save-project:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(230, 57, 70, 0.4);
+form button[name="add_tag"]:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
 }
 
-/* Mensajes de error */
-.error-msg {
-    background: #ffe5e5;
-    color: var(--color-error);
-    padding: 15px;
-    border-radius: 12px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    text-align: center;
+form button[name="add_tag"]:active {
+    transform: scale(0.97);
+    filter: brightness(0.95);
 }
 
-.tag-badge .remove-btn {
-    margin-left: 8px; cursor: pointer; font-weight: bold; color: #ffcccc;
-}
-
-/* Modal Estilos */
-.custom-modal {
-    display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-    width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-    background-color: white; margin: 10% auto; padding: 20px;
-    width: 400px; border-radius: 8px; position: relative;
-}
-
-.close-btn-modal { position: absolute; right: 20px; cursor: pointer; font-size: 24px; }
-
-.results-list { max-height: 200px; overflow-y: auto; margin-top: 10px; }
-
-.result-item {
-    padding: 10px; border-bottom: 1px solid #eee; cursor: pointer;
-}
-
-.result-item:hover { background-color: #f0f0f0; }
-
-.project-title-discover{
-    font-weight: 609;
-}
-
-.project-title, .project-description, .profile-field input{
-    font-size: 16px;
-    margin-bottom: 5px;
-    margin-top: -3px;
-    padding: 5px;
-    border-radius: 8px;
-    background: #f3986c57;
-    color: black;
-}
-
-.imagePreviewProfile {
-    width: 150px;
-}
-
-.profile-project-item > a{
+/* =========================
+   PROJECTES
+   ========================= */
+.profile-projects-header {
     display: flex;
-  justify-content: space-around;
-  align-items: center;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
-.buttons-edit-project{
-	display: flex;
-	align-items: center;
-	gap: 10px;
-  	justify-content: center;	
+.profile-new-project {
+    padding: 8px 14px;
+    border-radius: 14px;
+    border: none;
+    background: var(--btn-gradient);
+    color: var(--color-white);
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
 }
 
+.profile-new-project:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
 
-body.page-error {
+.profile-new-project:active {
+    transform: scale(0.97);
+    filter: brightness(0.95);
+}
+
+.profile-project-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+.profile-project-item a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--color-light);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+}
+
+.profile-project-item video,
+.profile-project-item .profile-project-placeholder {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    background: var(--color-gray);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* altura completa de la ventana */
-    font-family: 'Arial', sans-serif;
-    background: var(--bg-gradient);
+    color: var(--color-neutral);
+    font-weight: bold;
+}
+
+.profile-project-item span {
+    display: block;
+    padding: 10px;
+    font-weight: bold;
     color: var(--color-dark);
+    font-size: 0.95rem;
+}
+
+.profile-no-projects {
+    text-align: center;
+    color: var(--color-neutral);
+    font-size: 0.9rem;
+}
+
+/* =========================
+   LINKS INFERIORES
+   ========================= */
+.profile-links {
+    display: flex;
+    gap: 14px;
+}
+
+.profile-link-btn {
+    flex: 1;
+    text-align: center;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--btn-gradient);
+    color: var(--color-white);
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.profile-link-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.profile-link-btn:active {
+    transform: scale(0.97);
+    filter: brightness(0.95);
+}
+
+/* =========================
+   DESKTOP / TABLET
+   ========================= */
+@media (min-width: 768px) {
+    .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .profile-project-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .profile-links {
+        justify-content: center;
+    }
+
+    .profile-link-btn {
+        max-width: 240px;
+    }
+}
+
+/* =========================
+   ANIMACIONES
+   ========================= */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* =========================
+   MENSAJE DE ÉXITO
+   ========================= */
+.success-msg {
+    background: rgba(132,165,157,0.2);
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: var(--color-success);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+
+/* =========================
+   ETIQUETAS
+   ========================= */
+.profile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.profile-tag {
+    background-color: #e6e6e6;
+    padding: 6px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.profile-tag-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #ff4d4f;
+}
+
+/* =========================
+   MODAL ETIQUETES
+   ========================= */
+.tag-modal {
+    display: none; 
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.tag-modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+}
+
+.tag-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#tag-search {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    width: 100%;
+}
+
+#tag-results {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#tag-results .tag-result {
+    padding: 8px 10px;
+    background: rgba(230,57,70,0.15);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#tag-results .tag-result:hover {
+    background: #e63946;
+    color: #fff;
+}
+
+
+/* ERROR PAGE */
+
+/* Estilo para el botón en la página de error */
+.error-button-container {
+    margin-top: 20px;
     text-align: center;
 }
 
-/* Contenedor centrado */
-.page-error .container {
-    background-color: #fff;
-    padding: 40px 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    max-width: 400px;
-    width: 90%;
-}
-
-/* Título */
-.page-error .container h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: var(--color-primary);
-}
-
-/* Mensaje o párrafo */
-.page-error .container p {
-    font-size: 16px;
-    color: var(--color-neutral);
-}
-
-/* Botón con gradiente */
-.page-error .container button {
-    margin-top: 25px;
-    padding: 12px 25px;
-    font-size: 16px;
-    font-weight: bold;
+.btn-discover {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ff6600; /* naranja */
     color: #fff;
-    background: var(--btn-gradient);
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
-.page-error .container button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+.btn-discover:hover {
+    background-color: #e65c00;
 }
