@@ -80,3 +80,16 @@
 [15:47:20] [85.192.71.235] Usuario Marc eliminó la carta visible
 [15:47:20] [85.192.71.235] Usuario "Marc" cargó proyecto 3
 [15:47:28] [85.192.71.235] Usuario Marc a cerrat la notificació
+[16:37:02] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[16:37:02] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[16:37:02] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[16:37:03] [85.192.71.235] Usuario Marc a cerrado sesion
+[16:43:33] [85.192.71.235] Usuario abrió el selector de categorías
+[16:43:37] [85.192.71.235] Solicitud de registro enviada con éxito para el usuario: marc (marccachinero@gmail.com)
+[16:44:15] [85.192.71.235] Usuari "marccachinero@gmail.com" ha iniciat sessió
+[16:44:15] [85.192.71.235] Usuario "marc" cargó proyecto 6
+[16:44:16] [85.192.71.235] Usuario "marc" cargó proyecto 1
+[16:44:16] [85.192.71.235] Usuario "marc" cargó proyecto 4
+[16:44:21] [85.192.71.235] Usuario marc a cerrat la notificació
+[16:44:22] [85.192.71.235] El usuario a cerrat la notificació
+[16:44:24] [85.192.71.235] El usuario a cerrat la notificació
