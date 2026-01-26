@@ -1551,3 +1551,29 @@ body.page-error {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
+
+
+/* admin index.php */
+.admin{
+    background: white;
+  padding: 40px;
+  border-radius: 10px;
+}
+
+.admin p{
+    margin-bottom: 8px;
+}
+
+
+.admin li, .admin a{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 1rem;
+    background: rgb(105, 96, 78);
+    padding: 6px 12px;
+    border-radius: 14px;
+    text-decoration: none;
+   
+}

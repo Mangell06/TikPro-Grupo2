@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
   poblation VARCHAR(100) NOT NULL,
   entity_name VARCHAR(255) NOT NULL,
   entity_type ENUM('center', 'company') NOT NULL,
+  user_role ENUM('user', 'admin') NOT NULL DEFAULT 'user',
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   code_activate VARCHAR(64),
   code_expire DATETIME,
