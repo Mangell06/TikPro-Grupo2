@@ -19,9 +19,11 @@ CREATE TABLE IF NOT EXISTS users (
   poblation VARCHAR(100) NOT NULL,
   entity_name VARCHAR(255) NOT NULL,
   entity_type ENUM('center', 'company') NOT NULL,
+  user_role ENUM('user', 'admin') NOT NULL DEFAULT 'user',
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   code_activate VARCHAR(64),
   code_expire DATETIME,
+  logo_image varchar(255),
   presentation TEXT
 );
 
@@ -38,16 +40,28 @@ create table if not exists projects (
   foreign key (id_owner) references users(id)
 );
 
+-- tabla de chats
+create table if not exists chats (
+  id int primary key AUTO_INCREMENT,
+  user_owner int not null,
+  other_user int not null,
+  id_project int not null,
+  foreign key (user_owner) references users(id),
+  foreign key (other_user) references users(id),
+  foreign key (id_project) references projects(id),
+  UNIQUE (user_owner, other_user, id_project)
+);
+
 -- tabla messages
 create table if not exists messages (
-  id_message int auto_increment primary key,
+  id int primary key AUTO_INCREMENT,
+  id_chat int not Null,
   sender int not null,
-  destination int not null,
   text_message text not null,
-  date_message date not null,
+  date_message datetime not null,
   read_status boolean not null default false,
-  foreign key (sender) references users(id),
-  foreign key (destination) references users(id)
+  foreign key (id_chat) references chats(id),
+  foreign key (sender) references users(id)
 );
 
 -- tabla categories

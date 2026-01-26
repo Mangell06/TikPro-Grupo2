@@ -21,7 +21,7 @@
     <title>Descobrir</title>
     <link rel="stylesheet" href="styles.css?q=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="icono-simbio.png" type="image/png">
+    <link rel="icon" href="oak_4986983.png" type="image/png">
 </head>
 <body id="discover-body">
     <header class="header-discovered">
@@ -60,6 +60,28 @@ import { loadNotifications } from './load-notifications.js';
 
 loadNotifications();
 
+// Función genérica para crear chat si no existe
+async function createOrGetChat(id_project) {
+    try {
+        const res = await fetch("includes/create-chat.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ id_project })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+            return data.id_chat; // Devuelve el id del chat
+        } else {
+            showNotification("error", data.error, <?php echo json_encode($user['name']); ?>);
+            return null;
+        }
+    } catch (e) {
+        showNotification("error", "Error de conexión", <?php echo json_encode($user['name']); ?>);
+        return null;
+    }
+}
+
 $(document).on("keydown", function(e) {
     if ((e.which || e.keyCode) == 116 || ((e.ctrlKey || e.metaKey) && (e.which || e.keyCode) == 82)) {
         e.preventDefault();
@@ -89,7 +111,7 @@ function createCard(projectData) {
         const divInfo = createElement("<div></div>", divCard, "final-info-card");
         createElement("<p></p>", divInfo).text("No hi ha més videos per mostrar");
         createElement("<p></p>", divInfo).text("¿Vols tornar a veurels?");
-        const btnTornar = createElement("<button></button>", divInfo).text("Torna");
+        const btnTornar = createElement("<button></button>", divInfo, 'buttonEtiquetes').text("Torna");
 
         btnTornar.on("click", async () => {
             btnTornar.prop("disabled", true).addClass("loading").text("Carregant");
@@ -121,8 +143,8 @@ function createCard(projectData) {
     const divButtons = createElement("<div></div>", mother, "actions");
 
     if (!projectData.liked) {
-        const btnLike = createElement("<button></button>", divButtons, "like").text("M'agrada");
         const btnNope = createElement("<button></button>", divButtons, "nope").text("No m'interessa");
+        const btnLike = createElement("<button></button>", divButtons, "like").text("M'agrada");
 
         btnNope.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "No M'interessa" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
         btnLike.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "M'agrada" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
@@ -137,7 +159,15 @@ function createCard(projectData) {
 
     const ancoreDiv = createElement("<div></div>", mother, "divAncore");
     createElement("<a href='profile.php'></a>", ancoreDiv, "ancore").text("Perfil");
-    createElement("<a href='chats.php'></a>", ancoreDiv, "ancore").text("Chat");
+    const chatLink = createElement(`<a href='#'></a>`, ancoreDiv, "ancore").text("Chat");
+    chatLink.on("click", async (e) => {
+        e.preventDefault();
+        const chatId = await createOrGetChat(projectData.id_project);
+        if (chatId) {
+            window.location.href = `chat.php?talk=${chatId}`;
+        }
+    });
+
     const infoButton = createElement("<button></button>", ancoreDiv, "ancore").text("Detalls");
     infoButton.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "Detalls" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
 
@@ -149,19 +179,19 @@ function createCard(projectData) {
         sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} toggle info: ${divInfo.hasClass("hiddenSuave") ? 'oculto' : 'visible'}`);
     }
 
-    const infoButtonClose = createElement("<button></button>", divInfo, "info-toggle").text("Amagar detalls");
+    const infoButtonClose = createElement("<button></button>", divInfo, "buttonEtiquetes").text("Amagar detalls");
     infoButtonClose.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "Amagar detalls" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
     infoButton.on("click", infoButtonClick);
     infoButtonClose.on("click", infoButtonClick);
 
     createElement("<p></p>", divInfo,"project-title-discover").text(projectData.title);
     createElement("<pre></pre>", divInfo).text(projectData.username +" - "+ projectData.entity_name);
-    createElement("<p></p>", divInfo).text(projectData.description);
-    createElement("<p></p>", divInfo, "bold").text("Categories: ");
+    createElement("<p></p>", divInfo, "project-info-p").text(projectData.description);
+    createElement("<p></p>", divInfo, "project-title-discover").text("Categories: ");
 
     const divTags = createElement("<div></div>", divInfo, "tags");
     (projectData.tags || []).forEach(tag => {
-        createElement("<span></span>", divTags).text(tag);
+        createElement("<span></span>", divTags, 'tag-badge').text(tag);
     });
 
     return divCard;
@@ -244,30 +274,37 @@ function addCardEvents(card) {
 }
 
 async function handleAction(card, action) {
-    card.addClass(action === "like" ? "swipe-left" : "swipe-right");
+    card.addClass(action === "like" ? "swipe-right" : "swipe-left");
     setTimeout(() => {
         loadCard();
     }, 400);
 
-   if (action === "like" && projectsData[0]) {
+    if (action === "like" && projectsData[0]) {
+        const currentProject = projectsData[0]; // Aquí tienes los datos correctos
         try {
+            // Crear o obtener chat
+            const chatId = await createOrGetChat(currentProject.id_project);
+            if (chatId) {
+                showNotification("info","💖 Match! Anar al xat", <?php echo json_encode($user['name']); ?>);
+            }
+
+            // Enviar like
             const res = await fetch("includes/like-cards.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({ 
-                    project: projectsData[0].id_project,
-                    liked: projectsData[0].liked ? 1 : 0
+                    project: currentProject.id_project,
+                    liked: currentProject.liked ? 1 : 0
                 })
             });
+
             if (!res.ok) {
                 const err = await res.json();
-                showNotification("error", err.error,<?php echo json_encode($user['name']); ?>);
+                showNotification("error", err.error, <?php echo json_encode($user['name']); ?>);
                 sendLog(`Error: ${err.error}`);
-            } else {
-                showNotification("info","💖 Match! Anar al xat",<?php echo json_encode($user['name']); ?>);
             }
         } catch (e) {
-            showNotification("error","Error enviando like",<?php echo json_encode($user['name']); ?>);
+            showNotification("error","Error enviando like", <?php echo json_encode($user['name']); ?>);
         }
     }
 

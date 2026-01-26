@@ -1,20 +1,25 @@
 import { sendLog } from './create-logs.js';
 
 let notificationCount = 0;
+
+const divFather = document.createElement('div');
+divFather.classList.add('notiFather');
+document.body.appendChild(divFather);
 export function showNotification(type, message, username='', exist=false) {
     //Sumar la cantidad de notificaciones mostradas
-    notificationCount++;
+    
     // Crear contenedor
     const notif = document.createElement('div');
-    notif.className = `notification ${type} show`;
+    notif.className = `notification-section notification ${type} show`;
     //Animación de crear el margin, cuando hay más notificaciones
-    if (notificationCount > 1){
-        notif.style.marginTop = 5*notificationCount+"px";
-    }
+    
+    notificationCount++;
     // Texto
     const text = document.createElement('span');
     text.textContent = message;
     notif.appendChild(text);
+    // Append al padre
+    divFather.appendChild(notif);
 
     // Botón de cerrar
     const closeBtn = document.createElement('button');
@@ -22,6 +27,7 @@ export function showNotification(type, message, username='', exist=false) {
     closeBtn.innerHTML = '&times;';
     closeBtn.onclick = async function () {
         notif.remove();
+
         notificationCount--;
         if (username !== "") {
             sendLog(`Usuario ${username} a cerrat la notificació`);
@@ -42,9 +48,6 @@ export function showNotification(type, message, username='', exist=false) {
         .catch(err => console.error('Error borrando la notificación:', err));
     };
     notif.appendChild(closeBtn);
-
-    // Añadir al body
-    document.body.appendChild(notif);
 
     fetch('includes/create-notifications-session.php', {
         method: 'POST',

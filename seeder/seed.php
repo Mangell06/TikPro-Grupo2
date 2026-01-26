@@ -124,16 +124,20 @@ try {
     // Insertar centros
     foreach ($centres as $i => $nom) {
         $email = strtolower(preg_replace('/[^a-zA-Z]/','',$nom)).'@edu.cat';
-        $pdo->prepare("INSERT INTO users (email,password,name,tfn,entity_name,entity_type,poblation,presentation) VALUES (?,?,?,?,?,?,?,?)")
-            ->execute([$email, hash('sha256','constraseña'.$i), $centro_logo[$i], '65423300'.$i, $nom, 'center', 'Cornellà', "Usuario del centro $nom",]);
+        $pdo->prepare("INSERT INTO users (email,password,name,tfn,entity_name,entity_type,user_role,poblation,presentation) VALUES (?,?,?,?,?,?,?,?,?)")
+            ->execute([$email, hash('sha256','constraseña'.$i), $centro_logo[$i], '65423300'.$i, $nom, 'center', 'user', 'Cornellà', "Usuario del centro $nom",]);
     }
 
     // Insertar empresas
     foreach ($empreses as $i => $nom) {
         $email = strtolower(preg_replace('/[^a-zA-Z]/','',$nom)).'@empresa.com';
-        $pdo->prepare("INSERT INTO users (email,password,name,entity_name,entity_type,tfn,poblation,presentation) VALUES (?,?,?,?,?,?,?,?)")
-            ->execute([$email, hash('sha256','password'.$i), $nom, $nom.' S.L.', 'company', '95423300'.$i, 'Cornellà', "Usuario de la empresa $nom"]);
+        $pdo->prepare("INSERT INTO users (email,password,name,entity_name,entity_type,tfn,user_role,poblation,presentation) VALUES (?,?,?,?,?,?,?,?,?)")
+            ->execute([$email, hash('sha256','password'.$i), $nom, $nom.' S.L.', 'company', '95423300'.$i, 'user', 'Cornellà', "Usuario de la empresa $nom"]);
     }
+
+    $pdo->prepare("INSERT INTO users (email,password,name,tfn,entity_name,entity_type,user_role,poblation,presentation) VALUES (?,?,?,?,?,?,?,?,?)")
+            ->execute(['manolobonacheragomez@edu.cat', hash('sha256','admin1'), 'Manolo Bonachera Gómez', '654233089', 'IES Esteve Terradas i Illa', 'center', 'admin', 'Cornellà', "Administrador"]);
+
 
     /* -------------------------------------------------
     3. PROJECTS (6 proyectos)
