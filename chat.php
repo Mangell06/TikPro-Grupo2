@@ -30,7 +30,7 @@
 <body>
     <header class="header-discovered">
     <a href="discover.php" id="backdiscover">Discover</a>
-    <a href="messages.php" id="backdiscover">Misatges</a>
+    <a href="messages.php" id="backdiscover">Missatges</a>
     <div class="close-session">
         <?php
     include("includes/database.php");

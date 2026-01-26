@@ -51,7 +51,8 @@ try {
     $chat = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($chat) {
-        echo json_encode(["success" => true, "id_chat" => $chat['id'], "message" => "Chat ya existe"]);
+        http_response_code(200);
+        echo json_encode(["success" => true, "id_chat" => $chat['id'], "message" => "Chat existente"]);
         exit;
     }
 
@@ -65,7 +66,8 @@ try {
         ':user_id' => $user_id,
         ':id_project' => $id_project
     ]);
-
+    
+    http_response_code(200);
     $new_chat_id = $pdo->lastInsertId();
     echo json_encode(["success" => true, "id_chat" => $new_chat_id, "message" => "Chat creado"]);
 

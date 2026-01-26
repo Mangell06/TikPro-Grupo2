@@ -25,6 +25,7 @@
 </head>
 <body id="discover-body">
     <header class="header-discovered">
+        <a href="messages.php" id="backdiscover">Missatges</a>
         <div class="close-session">
             <?php
         include("includes/database.php");
@@ -71,7 +72,7 @@ async function createOrGetChat(id_project) {
 
         const data = await res.json();
         if (res.ok && data.success) {
-            return data.id_chat; // Devuelve el id del chat
+            return data.id_chat;
         } else {
             showNotification("error", data.error, <?php echo json_encode($user['name']); ?>);
             return null;
