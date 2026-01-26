@@ -136,7 +136,7 @@ try {
     }
 
     $pdo->prepare("INSERT INTO users (email,password,name,tfn,entity_name,entity_type,user_role,poblation,presentation) VALUES (?,?,?,?,?,?,?,?,?)")
-            ->execute(['manolobonacheragomez@edu.cat', hash('sha256','admin1'), 'Manolo Bonachera Gómez', '654233089', 'IES Esteve Terradas i Illa', 'center', 'admin', 'Cornellà', "Administrador"]);
+            ->execute(['profe@edu.cat', hash('sha256','admin1'), 'Profe', '654233089', 'IES Esteve Terradas i Illa', 'center', 'admin', 'Cornellà', "Administrador"]);
 
 
     /* -------------------------------------------------
