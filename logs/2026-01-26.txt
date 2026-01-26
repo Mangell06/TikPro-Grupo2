@@ -1,0 +1,95 @@
+[14:24:47] [85.192.71.235] El usuario a cerrat la notificació
+[14:36:19] [85.192.71.235] El usuario a cerrat la notificació
+[14:36:28] [85.192.71.235] El usuario a cerrat la notificació
+[14:36:45] [85.192.71.235] El usuario a cerrat la notificació
+[14:37:34] [85.192.71.235] Usuario "google@empresa.com" inició sesión
+[14:37:34] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[14:37:34] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[14:37:34] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[14:37:36] [85.192.71.235] Usuario Google a cerrat la notificació
+[14:37:41] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[14:37:41] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[14:37:41] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[14:37:45] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[14:37:45] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[14:37:45] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[14:37:47] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[14:37:47] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[14:37:47] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[14:37:50] [85.192.71.235] Usuario Google a cerrado sesion
+[14:40:09] [85.192.71.235] El usuario a cerrat la notificació
+[14:46:19] [85.192.71.235] El usuario a cerrat la notificació
+[15:01:58] [85.192.71.235] El usuario a cerrat la notificació
+[15:14:42] [85.192.71.235] Usuario "marccachinero@gmail.com" inició sesión
+[15:14:42] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:14:42] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:14:42] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:14:48] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:14:48] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:14:48] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:14:49] [85.192.71.235] Usuario Marc a cerrado sesion
+[15:15:06] [85.192.71.235] Usuario "marccachinero@gmail.com" inició sesión
+[15:15:06] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:15:06] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:15:07] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:15:14] [85.192.71.235] Usuario Marc a cerrat la notificació
+[15:15:22] [85.192.71.235] Usuario Marc a cerrado sesion
+[15:22:36] [85.192.71.235] Usuario "google@empresa.com" inició sesión
+[15:22:37] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[15:22:37] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[15:22:37] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[15:22:38] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:22:39] [85.192.71.235] Usuario Google a cerrado sesion
+[15:40:20] [85.192.71.235] Usuari "marccachinero@gmail.com" ha iniciat sessió
+[15:40:21] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:40:21] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:40:21] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:40:26] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:40:26] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:40:27] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:40:28] [85.192.71.235] Usuario Marc a cerrado sesion
+[15:41:25] [85.192.71.235] El usuario a cerrat la notificació
+[15:43:56] [85.192.71.235] Usuari "marccachinero@gmail.com" ha iniciat sessió
+[15:43:57] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:43:58] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:43:58] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:44:30] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:44:30] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:44:31] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:44:32] [85.192.71.235] Usuario Marc a cerrat la notificació
+[15:44:34] [85.192.71.235] Usuario Marc a cerrado sesion
+[15:44:42] [85.192.71.235] El usuario a cerrat la notificació
+[15:46:42] [85.192.71.235] Usuari "marccachinero@gmail.com" ha iniciat sessió
+[15:46:43] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:46:43] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:46:43] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:46:48] [85.192.71.235] Usuario Marc a cerrat la notificació
+[15:47:03] [85.192.71.235] El usuario a cerrat la notificació
+[15:47:06] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:47:06] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:47:06] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:47:07] [85.192.71.235] Usuario Marc a cerrat la notificació
+[15:47:10] [85.192.71.235] Usuario Marc presionó "Detalls" en el proyecto Necessitem col·laboració amb el nostre nou model de Paypal con id 6
+[15:47:10] [85.192.71.235] Usuario Marc toggle info: visible
+[15:47:14] [85.192.71.235] Usuario Marc presionó "Amagar detalls" en el proyecto Necessitem col·laboració amb el nostre nou model de Paypal con id 6
+[15:47:14] [85.192.71.235] Usuario Marc toggle info: oculto
+[15:47:16] [85.192.71.235] Usuario Marc presionó "M'agrada" en el proyecto Necessitem col·laboració amb el nostre nou model de Paypal con id 6
+[15:47:16] [85.192.71.235] Usuario Marc eliminó la carta visible
+[15:47:16] [85.192.71.235] Usuario "Marc" cargó proyecto 2
+[15:47:19] [85.192.71.235] Usuario Marc presionó "No M'interessa" en el proyecto Volem crear un programa que ajudi a renderitzar un video más ràpid con id 1
+[15:47:20] [85.192.71.235] Usuario Marc eliminó la carta visible
+[15:47:20] [85.192.71.235] Usuario "Marc" cargó proyecto 3
+[15:47:28] [85.192.71.235] Usuario Marc a cerrat la notificació
+[16:37:02] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[16:37:02] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[16:37:02] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[16:37:03] [85.192.71.235] Usuario Marc a cerrado sesion
+[16:43:33] [85.192.71.235] Usuario abrió el selector de categorías
+[16:43:37] [85.192.71.235] Solicitud de registro enviada con éxito para el usuario: marc (marccachinero@gmail.com)
+[16:44:15] [85.192.71.235] Usuari "marccachinero@gmail.com" ha iniciat sessió
+[16:44:15] [85.192.71.235] Usuario "marc" cargó proyecto 6
+[16:44:16] [85.192.71.235] Usuario "marc" cargó proyecto 1
+[16:44:16] [85.192.71.235] Usuario "marc" cargó proyecto 4
+[16:44:21] [85.192.71.235] Usuario marc a cerrat la notificació
+[16:44:22] [85.192.71.235] El usuario a cerrat la notificació
+[16:44:24] [85.192.71.235] El usuario a cerrat la notificació
