@@ -61,7 +61,7 @@ if ($requestUri !== $scriptName && strpos($requestUri, $scriptName . '/') === 0)
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sessió</title>
     <link rel="stylesheet" href="styles.css?q=1">
-    <link rel="icon" href="icono-simbio.png" type="image/png">
+    <link rel="icon" href="oak_4986983.png" type="image/png">
 </head>
 <?php if (!$loginSuccess): ?>
 <body id="login-body">
