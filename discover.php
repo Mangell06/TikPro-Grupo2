@@ -25,6 +25,7 @@
 </head>
 <body id="discover-body">
     <header class="header-discovered">
+        <a href="messages.php" id="backdiscover">Missatges</a>
         <div class="close-session">
             <?php
         include("includes/database.php");
@@ -59,6 +60,28 @@ import { sendLog } from '/create-logs.js';
 import { loadNotifications } from './load-notifications.js';
 
 loadNotifications();
+
+// Función genérica para crear chat si no existe
+async function createOrGetChat(id_project) {
+    try {
+        const res = await fetch("includes/create-chat.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ id_project })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+            return data.id_chat;
+        } else {
+            showNotification("error", data.error, <?php echo json_encode($user['name']); ?>);
+            return null;
+        }
+    } catch (e) {
+        showNotification("error", "Error de conexión", <?php echo json_encode($user['name']); ?>);
+        return null;
+    }
+}
 
 $(document).on("keydown", function(e) {
     if ((e.which || e.keyCode) == 116 || ((e.ctrlKey || e.metaKey) && (e.which || e.keyCode) == 82)) {
@@ -137,7 +160,15 @@ function createCard(projectData) {
 
     const ancoreDiv = createElement("<div></div>", mother, "divAncore");
     createElement("<a href='profile.php'></a>", ancoreDiv, "ancore").text("Perfil");
-    createElement("<a href='chats.php'></a>", ancoreDiv, "ancore").text("Chat");
+    const chatLink = createElement(`<a href='#'></a>`, ancoreDiv, "ancore").text("Chat");
+    chatLink.on("click", async (e) => {
+        e.preventDefault();
+        const chatId = await createOrGetChat(projectData.id_project);
+        if (chatId) {
+            window.location.href = `chat.php?talk=${chatId}`;
+        }
+    });
+
     const infoButton = createElement("<button></button>", ancoreDiv, "ancore").text("Detalls");
     infoButton.on("click", () => sendLog(`Usuario ${<?php echo json_encode($user['name']); ?>} presionó "Detalls" en el proyecto ${projectsData[0].title} con id ${projectsData[0].id_project}`));
 
@@ -249,25 +280,32 @@ async function handleAction(card, action) {
         loadCard();
     }, 400);
 
-   if (action === "like" && projectsData[0]) {
+    if (action === "like" && projectsData[0]) {
+        const currentProject = projectsData[0]; // Aquí tienes los datos correctos
         try {
+            // Crear o obtener chat
+            const chatId = await createOrGetChat(currentProject.id_project);
+            if (chatId) {
+                showNotification("info","💖 Match! Anar al xat", <?php echo json_encode($user['name']); ?>);
+            }
+
+            // Enviar like
             const res = await fetch("includes/like-cards.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({ 
-                    project: projectsData[0].id_project,
-                    liked: projectsData[0].liked ? 1 : 0
+                    project: currentProject.id_project,
+                    liked: currentProject.liked ? 1 : 0
                 })
             });
+
             if (!res.ok) {
                 const err = await res.json();
-                showNotification("error", err.error,<?php echo json_encode($user['name']); ?>);
+                showNotification("error", err.error, <?php echo json_encode($user['name']); ?>);
                 sendLog(`Error: ${err.error}`);
-            } else {
-                showNotification("info","💖 Match! Anar al xat",<?php echo json_encode($user['name']); ?>);
             }
         } catch (e) {
-            showNotification("error","Error enviando like",<?php echo json_encode($user['name']); ?>);
+            showNotification("error","Error enviando like", <?php echo json_encode($user['name']); ?>);
         }
     }
 

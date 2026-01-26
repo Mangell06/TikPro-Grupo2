@@ -1,3 +1,42 @@
-[12:51:01] [92.57.36.15] Usuario "Google" cargó proyecto 5
-[12:51:01] [92.57.36.15] Usuario "Google" cargó proyecto 1
-[12:51:01] [92.57.36.15] Usuario "Google" cargó proyecto 2
+[14:48:17] [85.192.71.235] Intent de login amb email: google@empresa.com
+[14:53:22] [85.192.71.235] El usuario a cerrat la notificació
+[15:16:44] [85.192.71.235] Intent de login fallit: marccachinero@gmail.com
+[15:16:45] [85.192.71.235] El usuario a cerrat la notificació
+[15:16:56] [85.192.71.235] Intent de login fallit: marccachinero@gmail.com
+[15:17:24] [85.192.71.235] Intent de login amb email: marccachinero@gmail.com
+[15:17:26] [85.192.71.235] El usuario a cerrat la notificació
+[15:17:26] [85.192.71.235] El usuario a cerrat la notificació
+[15:21:21] [85.192.71.235] Intent de login amb email: marccachinero@gmail.com
+[15:21:34] [85.192.71.235] Intent de login amb email: marccachinero@gmail.com
+[15:21:36] [85.192.71.235] El usuario a cerrat la notificació
+[15:21:37] [85.192.71.235] El usuario a cerrat la notificació
+[15:21:37] [85.192.71.235] El usuario a cerrat la notificació
+[15:27:25] [85.192.71.235] Usuario abrió el selector de categorías
+[15:27:55] [85.192.71.235] Error de servidor en el registro de marccachinero@gmail.com: Error al insertar usuario: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_active' in 'field list'
+[15:28:08] [85.192.71.235] El usuario a cerrat la notificació
+[15:28:14] [85.192.71.235] El usuario a cerrat la notificació
+[15:28:14] [85.192.71.235] El usuario a cerrat la notificació
+[15:28:14] [85.192.71.235] El usuario a cerrat la notificació
+[15:28:15] [85.192.71.235] El usuario a cerrat la notificació
+[15:28:16] [85.192.71.235] El usuario a cerrat la notificació
+[15:29:22] [85.192.71.235] Usuario abrió el selector de categorías
+[15:29:30] [85.192.71.235] Usuario abrió el selector de categorías
+[15:30:24] [85.192.71.235] Usuario abrió el selector de categorías
+[15:30:28] [85.192.71.235] Solicitud de registro enviada con éxito para el usuario: Marc (marccachinero@gmail.com)
+[15:31:04] [85.192.71.235] El usuario a cerrat la notificació
+[15:31:04] [85.192.71.235] El usuario a cerrat la notificació
+[15:31:05] [85.192.71.235] El usuario a cerrat la notificació
+[15:33:20] [85.192.71.235] El usuario a cerrat la notificació
+[15:36:41] [85.192.71.235] Usuario "marccachinero@gmail.com" inició sesión
+[15:36:41] [85.192.71.235] Usuario "Marc" cargó proyecto 6
+[15:36:41] [85.192.71.235] Usuario "Marc" cargó proyecto 1
+[15:36:42] [85.192.71.235] Usuario "Marc" cargó proyecto 4
+[15:36:43] [85.192.71.235] Usuario Marc a cerrat la notificació
+[15:36:43] [85.192.71.235] El usuario a cerrat la notificació
+[15:36:43] [85.192.71.235] El usuario a cerrat la notificació
+[15:36:44] [85.192.71.235] Usuario Marc a cerrado sesion
+[15:39:10] [85.192.71.235] El usuario a cerrat la notificació
+[15:39:11] [85.192.71.235] El usuario a cerrat la notificació
+[15:39:11] [85.192.71.235] El usuario a cerrat la notificació
+[15:39:16] [85.192.71.235] El usuario a cerrat la notificació
+[15:43:23] [85.192.71.235] El usuario a cerrat la notificació
