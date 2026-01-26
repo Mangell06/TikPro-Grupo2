@@ -21,47 +21,32 @@ try {
     $id_chat = $data["id_chat"];
     $last_date = isset($data["last-date"]) ? $data["last-date"] : null;
 
-     $stmtOwner = $pdo->prepare("SELECT id_project FROM projects WHERE id = ?");
-    $stmtOwner->execute([$id_chat]);
-    $id_project = $stmtOwner->fetch(PDO::FETCH_ASSOC);
+    $sql = "SELECT id, sender, text_message, date_message, read_status
+    FROM messages
+    WHERE id_chat = :id_chat";
 
-    $stmtOwner = $pdo->prepare("SELECT id_owner FROM projects WHERE id = ?");
-    $stmtOwner->execute([$id_project]);
-    $owner = $stmtOwner->fetch(PDO::FETCH_ASSOC);
-
-    if (!$owner) {
-        echo json_encode([]);
-        exit;
-    }
-
-    $owner_id = $owner['id_owner'];
-
-
-    $sql = "SELECT sender, text_message, date_message, read_status 
-        FROM messages
-        WHERE id_project = :project_id 
-        AND (
-            (sender = :user1 AND destination = :owner1)
-            OR 
-            (sender = :owner2 AND destination = :user2)
-        )";
     $params = [
-        ':project_id' => (int)$id_project,
-        ':user1' => (int)$user_id,
-        ':owner1' => (int)$owner_id,
-        ':owner2' => (int)$owner_id,
-        ':user2' => (int)$user_id
+        ':id_chat' => (int)$id_chat
     ];
+
     if ($last_date) {
         $sql .= " AND date_message > :last_date";
         $params[':last_date'] = $last_date;
     }
+
+    $sql .= " ORDER BY date_message ASC";
+
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    $updateStmt = $pdo->prepare("UPDATE messages SET read_status = 1 WHERE id = ?");
     $ultimosmensajes = [];
     foreach ($rows as $row) {
+        if ($row['read_status'] === 0 && $row['sender'] != $user_id) {
+            $updateStmt->execute([$row['id']]);
+            $row['read_status'] = 1;
+        }
         $ultimosmensajes[] = [
             "text_message" => $row['text_message'],
             "date_message" => $row['date_message'],
@@ -69,6 +54,7 @@ try {
             "read_status" => $row['read_status']
         ];
     }
+
     echo json_encode($ultimosmensajes);
 
 } catch (PDOException $e) {

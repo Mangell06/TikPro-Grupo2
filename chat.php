@@ -56,31 +56,49 @@
             <?php
             try {
                 include("includes/database.php");
-                $projectid = $_GET["talk"];
-                $sql = "SELECT p.title AS projectname, u.name AS username, u.logo_image 
-                FROM projects p JOIN users u ON u.id = p.id_owner 
-                JOIN messages m ON m.id_project = p.id WHERE m.id = ?;";
+
+                $chatid = $_GET["talk"];
+                $myId = $_SESSION['user_id'];
+
+                $sql = "
+                    SELECT 
+                        p.title AS projectname, 
+                        u.name AS username, 
+                        u.logo_image
+                    FROM chats ch
+                    JOIN projects p ON ch.id_project = p.id
+                    JOIN users u ON u.id = CASE 
+                        WHEN ch.user_owner = :myId THEN ch.other_user
+                        ELSE ch.user_owner
+                    END
+                    WHERE ch.id = :chatid
+                ";
+
                 $stmt = $pdo->prepare($sql);
-                $stmt->execute([$projectid]);
+                $stmt->execute([':myId' => $myId, ':chatid' => $chatid]);
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
                 $srclogoimg = $row["logo_image"];
                 if (empty($srclogoimg)) {
                     $srclogoimg = "uploads/basic-logo-user.png";
                 }
+
                 $username = $row["username"];
                 $titleproject = $row["projectname"];
+
                 echo "<img src='$srclogoimg' />";
                 echo "<p><strong>$username</strong></p>";
                 echo "<p>$titleproject</p>";
-            }  catch (PDOException $e) {
+
+            } catch (PDOException $e) {
                 error_log("ERROR SQL: " . $e->getMessage());
             }
             ?>
         </div>
         <div id="messagesblock"></div>
         <div>
-            <input type="text" placeholder="Envia un missatge...">
-            <button>Envia</button>
+            <input type="text" name="messagein" id="messagein" placeholder="Envia un missatge...">
+            <button id="sendbtn">Envia</button>
         </div>
     </form>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -95,19 +113,19 @@
 
         async function syncChat() {
             // 1. Construir el diccionario de datos
-            const payload = new URLSearchParams();
-            payload.append('data_message[id_chat]', idchat);
+            const chatData = new URLSearchParams();
+            chatData.append('data_message[id_chat]', idchat);
             
             // Solo añadimos la fecha si ya tenemos mensajes en pantalla
             if (lastDate) {
-                payload.append('data_message[last-date]', lastDate);
+                chatData.append('data_message[last-date]', lastDate);
             }
 
             // 2. Ejecutar el fetch
             fetch('includes/load-messages.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: payload.toString()
+                body: chatData.toString()
             })
             .then(response => response.json())
             .then(mensajes => {
@@ -121,10 +139,28 @@
                         createElement(`<p>${msg.text_message}</p>`, messageContainer, "textmessagechat");
                         createElement(`<p>${msg.date_message}</p>`, messageContainer, "textmessagechat");
                         lastDate = msg.date_message;
+                        const messagesBlock = document.getElementById("messagesblock");
+                        messagesBlock.scrollTop = messagesBlock.scrollHeight;
                     });
                 }
             })
             .catch(error => showNotification("error", error));
+        }
+
+        async function sendmessage(message) {
+            const datamessage = new URLSearchParams();
+            datamessage.append('data_message[id_chat]', idchat);
+            datamessage.append('data_message[message]', message);
+            fetch("includes/send-message.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: datamessage.toString(),
+            credentials: "same-origin"
+        })
+        .then(res => res.json())
+        .then(data => {
+            sendLog(`El usuario con id <?php echo json_encode($_SESSION["user_id"]); ?> ha enviado el mensaje "${datamessage.get('data_message[message]')}" en el chat con id ${datamessage.get('data_message[id_chat]')}`);
+        });
         }
 
         syncChat();
@@ -134,6 +170,12 @@
         
         $("form").on('submit', async function(e) {
             e.preventDefault();
+            const formData = new FormData(e.target);
+            await sendmessage(formData.get('messagein'));
+            $("#sendbtn").prop("disabled", true);
+            $("#messagein").val("");
+            syncChat();
+            $("#sendbtn").prop("disabled", false);
         });
     </script>
 </body>
