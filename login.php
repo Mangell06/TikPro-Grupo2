@@ -4,7 +4,7 @@ session_start();
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Asegúrate de que esta ruta es correcta en tu servidor
+// Asegúrate de que esta ruta es correcta. Si no usas composer, apunta al src de PHPMailer
 require 'vendor/autoload.php'; 
 
 if (!empty($_SESSION['user_id'])) {
@@ -16,14 +16,15 @@ include("includes/database.php");
 
 $error = "";
 $loginSuccess = false;
-$isUnverified = false;
+$showVerify = false; 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST['email'] ?? '');
     $action = $_POST['action'] ?? 'login';
+    $now = date("Y-m-d H:i:s"); // Fuente de tiempo única para PHP y MySQL
 
     if ($action === 'recover') {
-        // 1. GENERAR Y ENVIAR CÓDIGO
+        // --- 1. SOLICITAR CÓDIGO ---
         $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
         $stmt->execute([$email]);
         $user = $stmt->fetch();
@@ -53,7 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 $mail->send();
                 $error = "Codi enviat! Revisa el teu email.";
-                // Este flag le dirá a JS que muestre el campo del código
                 $showVerify = true; 
             } catch (Exception $e) {
                 $error = "Error en enviar l'email.";
@@ -62,21 +62,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $error = "Email no trobat.";
         }
     } elseif ($action === 'verify_code') {
-        // 2. VERIFICAR EL CÓDIGO INTRODUCIDO
-        $inputCode = $_POST['verify_code'] ?? '';
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ? AND code_activate = ? AND code_expire > NOW() LIMIT 1");
-        $stmt->execute([$email, $inputCode]);
+        // --- 2. VALIDAR CÓDIGO ---
+        $inputCode = trim($_POST['verify_code'] ?? '');
+        
+        // Buscamos coincidencia exacta de Email + Código + Que no haya expirado respecto a PHP
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ? AND code_activate = ? AND code_expire >= ? LIMIT 1");
+        $stmt->execute([$email, $inputCode, $now]);
         $user = $stmt->fetch();
 
         if ($user) {
+            // Éxito: Limpiamos el código para que sea de un solo uso
+            $pdo->prepare("UPDATE users SET code_activate = NULL, code_expire = NULL WHERE id = ?")->execute([$user['id']]);
+            
             $_SESSION['user_id'] = $user['id'];
             $loginSuccess = true;
         } else {
             $error = "Codi incorrecte o caducat.";
-            $showVerify = true; // Mantener el campo de código visible
+            $showVerify = true; // Mantener la pantalla del código activa
         }
     } else {
-        // 3. LOGIN NORMAL
+        // --- 3. LOGIN NORMAL ---
         $password = $_POST['password'] ?? '';
         if ($email && $password) {
             $password_hashed = hash('sha256', $password);
@@ -86,8 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if ($user) {
                 if ($user['is_active'] == 0) {
-                    $error = "Usuari no verificat.";
-                    $isUnverified = true;
+                    $error = "Usuari encara no verificat.";
                 } else {
                     $_SESSION['user_id'] = $user['id'];
                     $loginSuccess = true;
@@ -123,12 +127,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             <div id="password-group">
                 <label id="label-password" for="password">Contrasenya</label>
-                <input id="input-password" type="password" name="password">
+                <input id="input-password" type="password" name="password" required>
             </div>
 
             <div id="verify-group" style="display: none;">
                 <label for="verify_code">Codi de 6 dígits</label>
-                <input type="text" name="verify_code" maxlength="6" placeholder="000000">
+                <input id="input-verify" type="text" name="verify_code" maxlength="6" placeholder="000000" autocomplete="off">
             </div>
 
             <button id="login-button" type="submit">Iniciar sessió</button>
@@ -148,11 +152,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         const loginButton = document.getElementById('login-button');
         const forgotLink = document.getElementById('forgott-button');
         const actionInput = document.getElementById('form-action');
+        const emailInput = document.getElementById('input-email');
+        const passInput = document.getElementById('input-password');
+        const verifyInput = document.getElementById('input-verify');
 
         if (actionInput.value === 'login') {
             title.innerText = "Recuperar Codi";
             passwordGroup.style.display = 'none';
             verifyGroup.style.display = 'none';
+            passInput.required = false;
+            emailInput.readOnly = false;
             loginButton.innerText = "Enviar codi per email";
             forgotLink.innerText = "Tornar al Login";
             actionInput.value = 'recover';
@@ -160,17 +169,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             title.innerText = "Iniciar sessió";
             passwordGroup.style.display = 'block';
             verifyGroup.style.display = 'none';
+            passInput.required = true;
+            emailInput.readOnly = false;
             loginButton.innerText = "Iniciar sessió";
             forgotLink.innerText = "M'he oblidat de la contrasenya";
             actionInput.value = 'login';
         }
     }
 
-    // Si el PHP indica que acabamos de enviar el código, ajustar la interfaz
-    <?php if (isset($showVerify) && $showVerify): ?>
+    // Activar modo verificación si el PHP lo requiere
+    <?php if ($showVerify): ?>
         document.getElementById('login-title').innerText = "Verificar Codi";
         document.getElementById('password-group').style.display = 'none';
         document.getElementById('verify-group').style.display = 'block';
+        document.getElementById('input-password').required = false;
+        document.getElementById('input-verify').required = true;
+        document.getElementById('input-email').readOnly = true; // Evitar cambios de email aquí
         document.getElementById('login-button').innerText = "Validar i Entrar";
         document.getElementById('form-action').value = 'verify_code';
     <?php endif; ?>
