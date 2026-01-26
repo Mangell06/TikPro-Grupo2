@@ -1568,3 +1568,299 @@ body.page-error {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
+
+/* ------------------ Botón retornar Discover ------------------ */
+#backdiscover {
+  display: inline-block;
+  padding: 10px 18px;
+  margin: 10px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #1a73e8;
+  border-radius: 8px;
+  text-decoration: none;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#backdiscover:hover {
+  background-color: #155ab6;
+  transform: translateY(-2px);
+}
+
+/* ------------------ Contenedor general de mensajes ------------------ */
+#containermessages {
+  width: 100%;
+  max-width: 480px; /* first mobile */
+  height: auto; /* crecer según contenido */
+  max-height: calc(
+    100vh - 70px - 20px
+  ); /* header + padding 10px arriba y abajo */
+  margin: 0 auto;
+  padding: 10px;
+  background-color: #f5f5f5; /* fondo claro corporativo */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* scroll vertical cuando hay muchos mensajes */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* Scroll personalizado */
+#containermessages::-webkit-scrollbar {
+  width: 6px;
+}
+#containermessages::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+/* ------------------ Cada mensaje ------------------ */
+.message-item {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.2s;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.message-item:hover {
+  background-color: rgba(26, 115, 232, 0.05);
+}
+
+/* Mensaje no leído */
+.message-item.unread {
+  font-weight: 600;
+  background-color: #a8cdfe;
+}
+
+.message-item.unread:hover {
+  background-color: rgb(85, 158, 254, 0.6);
+}
+
+/* Contenedor del usuario (logo + nombre) */
+.user-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50px;
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+.user-image {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1a73e8;
+  margin-bottom: 4px;
+}
+
+.name-user {
+  font-size: 12px;
+  text-align: center;
+  color: #1a1a1a;
+}
+
+/* Contenedor del proyecto/mensaje */
+.project-item {
+  flex: 1;
+  min-width: 0;
+  max-width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 8px 12px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+}
+
+/* Nombre del proyecto */
+.name-project {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: #1a73e8;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 2px;
+}
+
+/* Contenedor del texto del mensaje */
+.text-item {
+  display: inline-block;
+  margin: 4px auto 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Texto del mensaje */
+.text-message {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #333333;
+}
+
+/* Fecha del mensaje */
+.last-date {
+  font-size: 10px;
+  color: #999999;
+  margin-top: 2px;
+  text-align: right;
+}
+
+#chatform {
+  width: 100%;
+  max-width: 480px; /* first mobile */
+  height: calc(100vh - 200px); /* resto del header */
+  margin: 0 auto;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+#destinyuser {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background-color: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#destinyuser img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1a73e8;
+}
+
+#destinyuser p {
+  margin: 0;
+  line-height: 1.2;
+  font-size: 13px;
+  color: #333;
+}
+
+#destinyuser p strong {
+  display: block;
+  font-size: 14px;
+  color: #1a73e8;
+}
+
+#messagesblock {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Scroll estilo WhatsApp */
+#messagesblock::-webkit-scrollbar {
+  width: 6px;
+}
+
+#messagesblock::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+
+.usermessagecontainer {
+  align-self: flex-end;
+  max-width: 75%;
+  background-color: #1a73e8;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 14px 14px 2px 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+  font-size: 13px;
+}
+
+/* No leído */
+.usermessagecontainer.unreadmessage {
+  background-color: #0d5fd3;
+}
+
+.destinymessagecontainer {
+  align-self: flex-start;
+  max-width: 75%;
+  background-color: #ffffff;
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 14px 14px 14px 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
+  font-size: 13px;
+}
+
+.textmessagechat {
+  margin: 2px 0;
+  font-size: 12px;
+}
+
+.textmessagechat:last-child {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: right;
+}
+
+/* Para los mensajes del otro */
+.destinymessagecontainer .textmessagechat:last-child {
+  color: #999;
+}
+
+#chatform > div:last-child {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#chatform input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  outline: none;
+  font-size: 13px;
+  background-color: #f5f5f5;
+}
+
+#chatform input:focus {
+  border-color: #1a73e8;
+  background-color: #ffffff;
+}
+
+#chatform button {
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: none;
+  background-color: #1a73e8;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#chatform button:hover {
+  background-color: #0d5fd3;
+}
