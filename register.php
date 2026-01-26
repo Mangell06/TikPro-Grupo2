@@ -229,7 +229,7 @@ function sendRegister(data) {
             showNotification('error', res.error);
             sendLog(`Error de servidor en el registro de ${data.email}: ${res.error}`);
         } else {
-            showNotification('success', 'Usuari registrat correctament. Revisa el teu email per verificar el compte.');
+            showNotification('info', 'Usuari registrat correctament. Revisa el teu email per verificar el compte.');
             sendLog(`Solicitud de registro enviada con éxito para el usuario: ${data.username} (${data.email})`);
             window.location.href = 'login.php';
         }
