@@ -71,7 +71,7 @@
                     window.location.href = `chat.php?talk=${message.id_messages}`;
                 });
 
-                if (message.read_status === 0 && message.sendername.toLowerCase() !== "yo") {
+                if (message.read_status && message.read_status === 0 && message.sendername.toLowerCase() !== "yo") {
                     mainContainer.addClass('unread');
                 } else {
                     mainContainer.addClass('read');
@@ -81,14 +81,16 @@
                 createElement("<img></img>", userContainer, "user-image", {src:imageuser, alt:"Logo"});
                 const usernameparraph = createElement("<p></p>",userContainer,"name-user");
                 createElement(`<strong>${message.user_name}</strong>`, usernameparraph);
-                createElement(`<p>${message.date_message}</p>`,userContainer,"last-date");
+                if (message.date_message) createElement(`<p>${message.date_message}</p>`,userContainer,"last-date");
 
                 const projectContainer = createElement("<div></div>",mainContainer,"project-item");
                 const projectnameparraph = createElement("<p></p>",projectContainer,"name-project");
                 createElement(`<strong>${message.project_name}</strong>`, projectnameparraph);
 
-                const textContainer = createElement("<div></div>",mainContainer,"text-item");
-                const textparraph = createElement(`<p>${message.text_message.length > 20 ? message.sendername + ": <br/>" + message.text_message.slice(0, 20) + "..." : message.sendername + ": <br/>" + message.text_message}</p>`,textContainer,"text-message");
+                if (message.text_message) {
+                    const textContainer = createElement("<div></div>",mainContainer,"text-item");
+                    const textparraph = createElement(`<p>${message.text_message.length > 20 ? message.sendername + ": <br/>" + message.text_message.slice(0, 20) + "..." : message.sendername + ": <br/>" + message.text_message}</p>`,textContainer,"text-message");
+                }
 
                 $("#containermessages").append(mainContainer);
             });

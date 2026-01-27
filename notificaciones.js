@@ -34,7 +34,7 @@ export function showNotification(type, message, username='', exist=false) {
         } else {
             sendLog(`El usuario a cerrat la notificació`);
         }
-        await fetch('includes/delete-notifications-session.php', {
+        await fetch('/includes/delete-notifications-session.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ message: message })
@@ -49,7 +49,7 @@ export function showNotification(type, message, username='', exist=false) {
     };
     notif.appendChild(closeBtn);
 
-    fetch('includes/create-notifications-session.php', {
+    fetch('/includes/create-notifications-session.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ message: message, type: type, exist: exist })
