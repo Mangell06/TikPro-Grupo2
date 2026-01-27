@@ -25,11 +25,10 @@
     <title>Chat</title>
     <link rel="stylesheet" href="styles.css?q=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="icono-simbio.png" type="image/png">
+    <link rel="icon" href="oak_4986983.png" type="image/png">
 </head>
 <body>
     <header class="header-discovered">
-        <h1 class="header-title">SIMBIO</h1>
     <div>
     <a href="discover.php" id="backdiscover">Discover</a>
     <a href="messages.php" id="backdiscover">Missatges</a>

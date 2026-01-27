@@ -1597,9 +1597,10 @@ body.page-error {
   font-size: 14px;
   font-weight: 600;
   color: #ffffff;
-  background-color: #1a73e8;
+  background-color: var(--color-fifth);
   border-radius: 8px;
   text-decoration: none;
+  font-family: var(--font-primary);
   transition:
     background-color 0.3s,
     transform 0.2s;
@@ -1607,7 +1608,7 @@ body.page-error {
 }
 
 #backdiscover:hover {
-  background-color: #155ab6;
+  background-color: #69604e;
   transform: translateY(-2px);
 }
 
@@ -1628,6 +1629,7 @@ body.page-error {
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  font-family: var(--font-primary);
 }
 
 /* Scroll personalizado */
@@ -1659,11 +1661,11 @@ body.page-error {
 /* Mensaje no leído */
 .message-item.unread {
   font-weight: 600;
-  background-color: #a8cdfe;
+  background-color: var(--color-secondary);
 }
 
 .message-item.unread:hover {
-  background-color: rgb(85, 158, 254, 0.6);
+  background-color: #c5b89e;
 }
 
 /* Contenedor del usuario (logo + nombre) */
@@ -1711,7 +1713,7 @@ body.page-error {
   font-weight: 700;
   font-size: 14px;
   margin-bottom: 4px;
-  color: #1a73e8;
+  color: black;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding-bottom: 2px;
 }
@@ -1734,7 +1736,7 @@ body.page-error {
 /* Fecha del mensaje */
 .last-date {
   font-size: 10px;
-  color: #999999;
+  color: gray;
   margin-top: 2px;
   text-align: right;
 }
@@ -1767,6 +1769,7 @@ body.page-error {
   padding: 10px 12px;
   background-color: #ffffff;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  font-family: var(--font-primary);
 }
 
 #destinyuser img {
@@ -1812,18 +1815,14 @@ body.page-error {
 .usermessagecontainer {
   align-self: flex-end;
   max-width: 75%;
-  background-color: #1a73e8;
-  color: white;
+  background-color: var(--color-primary);
+  color: black;
   padding: 8px 12px;
   border-radius: 14px 14px 2px 14px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   word-wrap: break-word;
   font-size: 13px;
-}
-
-/* No leído */
-.usermessagecontainer.unreadmessage {
-  background-color: #0d5fd3;
+  font-family: var(--font-primary);
 }
 
 .destinymessagecontainer {
@@ -1845,7 +1844,7 @@ body.page-error {
 
 .textmessagechat:last-child {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgb(156, 156, 156);
   text-align: right;
 }
 
@@ -1881,7 +1880,7 @@ body.page-error {
   padding: 10px 16px;
   border-radius: 20px;
   border: none;
-  background-color: #1a73e8;
+  background-color: #69604e;
   color: white;
   font-size: 13px;
   font-weight: 600;
@@ -1890,7 +1889,7 @@ body.page-error {
 }
 
 #chatform button:hover {
-  background-color: #0d5fd3;
+  background-color: #50493c;
 }
 
 /* admin index.php */
