@@ -1940,6 +1940,14 @@ body.page-error {
   cursor: pointer;
 }
 
+#admin-projects button:disabled {
+    background-color: #ccc !important;
+    color: #666 !important;           
+    cursor: not-allowed;               
+    opacity: 0.6;
+    border-color: #bbb !important;
+}
+
 #admin-projects .set{
   display: flex;
   gap: 27px;
@@ -1974,4 +1982,10 @@ body.page-error {
   align-items: center;
   gap: 5px;
 }
+
+.is-archived {
+    background-color: #6666667e !important;
+    color: white;
+}
+
   

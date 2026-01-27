@@ -2,9 +2,12 @@
     session_start();
     include("../includes/database.php");
 
-    $sql = "SELECT projects.*, name, entity_name
-            FROM projects
-            LEFT JOIN users ON projects.id_owner = users.id;";
+   $sql = "SELECT projects.*, 
+               projects.state AS project_state,
+               users.name, 
+               users.entity_name
+        FROM projects
+        LEFT JOIN users ON projects.id_owner = users.id;";
     $stmt = $pdo->prepare($sql);
     $stmt -> execute();
     $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,7 +24,6 @@
     <header class="main-header">
         <!-- <h1 class="header-title">SIMBIO</h1> -->
         <?php
-            include("../includes/database.php");
             $userAdmin =  $_SESSION['admin_id'];
             $stmt = $pdo->prepare("SELECT name FROM users WHERE id = :idadmin");
             $stmt->execute(['idadmin' => $userAdmin]);
@@ -36,12 +38,24 @@
             ?>
             <a href="/admin/logout.php" id="nav-logout" class="logout-button">Tancar sessió</a>
     </header>
-    <?php foreach ($projects as $project){?>
-    <section class="section-project">
+    <?php foreach ($projects as $project): 
+    $isArchived = ($project['project_state'] === 'archived');
+    ?>
+    <section id="section-project-<?= $project['id'] ?>" 
+             class="section-project <?= $isArchived ? 'is-archived' : '' ?>">
         <div class="buttons">
                 <button id="upload-hidden-<?=($project['id'])?>" onclick="uploadedVideo('<?=($project['id'])?>','<?='../'.($project['video'])?>')">Cargar Video</button>    
-                <button onclick="approvedProject('<?=($project['id'])?>')">Aprovar projecte</button>    
-                <button onclick="unapprovedProject('<?($project['id'])?>')">Eliminar projecte</button>  
+               <button id="buttonReactive-<?= $project['id'] ?>" 
+                onclick="approvedProject('<?= $project['id'] ?>')" 
+                <?= !$isArchived ? 'disabled' : '' ?>>
+            Reactivar projecte
+        </button>
+
+        <button id="buttonDelete-<?= $project['id'] ?>" 
+                onclick="unapprovedProject('<?= $project['id'] ?>')"
+                <?= $isArchived ? 'disabled' : '' ?>>
+            Eliminar projecte
+        </button>
         </div>
         <div class="set">
             <div class="insert-video" id="insertVideo-<?=$project['id']?>"></div>
@@ -58,14 +72,12 @@
         <!-- crear cada section, para cada uno de los proyectos -->
         
     </section>
-    <?php
-    }
-    ?>
+    <?php endforeach; ?>
     <script>
             function uploadedVideo(projectId, videoScr){
                 const button = document.getElementById('upload-hidden-'+projectId);
                 if(button.textContent ==='Cargar Video'){
-                        button.textContent = 'Esconder Video';
+                        button.textContent = 'Amagar Video';
                         document.getElementById('insertVideo-'+projectId).style.display = 'block';
                         
                         if (document.getElementById('insertVideo-'+projectId).innerHTML.trim() === "") {
@@ -76,18 +88,74 @@
                             video.muted = true;
                             document.getElementById('insertVideo-'+projectId).appendChild(video);
                         }
-                } else if(button.textContent ==='Esconder Video'){
+                } else if(button.textContent ==='Amagar Video'){
                      document.getElementById('insertVideo-'+projectId).style.display = 'none';
                      button.textContent = 'Cargar Video';
                      return;
                 }
                
-                
-                
             }
 
-            function approvedProject(projectId){console.log("Aprobando video "+projectId)}
-            function unapprovedProject(projectId){console.log("Eliminando video "+projectId)}
+            function approvedProject(projectId){
+                fetch('../includes/approved.php', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ projectId: projectId })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error en el servidor');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const container = document.getElementById('section-project-' + projectId);
+                        const btnReactive = document.getElementById('buttonReactive-' + projectId);
+                        const btnDelete = document.getElementById('buttonDelete-' + projectId);
+
+                        if (container) {
+                            container.classList.remove('is-archived');
+                            if(btnDelete) btnDelete.disabled = false;
+                            if(btnReactive) btnReactive.disabled = true;
+                            
+                        }
+                    } else {
+                        alert("Error: " + (data.error || data.message));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error detallado:', error);
+                });
+            }
+            function unapprovedProject(projectId) {
+                fetch('../includes/unnapprove.php', { 
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ projectId: projectId })
+                })
+                .then(response => {
+                    if (!response.ok) throw new Error('Error en el servidor');
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        const container = document.getElementById('section-project-' + projectId);
+                        const btnReactive = document.getElementById('buttonReactive-' + projectId);
+                        const btnDelete = document.getElementById('buttonDelete-' + projectId);
+
+                        if (container) {
+                            container.classList.add('is-archived');
+                            if(btnDelete) btnDelete.disabled = true;
+                            if(btnReactive) btnReactive.disabled = false;
+                            
+                        }
+                    } else {
+                        alert("Error: " + (data.error || data.message));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error detallado:', error);
+                });
+            }
     </script>
 </body>
 </html>

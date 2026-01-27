@@ -1,0 +1,95 @@
+[15:00:06] [85.192.71.235] El usuario a cerrat la notificació
+[15:00:17] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[15:00:17] [85.192.71.235] Usuario "Google" cargó proyecto 3
+[15:00:17] [85.192.71.235] Usuario "Google" cargó proyecto 2
+[15:00:19] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:01:19] [85.192.71.235] Usuario Google presionó "No M'interessa" en el proyecto ¿Podries esbrinar el nou sabor de CocaCola? con id 4
+[15:01:19] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:01:19] [85.192.71.235] Usuario "Google" cargó proyecto 6
+[15:01:21] [85.192.71.235] Usuario Google presionó "M'agrada" en el proyecto Enviaments ràpids amb Amazon con id 3
+[15:01:22] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:01:22] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[15:01:39] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:01:41] [85.192.71.235] Usuario Google presionó "següent" en el proyecto Prova el nou Office amb IA con id 2
+[15:01:41] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:01:41] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[15:01:42] [85.192.71.235] Usuario Google presionó "M'agrada" en el proyecto Necessitem col·laboració amb el nostre nou model de Paypal con id 6
+[15:01:43] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:02:35] [85.192.71.235] Usuario "Google" cargó proyecto 6
+[15:02:35] [85.192.71.235] Usuario "Google" cargó proyecto 3
+[15:02:35] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[15:02:37] [85.192.71.235] El usuario a cerrat la notificació
+[15:02:38] [85.192.71.235] Usuario Google presionó "M'agrada" en el proyecto Necessitem col·laboració amb el nostre nou model de Paypal con id 6
+[15:02:39] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:02:39] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[15:02:40] [85.192.71.235] Usuario Google presionó "No M'interessa" en el proyecto Enviaments ràpids amb Amazon con id 3
+[15:02:40] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:02:40] [85.192.71.235] Usuario "Google" cargó proyecto 2
+[15:02:41] [85.192.71.235] Usuario Google presionó "M'agrada" en el proyecto ¿Podries esbrinar el nou sabor de CocaCola? con id 4
+[15:02:41] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:02:41] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[15:02:42] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:02:43] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:02:43] [85.192.71.235] Usuario Google a cerrat la notificació
+[15:02:44] [85.192.71.235] Usuario Google presionó "següent" en el proyecto Volem crear un programa que ajudi a renderitzar un video más ràpid con id 1
+[15:02:45] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:02:46] [85.192.71.235] Usuario Google presionó "següent" en el proyecto Prova el nou Office amb IA con id 2
+[15:02:46] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:02:47] [85.192.71.235] Usuario Google presionó "No M'interessa" en el proyecto Nou Mercedes-Benz elèctric con id 5
+[15:02:47] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:02:47] [85.192.71.235] Usuario Google no tiene proyectos disponibles
+[15:02:48] [85.192.71.235] Usuario "Google" cargó proyecto 6
+[15:02:48] [85.192.71.235] Usuario "Google" cargó proyecto 3
+[15:02:48] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[15:02:48] [85.192.71.235] Usuario Google eliminó la carta visible
+[15:02:48] [85.192.71.235] Usuario Google vuelve a ver los projectos
+[15:02:48] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[15:03:28] [85.192.71.235] Usuario "Google" cargó proyecto 3
+[15:03:28] [85.192.71.235] Usuario "Google" cargó proyecto 6
+[15:03:28] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[15:03:36] [85.192.71.235] Usuario "Google" cargó proyecto 6
+[15:03:36] [85.192.71.235] Usuario "Google" cargó proyecto 3
+[15:03:36] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[15:03:48] [85.192.71.235] Usuario Google a cerrat la notificació
+[17:15:07] [85.192.71.235] Error: No s'ha pogut conectar amb el servidor
+[17:15:36] [85.192.71.235] Usuario Google a cerrat la notificació
+[17:15:37] [85.192.71.235] Error: No s'ha pogut conectar amb el servidor
+[17:17:14] [85.192.71.235] Error: No s'ha pogut conectar amb el servidor
+[17:17:18] [85.192.71.235] El usuario a cerrat la notificació
+[17:17:19] [85.192.71.235] Usuario Google a cerrat la notificació
+[17:18:47] [85.192.71.235] Usuario "Google" cargó proyecto 6
+[17:18:47] [85.192.71.235] Usuario "Google" cargó proyecto 3
+[17:18:47] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[17:18:50] [85.192.71.235] Usuario Google a cerrat la notificació
+[17:18:59] [85.192.71.235] Usuario Google presionó "següent" en el proyecto Necessitem col·laboració amb el nostre nou model de Paypal con id 6
+[17:18:59] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:18:59] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[17:19:01] [85.192.71.235] Usuario Google presionó "No M'interessa" en el proyecto Enviaments ràpids amb Amazon con id 3
+[17:19:02] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:19:02] [85.192.71.235] Usuario "Google" cargó proyecto 2
+[17:19:03] [85.192.71.235] Usuario Google presionó "següent" en el proyecto ¿Podries esbrinar el nou sabor de CocaCola? con id 4
+[17:19:03] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:19:03] [85.192.71.235] Usuario "Google" cargó proyecto 5
+[17:19:04] [85.192.71.235] Usuario Google presionó "següent" en el proyecto Volem crear un programa que ajudi a renderitzar un video más ràpid con id 1
+[17:19:04] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:19:05] [85.192.71.235] Usuario Google presionó "següent" en el proyecto Prova el nou Office amb IA con id 2
+[17:19:06] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:19:07] [85.192.71.235] Usuario Google presionó "No M'interessa" en el proyecto Nou Mercedes-Benz elèctric con id 5
+[17:19:07] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:19:07] [85.192.71.235] Usuario Google no tiene proyectos disponibles
+[17:20:04] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[17:20:04] [85.192.71.235] Usuario "Google" cargó proyecto 3
+[17:20:04] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[17:20:10] [85.192.71.235] Usuario Google presionó "següent" en el proyecto Volem crear un programa que ajudi a renderitzar un video más ràpid con id 1
+[17:20:10] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:20:19] [85.192.71.235] Usuario Google presionó "No M'interessa" en el proyecto Enviaments ràpids amb Amazon con id 3
+[17:20:20] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:20:26] [85.192.71.235] Usuario Google presionó "següent" en el proyecto ¿Podries esbrinar el nou sabor de CocaCola? con id 4
+[17:20:26] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:20:26] [85.192.71.235] Usuario Google no tiene proyectos disponibles
+[17:20:27] [85.192.71.235] Usuario "Google" cargó proyecto 1
+[17:20:27] [85.192.71.235] Usuario "Google" cargó proyecto 3
+[17:20:27] [85.192.71.235] Usuario "Google" cargó proyecto 4
+[17:20:27] [85.192.71.235] Usuario Google eliminó la carta visible
+[17:20:27] [85.192.71.235] Usuario Google vuelve a ver los projectos
+[17:20:40] [85.192.71.235] Usuario Google a cerrat la notificació

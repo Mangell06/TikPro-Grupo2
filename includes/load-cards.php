@@ -15,6 +15,14 @@ try {
     if (isset($_GET['exclude_projects']) && $_GET['exclude_projects'] !== '') {
         $excludeIds = array_map('intval', explode(',', $_GET['exclude_projects']));
     }
+    $whereConditions = ["p.state = 'active'"];
+
+    if (!empty($excludeIds)) {
+        $excludeIds = array_filter($excludeIds, fn($id) => $id > 0);
+        if (!empty($excludeIds)) {
+            $whereConditions[] = 'p.id NOT IN (' . implode(',', $excludeIds) . ')';
+        }
+    }
 
     $whereSql = '';
     if (!empty($excludeIds)) {
@@ -23,6 +31,7 @@ try {
             $whereSql = 'WHERE p.id NOT IN (' . implode(',', $excludeIds) . ')';
         }
     }
+    $whereSql = 'WHERE ' . implode(' AND ', $whereConditions);
     error_log("Exclude IDs: " . implode(',', $excludeIds));
 
     $userId = $_SESSION['user_id'];
