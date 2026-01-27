@@ -29,8 +29,11 @@
 </head>
 <body>
     <header class="header-discovered">
+        <h1 class="header-title">SIMBIO</h1>
+    <div>
     <a href="discover.php" id="backdiscover">Discover</a>
     <a href="messages.php" id="backdiscover">Missatges</a>
+    </div>
     <div class="close-session">
         <?php
     include("includes/database.php");

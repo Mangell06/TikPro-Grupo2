@@ -214,15 +214,32 @@
 
 .header-discovered {
   width: 100%;
-  padding: 20px 22px;
+  padding: 20px 40px;
   background: white;
-  text-align: center;
-  z-index: 1000;
-  position: relative;
-  justify-content: right;
   display: flex;
-  gap: 24px;
+  justify-content: flex-end;
   align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1000;
+}
+
+@media screen and (max-width: 850px) {
+  .header-discovered {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    gap: 12px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .header-discovered {
+    font-size: 0.85rem; /* ajustar tamaño de texto */
+    padding: 10px 15px;
+  }
 }
 
 .close-session {
@@ -1717,9 +1734,9 @@ body.page-error {
 }
 
 #chatform {
-  width: 100%;
-  max-width: 480px; /* first mobile */
-  height: calc(100vh - 200px); /* resto del header */
+  width: 380px;
+  max-width: 50%;
+  height: calc(100dvh - 100px);
   margin: 0 auto;
   background-color: #f5f5f5;
   display: flex;
@@ -1727,6 +1744,14 @@ body.page-error {
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+}
+
+@media screen and (max-width:650px) {
+  #chatform {
+    width: 100%;
+    max-width: 100dvw;
+    height: calc(100dvh - 170px);
+  }
 }
 
 #destinyuser {
