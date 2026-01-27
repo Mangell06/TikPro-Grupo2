@@ -77,12 +77,12 @@
                     window.location.href = `chat.php?talk=${message.id_messages}`;
                 });
 
-                if (message.read_status && message.read_status === 0 && message.sendername.toLowerCase() !== "yo") {
+                if (!message.read_status && message.sendername && message.sendername.toLowerCase() !== "yo") {
                     mainContainer.addClass('unread');
                 } else {
                     mainContainer.addClass('read');
                 }
-
+                
                 const userContainer = createElement("<div></div>",mainContainer,"user-item");
                 createElement("<img></img>", userContainer, "user-image", {src:imageuser, alt:"Logo"});
                 const usernameparraph = createElement("<p></p>",userContainer,"name-user");

@@ -61,6 +61,22 @@ import { loadNotifications } from './load-notifications.js';
 
 loadNotifications();
 
+async function enviarEmailMatch(projectId, idChat) {
+    const formData = new FormData();
+    formData.append('project', projectId);
+    formData.append('idchat', idChat);
+
+    try {
+        await fetch('includes/send-email-like.php', {
+            method: 'POST',
+            body: formData
+        });
+        console.log("Notificación por email disparada.");
+    } catch (error) {
+        console.error("Error al enviar email:", error);
+    }
+}
+
 // Función genérica para crear chat si no existe
 async function createOrGetChat(id_project) {
     try {
@@ -286,6 +302,7 @@ async function handleAction(card, action) {
             // Crear o obtener chat
             const chatId = await createOrGetChat(currentProject.id_project);
             if (chatId) {
+                enviarEmailMatch(currentProject.id_project, chatId);
                 showNotification("info","💖 Match! Anar al xat", <?php echo json_encode($user['name']); ?>);
             }
 
