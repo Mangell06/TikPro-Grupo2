@@ -5,6 +5,21 @@
         exit;
     }
     include("includes/database.php");
+
+    $project_id = $_GET['project_id'] ?? 0;
+
+    if ($project_id) {
+        // 2. Consultar el estado del proyecto
+        $stmt = $pdo->prepare("SELECT state FROM projects WHERE id = ?");
+        $stmt->execute([$project_id]);
+        $project = $stmt->fetch();
+
+        if ($project && $project['state'] === 'archived') {
+            http_response_code(404);
+            exit;
+        }
+    }
+
     $projectId = null;
     $project_editar = false;
     $tags_editar = [];
@@ -12,6 +27,7 @@
     if(isset($_GET["project_id"])){
         $projectId = (int)$_GET["project_id"];
     }
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST' and $projectId === null) {
             $sql = 
                "INSERT INTO projects (title, description, date_creation, state, id_owner, video, logo_image)

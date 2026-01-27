@@ -60,64 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
     }
 
-    // // Añadir nueva etiqueta
-    // if (isset($_POST['add_tag']) && !empty($_POST['new_tag'])) {
-    //     $tagName = trim($_POST['new_tag']);
-
-    //     if ($tagName !== '') {
-    //         $stmt = $pdo->prepare("SELECT id FROM categories WHERE name = :name LIMIT 1");
-    //         $stmt->execute(['name' => $tagName]);
-    //         $category = $stmt->fetch();
-
-    //         if ($category) {
-    //             $id = $category['id'];
-    //         } else {
-    //             $stmt = $pdo->prepare("
-    //                 INSERT INTO categories (name, type)
-    //                 VALUES (:name, :type)
-    //             ");
-    //             $stmt->execute([
-    //                 'name' => $tagName,
-    //                 'type' => 'family'
-    //             ]);
-    //             $id = $pdo->lastInsertId();
-    //         }
-
-    //         $stmt = $pdo->prepare("
-    //             SELECT 1 FROM categories_user
-    //             WHERE id = :user AND id = :cat
-    //         ");
-    //         $stmt->execute([
-    //             'user' => $iduser,
-    //             'cat' => $id
-    //         ]);
-
-    //         if (!$stmt->fetch()) {
-    //             $stmt = $pdo->prepare("
-    //                 INSERT INTO categories_user (id, id)
-    //                 VALUES (:user, :cat)
-    //             ");
-    //             $stmt->execute([
-    //                 'user' => $iduser,
-    //                 'cat' => $id
-    //             ]);
-    //         }
-    //     }
-    // }
-
-    // // Eliminar etiqueta
-    // if (isset($_POST['delete_tag']) && !empty($_POST['delete_tag_id'])) {
-    //     $id = (int)$_POST['delete_tag_id'];
-    //     $stmt = $pdo->prepare("
-    //         DELETE FROM categories_user
-    //         WHERE id_user = :user AND id_category = :cat
-    //     ");
-    //     $stmt->execute([
-    //         'user' => $iduser,
-    //         'cat' => $id
-    //     ]);
-    // }
-
     header("Location: profile.php?success=true");
     exit;
 }
@@ -230,9 +172,9 @@ if (!$tags) {
         <div class="profile-project-list">
             <?php
             $stmt = $pdo->prepare("
-                SELECT id, title, logo_image
+                SELECT id, title, logo_image, state
                 FROM projects
-                WHERE id_owner = :id
+                WHERE id_owner = :id AND projects.state = 'active'
                 ORDER BY id DESC
             ");
             $stmt->execute(['id' => $iduser]);
@@ -241,16 +183,21 @@ if (!$tags) {
             if ($projects):
                 foreach ($projects as $proj):
             ?>
-                <div class="profile-project-item">
-                    <a href="edit_project.php?project_id=<?= (int)$proj['id'] ?>">
-                        <?php if (!empty($proj['logo_image'])): ?>
+                <div class="profile-project-item" id="section-project-<?= (int)$proj['id'] ?>">
+                    <?php if (!empty($proj['logo_image'])): ?>
                             <img class="imagePreviewProfile" src="<?= htmlspecialchars($proj['logo_image']) ?>" alt="Logo">
                         <?php else: ?>
                             <div class="profile-project-placeholder">Sense imatge</div>
                         <?php endif; ?>
-                        <span><?= htmlspecialchars($proj['title']) ?></span>
-                    </a>
-                </div>
+                    <div class="set-buttons-with-text">
+                            <span><?= htmlspecialchars($proj['title']) ?></span>
+                    <div class="buttons-edit-delete">
+                            <a class="tag-badge" href="edit_project.php?project_id=<?= (int)$proj['id'] ?>">Editar</a>
+                            <button class="tag-badge" onclick="unapprovedProject(<?= (int)$proj['id'] ?>)">Esborrar</button>
+                    </div>
+                    </div>
+                    
+              </div>
             <?php
                 endforeach;
             else:
@@ -384,6 +331,46 @@ function afegirEtiqueta(id, nom) {
 
     // Cerrar modal
     document.getElementById('modalCerca').style.display = 'none';
+}
+
+    window.unapprovedProject = function(projectId) {
+    fetch('includes/unnapprove.php', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId: projectId })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Error en el servidor');
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // 1. Seleccionamos el elemento del proyecto
+            const projectItem = document.getElementById('section-project-' + projectId);
+            
+            if (projectItem) {
+                // 2. Lo eliminamos del DOM por completo en lugar de solo ocultarlo
+                const parent = projectItem.parentElement;
+                projectItem.remove();
+
+                // 3. Comprobamos si quedan más proyectos (divs con la clase item)
+                const remainingProjects = parent.querySelectorAll('.profile-project-item');
+                
+                if (remainingProjects.length === 0) {
+                    // 4. Si no quedan, añadimos la frase al contenedor principal
+                    const p = document.createElement('p');
+                    p.classList.add('profile-no-projects');
+                    p.textContent = "Encara no tens projectes.";
+                    parent.appendChild(p);
+                }
+            }
+        } else {
+            alert("Error: " + (data.error || data.message));
+        }
+    })
+    .catch(error => {
+        console.error('Error detallado:', error);
+    });
 }
 </script>
 </main>

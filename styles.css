@@ -1064,10 +1064,14 @@ label {
   display: inline-flex;
   align-items: center;
   margin: 5px;
-  padding: 5px 10px;
+  padding: 10px 13px;
   background: rgb(105, 96, 78);
   color: white;
   border-radius: 15px;
+  border: 0;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 /* =========================
@@ -1497,6 +1501,7 @@ input[type="file"]::file-selector-button,
 
 .imagePreviewProfile {
   width: 150px;
+  border-radius: 33px;
 }
 
 .profile-project-item > a {
@@ -1986,6 +1991,12 @@ body.page-error {
 .is-archived {
     background-color: #6666667e !important;
     color: white;
+}
+
+.set-buttons-with-text{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
   
