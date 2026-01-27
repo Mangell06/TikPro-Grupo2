@@ -32,7 +32,7 @@
         <h2>Benvingut/da, administrador/a!</h2>
         <p>Utilitza el menú de navegació per gestionar el sistema.</p>
         <ul>
-            <li><a href="admin/projectes.php">Gestionar projectes</a></li>
+            <li><a href="projects.php">Gestionar projectes</a></li>
         </ul>
     </section>
 </body>
