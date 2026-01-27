@@ -57,6 +57,11 @@
         fetch('includes/load-last-messages.php', { credentials: 'same-origin' })
         .then(res => res.json())
         .then(messages => {
+            if (messages.length === 0) {
+                createElement("<h1>No hi ha encara converses</h1>","#containermessages","name-project");
+
+                $("#containermessages").append(mainContainer);
+            }
             messages.forEach(function(message) {
                 let imageuser = "uploads/basic-logo-user.png";
                 if (message.logo_image) {
