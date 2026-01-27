@@ -20,7 +20,7 @@ if (isset($_GET['validate'])) {
             $stmt->execute([$user['id']]);
             $_SESSION['notifications'][] = [
                 "message" => "Compte verificat correctament",
-                "type" => "success"
+                "type" => "info"
             ];
         } else {
             $_SESSION['notifications'][] = [
@@ -57,25 +57,28 @@ if (isset($_GET['validate'])) {
 
     <form id="register-form" method="post" enctype="multipart/form-data">
         <label for="input-name">Nom complet</label>
-        <input id="input-name" type="text" name="name" placeholder="Pere" required>
+        <input id="input-name" type="text" name="input-name" placeholder="Pere" required>
 
         <label for="input-email">Email</label>
-        <input id="input-email" type="email" name="email" placeholder="usuari@domain.dom" required>
+        <input id="input-email" type="email" name="input-email" placeholder="usuari@domain.dom" required>
 
         <label for="input-tfn">Telèfon</label>
-        <input id="input-tfn" type="text" name="tfn" placeholder="+34675432891" required>
+        <input id="input-tfn" type="text" name="input-tfn" placeholder="+34675432891" required>
 
         <label for="input-password">Contrasenya</label>
-        <input id="input-password" type="password" name="password" placeholder="**********" required>
+        <input id="input-password" type="password" name="input-password" placeholder="**********" required>
 
         <label for="input-poblation">Població</label>
-        <input id="input-poblation" type="text" placeholder="Barcelona" name="poblation" required>
+        <input id="input-poblation" type="text" placeholder="Barcelona" name="input-poblation" required>
 
         <label for="input-entity-name">Nom d'entitat</label>
-        <input id="input-entity-name" type="text" name="entity_name" placeholder="Google" required>
+        <input id="input-entity-name" type="text" name="input-entity_name" placeholder="Google" required>
+
+        <label for="input-image-usuari">Imatge usuari</label>
+        <input id="input-image-usuari" type="file" name="input-image-usuari" placeholder="Google" required>
 
         <label for="input-entity-type">Tipus d'entitat</label>
-        <select id="input-entity-type" name="entity_type" required>
+        <select id="input-entity-type" name="input-entity_type" required>
             <option value="center">Centre</option>
             <option value="company">Empresa</option>
         </select>
@@ -84,7 +87,7 @@ if (isset($_GET['validate'])) {
         <button id="open-categories-btn" class="buttonEtiquetes" type="button">Obrir categories</button>
 
         <label for="input-presentation">Presentació (opcional)</label>
-        <textarea id="input-presentation" name="presentation"></textarea>
+        <textarea id="input-presentation" name="input-presentation"></textarea>
 
         <button id="register-button" type="submit">Registrar</button>
 
@@ -217,27 +220,24 @@ $('#open-categories-btn').on('click', function() {
     });
 });
 
-function sendRegister(data) {
+function sendRegister(formDataObject) {
     fetch('includes/register-user.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ registerData: JSON.stringify(data) })
+        body: formDataObject // Enviem directament el FormData
     })
     .then(res => res.json())
     .then(res => {
         if (res.error) {
             showNotification('error', res.error);
-            sendLog(`Error de servidor en el registro de ${data.email}: ${res.error}`);
+            $("#register-button").prop('disabled', false);
         } else {
-            showNotification('info', 'Usuari registrat correctament. Revisa el teu email per verificar el compte.');
-            sendLog(`Solicitud de registro enviada con éxito para el usuario: ${data.username} (${data.email})`);
+            showNotification('info', 'Usuari registrat! Revisa el correu.');
             window.location.href = 'login.php';
         }
     })
     .catch(err => {
-        console.error(err);
-        sendLog(`Fallo crítico de red al intentar registrar al usuario ${data.email}`);
-        showNotification('error', err.message);
+        showNotification('error', "Error de connexió");
+        $("#register-button").prop('disabled', false);
     });
 }
 
@@ -246,24 +246,26 @@ $('#register-form').on('submit', (e) => {
     let isValid = true;
     const formData = new FormData(e.target);
 
-    const name = formData.get('name');
+    const name = formData.get('input-name');
     if (name.length  > 12 || name.length  < 3) {
         showNotification("warning","El nombre ha de ser menor a 13 caràcters i major a 3 caràcters");
         sendLog(`Intento de registro fallido: Nombre fuera de rango (${name})`);
         isValid = false;
     }
 
-    const email = formData.get('email');
+    const email = formData.get('input-email');
     let countPointEmail = 0;
+    let isDomain = false;
     for (const characterEmail of email) {
-        if (characterEmail === ".") countPointEmail ++;
+        if (characterEmail === "." && isDomain) countPointEmail ++;
+        if (characterEmail === "@") isDomain = true;
     }
     if (countPointEmail !== 1) {
         showNotification("warning","En el correu ha d'haver-hi una extensió");
         isValid = false;
     }
 
-    const tfn = formData.get('tfn');
+    const tfn = formData.get('input-tfn');
     let onlyNumbers = true;
     for (const num of tfn.slice(1)) {
         if (num < "0" || num > "9") onlyNumbers = false;
@@ -275,7 +277,7 @@ $('#register-form').on('submit', (e) => {
         isValid = false;
     }
 
-    const password = formData.get('password');
+    const password = formData.get('input-password');
     if (password.length < 8) {
         showNotification("warning","La contrasenya ha de fer més de 8 caràcters de llargada");
         sendLog(`Intento de registro fallido: Contraseña no cumple criterios de seguridad para el email ${email}`);
@@ -318,26 +320,38 @@ $('#register-form').on('submit', (e) => {
         isValid = false;
     } 
 
-    const poblation = formData.get('poblation');
+    const poblation = formData.get('input-poblation');
     if (poblation.length > 22 || poblation.length < 3) {
         showNotification("warning","La població hi ha de menor a 18 caràcters i major a 3 caràcters");
         isValid = false;
     }
 
-    const entity_name = formData.get('entity_name');
+    const entity_name = formData.get('input-entity_name');
     if (entity_name.length  > 22 || entity_name.length  < 3) {
         showNotification("warning","El nom de l'entitat ha de ser menor a 18 caràcters i major a 3 caràcters");
         isValid = false;
     }
 
-    const entity_type = formData.get('entity_type');
+    const entity_type = formData.get('input-entity_type');
 
     let presentation = false;
 
-    if (formData.get('presentation').trim() !== "") {
-        presentation = formData.get('presentation');
+    const imageFile = formData.get('input-image-usuari');
+    let logo = null;
+    if (imageFile && imageFile.size > 0 && imageFile.type.startsWith("image/")) {
+        logo = imageFile;
+    }
+    if (imageFile && imageFile.size > 0 && !(imageFile.type.startsWith("image/"))) {
+        showNotification("warning","Solo puedes subir imagenes");
+        return;
     }
 
+
+    if (formData.get('input-presentation').trim() !== "") {
+        presentation = formData.get('input-presentation');
+    }
+
+    // Substitueix la part final del teu $('#register-form').on('submit', ...)
     if (isValid) {
         if (categoriaSeleccionada.length === 0) {
             showNotification("warning", "Has de seleccionar almenys una categoria");
@@ -346,6 +360,10 @@ $('#register-form').on('submit', (e) => {
 
         $("#register-button").prop('disabled', true);
         
+        // 1. Creem el FormData
+        const formDataEnviar = new FormData();
+        
+        // 2. Afegim les dades de text (com a JSON, tal com ho tenies)
         const registerData = {
             username: name,
             email: email,
@@ -354,14 +372,19 @@ $('#register-form').on('submit', (e) => {
             population: poblation,
             nameentity: entity_name,
             typeentity: entity_type,
-            categories: categoriaSeleccionada
+            categories: categoriaSeleccionada,
+            presentation: formData.get('input-presentation').trim()
         };
+        formDataEnviar.append('registerData', JSON.stringify(registerData));
 
-        if (presentation) {
-            registerData.presentation = presentation.trim();
+        // 3. Afegim el FITXER FÍSIC
+        const imageInput = document.getElementById('input-image-usuari');
+        if (imageInput.files[0]) {
+            formDataEnviar.append('input-image-usuari', imageInput.files[0]);
         }
-        
-        sendRegister(registerData);
+
+        // 4. Cridem a la funció (la modificarem a continuació)
+        sendRegister(formDataEnviar);
     }
 });
 </script>

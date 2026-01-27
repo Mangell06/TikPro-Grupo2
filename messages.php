@@ -62,6 +62,7 @@
 
                 $("#containermessages").append(mainContainer);
             }
+            
             messages.forEach(function(message) {
                 let imageuser = "uploads/basic-logo-user.png";
                 if (message.logo_image) {

@@ -8,7 +8,6 @@ include("database.php");
 header('Content-Type: application/json');
 
 try {
-    // Solo permitir POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         http_response_code(405);
         echo json_encode(["error" => "Mètode no permès"]);
@@ -16,62 +15,75 @@ try {
     }
 
     $registerData = json_decode($_POST['registerData'], true);
-    if (!isset($registerData) || empty($registerData)) {
+    if (!$registerData) {
         http_response_code(400);
-        echo json_encode([
-            "error" => "No s'han rebut les dades de registre"
-        ]);
+        echo json_encode(["error" => "No s'han rebut les dades de registre"]);
         exit;
     }
 
+    // --- 1. GESTIÓ DEL FITXER FÍSIC ---
+    $logoPath = null;
+    if (isset($_FILES['input-image-usuari']) && $_FILES['input-image-usuari']['error'] === UPLOAD_ERR_OK) {
+        // Defineix la carpeta on es guardaran les fotos (crea-la si no existeix!)
+        $uploadDir = '../uploads/logos/'; 
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $fileExtension = pathinfo($_FILES['input-image-usuari']['name'], PATHINFO_EXTENSION);
+        // Generem un nom únic per evitar duplicats
+        $newFileName = uniqid('user_', true) . '.' . $fileExtension;
+        $destination = $uploadDir . $newFileName;
+
+        if (move_uploaded_file($_FILES['input-image-usuari']['tmp_name'], $destination)) {
+            $logoPath = $newFileName; // Guardarem el nom del fitxer
+        }
+    }
+
+    // --- 2. PREPARACIÓ DE DADES ---
     $username = $registerData["username"];
     $email = $registerData["email"];
     $tfn = $registerData["tfn"];
-    $password = hash('sha256', $registerData["password"]);
+    // Recorda: password_hash() és més segur que hash('sha256')
+    $password = hash('sha256', $registerData["password"]); 
     $categories = $registerData["categories"];
     $population = $registerData["population"];
     $nameentity = $registerData["nameentity"];
     $typeentity = $registerData["typeentity"];
+    $presentationValue = $registerData["presentation"] ?? null;
     
-    // Generación de código de activación
     $codeactivate = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 4);
     $codeexpire = date('Y-m-d H:i:s', strtotime('+48 hours'));
+
+    // --- 3. INSERCIÓ A LA BASE DE DADES ---
+    $pdo->beginTransaction(); // Fem servir transaccions per seguretat
+
+    $sql = "INSERT INTO users (email, tfn, password, name, poblation, entity_name, entity_type, is_active, code_activate, code_expire, presentation, logo_image) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?)";
     
-    $presentationValue = isset($registerData["presentation"]) ? $registerData["presentation"] : null;
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        $email, $tfn, $password, $username, $population, 
+        $nameentity, $typeentity, $codeactivate, $codeexpire, 
+        $presentationValue, "uploads/logos/". $logoPath
+    ]);
 
-    $sqlcreation = "INSERT INTO users (email, tfn, password, name, poblation, entity_name, 
-    entity_type, is_active, code_activate, code_expire, presentation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $userId = $pdo->lastInsertId();
 
-    $values = [$email, $tfn, $password, $username, $population, $nameentity, $typeentity, 0, $codeactivate, $codeexpire, $presentationValue];
+    // Gestió de categories
+    if (!empty($categories)) {
+        $placeholders = implode(',', array_fill(0, count($categories), '?'));
+        $stmtCats = $pdo->prepare("SELECT id FROM categories WHERE name IN ($placeholders)");
+        $stmtCats->execute($categories);
+        $categoryData = $stmtCats->fetchAll(PDO::FETCH_ASSOC);
 
-    try {
-        $stmt = $pdo->prepare($sqlcreation);
-        $stmt->execute($values);
-
-        $userId = $pdo->lastInsertId();
-
-        if (!empty($categories) && is_array($categories)) {
-            $placeholders = implode(',', array_fill(0, count($categories), '?'));
-            $sqlCatIds = "SELECT id FROM categories WHERE name IN ($placeholders)";
-            $stmtCats = $pdo->prepare($sqlCatIds);
-            $stmtCats->execute($categories);
-            $categoryData = $stmtCats->fetchAll(PDO::FETCH_ASSOC);
-
-            if ($categoryData) {
-                $sqlRelation = "INSERT INTO categories_user (id_user, id_category) VALUES (?, ?)";
-                $stmtRel = $pdo->prepare($sqlRelation);
-                foreach ($categoryData as $cat) {
-                    $stmtRel->execute([$userId, $cat['id']]);
-                }
-            }
+        $stmtRel = $pdo->prepare("INSERT INTO categories_user (id_user, id_category) VALUES (?, ?)");
+        foreach ($categoryData as $cat) {
+            $stmtRel->execute([$userId, $cat['id']]);
         }
-    } catch (PDOException $err) {
-        http_response_code(500);
-        echo json_encode([
-            "error" => "Error al insertar usuari: " . $err->getMessage()
-        ]);
-        exit;
     }
+
+    $pdo->commit();
 
     // --- CONFIGURACIÓN DE EMAIL CON ESTILOS GMAIL ---
     $verificationLink = "https://simbio2.ieti.site/register.php?validate=" . $codeactivate;
@@ -140,6 +152,9 @@ try {
     exit;
 
 } catch (Exception $err) {
+    if (isset($pdo) && $pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
     http_response_code(503);
     echo json_encode([
         "error" => "No s'ha pogut connectar amb el servidor"
