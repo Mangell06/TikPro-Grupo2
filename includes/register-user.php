@@ -16,12 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(401);
-    echo json_encode(["error" => "Sessió no iniciada"]);
-    exit;
-}
-
 $userId = (int) $_SESSION['user_id'];
 $projectId = isset($_POST['project']) ? (int) $_POST['project'] : 0;
 $liked = isset($_POST['liked']) ? (int) $_POST['liked'] : 0;
