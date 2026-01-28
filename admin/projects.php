@@ -1,5 +1,10 @@
 <?php
     session_start();
+    session_start();
+    if (!isset($_SESSION['admin_id'])) {
+        header("Location: /admin/login.php");
+        exit;
+    }
     include("../includes/database.php");
 
    $sql = "SELECT projects.*, 
