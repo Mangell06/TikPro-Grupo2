@@ -20,13 +20,7 @@ $ip = $clientIp ?: $serverIp;
 $time = date('H:i:s');
 $line = "[$time] [$ip] $text" . PHP_EOL;
 
-$result = file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
-if ($result === false) {
-    error_log("Error escribiendo log en $logFile");
-    http_response_code(500);
-    echo json_encode(['status'=>'error','message'=>'No se pudo escribir el log']);
-    exit;
-}
+file_put_contents($logFile, $line, FILE_APPEND | LOCK_EX);
 
 header('Content-Type: application/json');
 echo json_encode(['status' => 'success']);
