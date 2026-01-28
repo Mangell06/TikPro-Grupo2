@@ -1544,7 +1544,7 @@ body.page-error {
   height: 100vh;
   font-family: "Arial", sans-serif;
   background: var(--color-primary);
-  color: var(--color-dark);
+  color: var(--color-sixth);
   text-align: center;
 }
 
@@ -1578,13 +1578,11 @@ body.page-error {
   font-size: 16px;
   font-weight: bold;
   color: #fff;
-  background: var(--btn-gradient);
+  background: linear-gradient(135deg, var(--color-fifth), var(--color-sixth));
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .page-error .container button:hover {
