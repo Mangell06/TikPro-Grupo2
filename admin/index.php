@@ -35,5 +35,9 @@
             <li><a href="projects.php">Gestionar projectes</a></li>
         </ul>
     </section>
+    <script type="module">
+        import { sendLog } from '/create-logs.js';
+        sendLog(`El usuario con id <?php echo json_encode($_SESSION["admin_id"]); ?> ha iniciado sessión en admin`);
+    </script>
 </body>
 </html>

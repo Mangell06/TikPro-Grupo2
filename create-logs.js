@@ -17,7 +17,7 @@ async function getClientIp() {
 export async function sendLog(text) {
     const ip = await getClientIp();
 
-    fetch('logs/logs.php', {
+    fetch('/logs/logs.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

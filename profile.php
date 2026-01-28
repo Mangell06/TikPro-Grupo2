@@ -8,10 +8,7 @@ if (!$iduser) {
     exit;
 }
 
-// ====== GUARDAR CAMBIOS DEL USUARIO ======
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    // Editar usuario
     if (isset($_POST['save_user'])) {
         $name = $_POST['name'] ?? '';
         $email = $_POST['email'] ?? '';
@@ -64,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// ====== CARGAR DATOS DEL USUARIO ======
 $stmt = $pdo->prepare("
     SELECT name, email, entity_name, entity_type, presentation, tfn, poblation
     FROM users
@@ -74,7 +70,6 @@ $stmt = $pdo->prepare("
 $stmt->execute(['id' => $iduser]);
 $user = $stmt->fetch();
 
-// ====== CARGAR ETIQUETAS DEL USUARIO ======
 $stmtTags = $pdo->prepare(
     "SELECT c.id, c.name, c.type, cu.id_category 
     FROM categories c
@@ -258,7 +253,6 @@ const inputCerca = document.getElementById('inputCerca');
 const llistaResultats = document.getElementById('llistaResultats');
 const contenidorEtiquetes = document.getElementById('etiquetes-contenidor');
 
-    // 1. Obrir/Tancar Modal
 document.getElementById('btnObrirModal').onclick = () => modal.style.display = 'block';
 document.getElementById('btnTancarModal').onclick = () => {
     modal.style.display = 'none';
@@ -266,12 +260,10 @@ document.getElementById('btnTancarModal').onclick = () => {
     llistaResultats.innerHTML = '';
 };
 
-// 2. Cerca AJAX
 inputCerca.addEventListener('input', function() {
     const text = this.value.trim();
     
     if (text.length >= 3) {
-        // Simulem la petició AJAX (has de canviar la URL pel teu fitxer PHP)
         fetch(`search_tags.php?q=${encodeURIComponent(text)}`)
             .then(res => res.json())
             .then(data => {
@@ -279,7 +271,7 @@ inputCerca.addEventListener('input', function() {
                 data.forEach(cat => {
                     const div = document.createElement('div');
                     div.className = 'result-item';
-                    div.textContent = cat.name; // 'name' de la taula categories
+                    div.textContent = cat.name;
                     div.onclick = () => afegirEtiqueta(cat.id, cat.name);
                     llistaResultats.appendChild(div);
                 });
@@ -289,11 +281,8 @@ inputCerca.addEventListener('input', function() {
     }
 });
 
-// 3. Aplicar Selecció i Tancar
 function afegirEtiqueta(id, nom) {
     const contenidor = document.getElementById('etiquetes-contenidor');
-
-    // 1. Creamos el elemento visual (el badge)
     const div = document.createElement('div');
     div.className = 'tag-badge';
     div.style.display = 'inline-flex';
@@ -304,14 +293,11 @@ function afegirEtiqueta(id, nom) {
     div.style.color = 'white';
     div.style.borderRadius = '15px';
 
-    // 2. Creamos el INPUT OCULTO que se mandará por POST
-    // Usamos name="categories[]" para recibir un array en el servidor
     const inputHidden = document.createElement('input');
     inputHidden.type = 'hidden';
     inputHidden.name = 'categories[]'; 
-    inputHidden.value = id; // El ID de la base de datos (p.ej: 5)
+    inputHidden.value = id;
 
-    // 3. Contenido del badge (Texto + Botón eliminar)
     div.innerHTML = `<span>${nom}</span>`;
     
     const btnEliminar = document.createElement('span');
@@ -319,17 +305,14 @@ function afegirEtiqueta(id, nom) {
     btnEliminar.style.cursor = 'pointer';
     btnEliminar.style.marginLeft = '10px';
     
-    // Al eliminar el div, el inputHidden que está dentro también desaparece
     btnEliminar.onclick = function() {
         div.remove();
     };
 
-    // 4. Ensamblamos: metemos el input dentro del div, y el div en el contenedor
     div.appendChild(inputHidden);
     div.appendChild(btnEliminar);
     contenidor.appendChild(div);
 
-    // Cerrar modal
     document.getElementById('modalCerca').style.display = 'none';
 }
 
@@ -345,23 +328,19 @@ function afegirEtiqueta(id, nom) {
     })
     .then(data => {
         if (data.success) {
-            // 1. Seleccionamos el elemento del proyecto
             const projectItem = document.getElementById('section-project-' + projectId);
             
             if (projectItem) {
-                // 2. Lo eliminamos del DOM por completo en lugar de solo ocultarlo
                 const parent = projectItem.parentElement;
                 projectItem.remove();
-
-                // 3. Comprobamos si quedan más proyectos (divs con la clase item)
                 const remainingProjects = parent.querySelectorAll('.profile-project-item');
                 
                 if (remainingProjects.length === 0) {
-                    // 4. Si no quedan, añadimos la frase al contenedor principal
                     const p = document.createElement('p');
                     p.classList.add('profile-no-projects');
                     p.textContent = "Encara no tens projectes.";
                     parent.appendChild(p);
+                    showNotification("info", "S'ha eliminat correctament el projecte");
                 }
             }
         } else {

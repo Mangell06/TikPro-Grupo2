@@ -695,7 +695,7 @@ input[type="file"]::file-selector-button:hover {
 }
 
 .notification.success {
-  background-color: var(--color-success);
+  background-color: var(--color-info);
 }
 /* Botón de cerrar */
 .notification .close-btn {
@@ -727,6 +727,9 @@ input[type="file"]::file-selector-button:hover {
   margin-top: 100px;
 }
 
+#admin-projects .notiFather{
+  top: 150px;
+}
 .notification.warning .close-btn {
   color: #333;
 }
@@ -1946,7 +1949,7 @@ body.page-error {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 77, 109, 0.15);
-  width: 80%;
+  width: 50%;
 }
 
 #admin-projects .buttons{
@@ -1984,7 +1987,8 @@ body.page-error {
 }
 
 #admin-projects .section-project{
-  margin-top: 40px;
+  margin-top: 23px;
+  margin-bottom: 23px;
 }
 
 #admin-projects .insert-video video{
@@ -2023,4 +2027,39 @@ body.page-error {
   text-align: center;
 }
 
-  
+.insert-video {
+  display: flex;
+  justify-content: center;
+}
+
+.amagarVideo {
+  display: none;
+}
+
+#admin-projects .logout-button {
+    margin-right: 10px;
+}
+
+@media screen and (max-width:1250px) {
+  #admin-projects section{
+    width: 100%;
+  }
+
+  #admin-projects .set{
+    flex-direction: column;
+  }
+  #admin-projects .insert-video{
+    width: 100%;
+  }
+  #admin-projects .insert-video video{
+    width: 250px !important;
+  }
+  #admin-projects .explication {
+    width: 100%;
+    padding: 10px;
+  }
+
+  #admin-projects .explication h1{
+    font-size: 20px;
+  }
+}

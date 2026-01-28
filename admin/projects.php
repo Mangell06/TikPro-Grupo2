@@ -22,7 +22,6 @@
 </head>
 <body id="admin-projects">
     <header class="main-header">
-        <!-- <h1 class="header-title">SIMBIO</h1> -->
         <?php
             $userAdmin =  $_SESSION['admin_id'];
             $stmt = $pdo->prepare("SELECT name FROM users WHERE id = :idadmin");
@@ -69,16 +68,16 @@
             </div>
         </div>
         
-        <!-- crear cada section, para cada uno de los proyectos -->
-        
     </section>
     <?php endforeach; ?>
-    <script>
+    <script type="module">
+            import { sendLog } from '/create-logs.js';
+            import { showNotification } from '/notificaciones.js';
             function uploadedVideo(projectId, videoScr){
                 const button = document.getElementById('upload-hidden-'+projectId);
                 if(button.textContent ==='Cargar Video'){
                         button.textContent = 'Amagar Video';
-                        document.getElementById('insertVideo-'+projectId).style.display = 'block';
+                        document.getElementById('insertVideo-'+projectId).classList.remove("amagarVideo");
                         
                         if (document.getElementById('insertVideo-'+projectId).innerHTML.trim() === "") {
                             const video = document.createElement('video');
@@ -89,7 +88,7 @@
                             document.getElementById('insertVideo-'+projectId).appendChild(video);
                         }
                 } else if(button.textContent ==='Amagar Video'){
-                     document.getElementById('insertVideo-'+projectId).style.display = 'none';
+                     document.getElementById('insertVideo-'+projectId).classList.add("amagarVideo");
                      button.textContent = 'Cargar Video';
                      return;
                 }
@@ -108,6 +107,8 @@
                 })
                 .then(data => {
                     if (data.success) {
+                        sendLog(`El admin con id <?php echo json_encode($_SESSION["admin_id"]);?> ha reactivado el proyecto con id `+projectId);
+                        showNotification("info", "S'ha reactivat el projecte correctament!");
                         const container = document.getElementById('section-project-' + projectId);
                         const btnReactive = document.getElementById('buttonReactive-' + projectId);
                         const btnDelete = document.getElementById('buttonDelete-' + projectId);
@@ -138,6 +139,8 @@
                 })
                 .then(data => {
                     if (data.success) {
+                        sendLog(`El admin con id <?php echo json_encode($_SESSION["admin_id"]);?> ha borrado el proyecto con id `+projectId);
+                        showNotification("success", "S'ha eliminat el projecte correctament!");
                         const container = document.getElementById('section-project-' + projectId);
                         const btnReactive = document.getElementById('buttonReactive-' + projectId);
                         const btnDelete = document.getElementById('buttonDelete-' + projectId);
@@ -156,6 +159,10 @@
                     console.error('Error detallado:', error);
                 });
             }
+
+            window.uploadedVideo = uploadedVideo;
+            window.approvedProject = approvedProject;
+            window.unapprovedProject = unapprovedProject;
     </script>
 </body>
 </html>
