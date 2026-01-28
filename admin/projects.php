@@ -18,6 +18,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles.css">
+    <link rel="icon" href="/oak_4986983.png" type="image/png">
     <title>Administració de projectes</title>
 </head>
 <body id="admin-projects">
