@@ -15,7 +15,8 @@
         $project = $stmt->fetch();
 
         if ($project && $project['state'] === 'archived') {
-            http_response_code(404);
+            header('HTTP/1.1 404 Not Found');
+            virtual('/errors/HTTP_NOT_FOUND.html.var');
             exit;
         }
     }
