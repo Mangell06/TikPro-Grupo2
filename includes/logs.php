@@ -1,5 +1,5 @@
 <?php
-$logDir = "../logs";
+$logDir = "/var/www/logs";
 $today = date('Y-m-d');
 $logFile = $logDir . "/$today.txt";
 
