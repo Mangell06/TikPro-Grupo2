@@ -39,10 +39,23 @@ try {
     
     $presentationValue = isset($registerData["presentation"]) ? $registerData["presentation"] : null;
 
-    $sqlcreation = "INSERT INTO users (email, tfn, password, name, poblation, entity_name, 
-    entity_type, is_active, code_activate, code_expire, presentation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $logoImagePath = null;
+    if (isset($_FILES['input-image-usuari']) && $_FILES['input-image-usuari']['error'] === 0) {
+        $uploadDir = '../uploads/'; // asegúrate que exista y sea escribible
+        $filename = uniqid() . '_' . basename($_FILES['input-image-usuari']['name']);
+        $targetPath = $uploadDir . $filename;
 
-    $values = [$email, $tfn, $password, $username, $population, $nameentity, $typeentity, 0, $codeactivate, $codeexpire, $presentationValue];
+        if (move_uploaded_file($_FILES['input-image-usuari']['tmp_name'], $targetPath)) {
+            $logoImagePath = 'uploads/' . $filename; // ruta relativa para la DB
+        }
+    }
+
+    $sqlcreation = "INSERT INTO users (email, tfn, password, name, poblation, entity_name, 
+    entity_type, is_active, code_activate, code_expire, presentation, logo_image) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    $values = [$email, $tfn, $password, $username, $population, $nameentity, $typeentity, 0, $codeactivate, $codeexpire, $presentationValue, $logoImagePath];
+
 
     try {
         $stmt = $pdo->prepare($sqlcreation);
